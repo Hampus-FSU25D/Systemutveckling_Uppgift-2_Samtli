@@ -21,6 +21,18 @@ final class UserRepository
         return $statement->fetchColumn() !== false;
     }
 
+    /**
+     * @return array{id: int|string, email: string, password_hash: string}|null
+     */
+    public function findForAuthentication(string $email): ?array
+    {
+        $statement = $this->pdo->prepare('SELECT id, email, password_hash FROM users WHERE email = ? LIMIT 1');
+        $statement->execute([$email]);
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $row === false ? null : $row;
+    }
+
     public function create(string $firstName, string $lastName, string $email, string $passwordHash): int
     {
         $statement = $this->pdo->prepare(

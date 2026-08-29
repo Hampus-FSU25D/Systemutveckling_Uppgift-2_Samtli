@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
+use Samtli\Auth\AuthenticationService;
 use Samtli\Auth\RegistrationService;
 use Samtli\Database\Connection;
+use Samtli\Http\LoginController;
 use Samtli\Http\RedirectResponse;
 use Samtli\Http\RegisterController;
 use Samtli\Http\Response;
 use Samtli\Repositories\UserRepository;
 use Samtli\Security\CsrfTokenManager;
+use Samtli\Security\SessionAuthenticator;
 use Samtli\View\TemplateRenderer;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
@@ -21,8 +24,17 @@ session_start([
 
 $templates = new TemplateRenderer(dirname(__DIR__) . '/templates');
 $csrf = new CsrfTokenManager($_SESSION);
-$controller = new RegisterController(
-    new RegistrationService(new UserRepository(Connection::fromEnvironment())),
+$users = new UserRepository(Connection::fromEnvironment());
+$authenticator = new SessionAuthenticator($_SESSION);
+
+$registerController = new RegisterController(
+    new RegistrationService($users),
+    $csrf,
+    $templates
+);
+$loginController = new LoginController(
+    new AuthenticationService($users),
+    $authenticator,
     $csrf,
     $templates
 );
@@ -31,13 +43,14 @@ $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 $response = match ([$method, $path]) {
-    ['GET', '/'] => new Response($templates->render('home', ['title' => 'Samtli'])),
-    ['GET', '/register'] => $controller->show(),
-    ['POST', '/register'] => $controller->store($_POST),
-    ['GET', '/login'] => new Response($templates->render('auth/login-placeholder', [
-        'title' => 'Log in',
-        'flash' => pullFlash('success'),
+    ['GET', '/'] => new Response($templates->render('home', [
+        'title' => 'Samtli',
+        'authenticatedUserId' => $authenticator->id(),
     ])),
+    ['GET', '/register'] => $registerController->show(),
+    ['POST', '/register'] => $registerController->store($_POST),
+    ['GET', '/login'] => $loginController->show(pullFlash('success')),
+    ['POST', '/login'] => $loginController->store($_POST),
     default => new Response($templates->render('home', ['title' => 'Page not found']), 404),
 };
 
