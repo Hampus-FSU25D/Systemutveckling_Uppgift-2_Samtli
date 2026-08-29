@@ -16,8 +16,8 @@ $environment = getenv('APP_ENV') ?: 'local';
     <main class="bootstrap-page">
         <section class="bootstrap-panel" aria-labelledby="page-title">
             <p class="eyebrow">Samtli</p>
-            <h1 id="page-title">PHP-miljon ar igang</h1>
-            <p>Projektgrunden kor PHP <?php echo htmlspecialchars(PHP_VERSION, ENT_QUOTES, 'UTF-8'); ?> i miljo <?php echo htmlspecialchars($environment, ENT_QUOTES, 'UTF-8'); ?>.</p>
+            <h1 id="page-title">PHP-miljön är igång</h1>
+            <p>Projektgrunden kör PHP <?php echo htmlspecialchars(PHP_VERSION, ENT_QUOTES, 'UTF-8'); ?> i miljö <?php echo htmlspecialchars($environment, ENT_QUOTES, 'UTF-8'); ?>.</p>
             <p class="note">Forumfunktioner byggs i kommande feature branches.</p>
         </section>
     </main>
