@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Samtli\Http;
 
 use Samtli\Groups\GroupCreationService;
+use Samtli\Memberships\MembershipRequestService;
+use Samtli\Repositories\GroupRepository;
 use Samtli\Security\CsrfTokenManager;
 use Samtli\Security\SessionAuthenticator;
 use Samtli\View\TemplateRenderer;
@@ -13,10 +15,29 @@ final class GroupController
 {
     public function __construct(
         private readonly GroupCreationService $groups,
+        private readonly MembershipRequestService $membershipRequests,
+        private readonly GroupRepository $groupRepository,
         private readonly SessionAuthenticator $authenticator,
         private readonly CsrfTokenManager $csrf,
         private readonly TemplateRenderer $templates
     ) {
+    }
+
+    public function index(?string $successMessage = null, ?string $errorMessage = null): Response|RedirectResponse
+    {
+        $userId = $this->authenticator->id();
+
+        if ($userId === null) {
+            return new RedirectResponse('/login');
+        }
+
+        return new Response($this->templates->render('groups/index', [
+            'title' => 'Discover groups',
+            'csrfToken' => $this->csrf->token('groups.join_request'),
+            'groups' => $this->groupRepository->discoverableForUser($userId),
+            'successMessage' => $successMessage,
+            'errorMessage' => $errorMessage,
+        ]));
     }
 
     public function create(): Response|RedirectResponse
@@ -65,6 +86,36 @@ final class GroupController
             'title' => 'Group created',
             'groupId' => $groupId,
         ]));
+    }
+
+    /**
+     * @param array<string, string> $post
+     */
+    public function requestMembership(int $groupId, array $post): Response|RedirectResponse
+    {
+        $userId = $this->authenticator->id();
+
+        if ($userId === null) {
+            return new RedirectResponse('/login');
+        }
+
+        if (!$this->csrf->isValid('groups.join_request', $post['_csrf'] ?? '')) {
+            $response = $this->index(null, 'Your session expired. Please submit the request again.');
+
+            return $response instanceof Response
+                ? new Response($response->body(), 419)
+                : new Response('', 419);
+        }
+
+        $result = $this->membershipRequests->request($groupId, $userId);
+
+        if (!$result->isSuccess()) {
+            return $this->index(null, $result->message());
+        }
+
+        $_SESSION['_flash']['success'] = $result->message();
+
+        return new RedirectResponse('/groups');
     }
 
     /**

@@ -11,7 +11,9 @@ use Samtli\Http\LoginController;
 use Samtli\Http\RedirectResponse;
 use Samtli\Http\RegisterController;
 use Samtli\Http\Response;
+use Samtli\Memberships\MembershipRequestService;
 use Samtli\Repositories\GroupRepository;
+use Samtli\Repositories\MembershipRepository;
 use Samtli\Repositories\UserRepository;
 use Samtli\Security\CsrfTokenManager;
 use Samtli\Security\SessionAuthenticator;
@@ -27,7 +29,10 @@ session_start([
 
 $templates = new TemplateRenderer(dirname(__DIR__) . '/templates');
 $csrf = new CsrfTokenManager($_SESSION);
-$users = new UserRepository(Connection::fromEnvironment());
+$pdo = Connection::fromEnvironment();
+$users = new UserRepository($pdo);
+$groups = new GroupRepository($pdo);
+$memberships = new MembershipRepository($pdo);
 $authenticator = new SessionAuthenticator($_SESSION);
 
 $registerController = new RegisterController(
@@ -42,7 +47,9 @@ $loginController = new LoginController(
     $templates
 );
 $groupController = new GroupController(
-    new GroupCreationService(new GroupRepository(Connection::fromEnvironment())),
+    new GroupCreationService($groups),
+    new MembershipRequestService($groups, $memberships),
+    $groups,
     $authenticator,
     $csrf,
     $templates
@@ -61,8 +68,10 @@ $response = match (true) {
     $method === 'POST' && $path === '/register' => $registerController->store($_POST),
     $method === 'GET' && $path === '/login' => $loginController->show(pullFlash('success')),
     $method === 'POST' && $path === '/login' => $loginController->store($_POST),
+    $method === 'GET' && $path === '/groups' => $groupController->index(pullFlash('success'), pullFlash('error')),
     $method === 'GET' && $path === '/groups/create' => $groupController->create(),
     $method === 'POST' && $path === '/groups' => $groupController->store($_POST),
+    $method === 'POST' && $groupId !== null && str_ends_with($path, '/join-requests') => $groupController->requestMembership($groupId, $_POST),
     $method === 'GET' && $groupId !== null => $groupController->show($groupId),
     default => new Response($templates->render('home', ['title' => 'Page not found']), 404),
 };
@@ -81,7 +90,7 @@ function pullFlash(string $key): ?string
 
 function groupIdFromPath(string $path): ?int
 {
-    if (preg_match('#^/groups/([1-9][0-9]*)$#', $path, $matches) !== 1) {
+    if (preg_match('#^/groups/([1-9][0-9]*)(?:/join-requests)?$#', $path, $matches) !== 1) {
         return null;
     }
 

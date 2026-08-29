@@ -6,6 +6,7 @@ use Samtli\View\Html;
 
 /** @var string $title */
 /** @var string $content */
+/** @var string|null $mainClass */
 
 ?><!doctype html>
 <html lang="en">
@@ -25,7 +26,7 @@ use Samtli\View\Html;
             <span class="brand-name">Samtli</span>
         </a>
     </header>
-    <main class="auth-page">
+    <main class="<?php echo Html::escape($mainClass ?? 'auth-page'); ?>">
         <?php echo $content; ?>
     </main>
 </body>

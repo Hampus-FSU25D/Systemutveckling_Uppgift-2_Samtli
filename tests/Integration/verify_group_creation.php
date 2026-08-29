@@ -7,7 +7,9 @@ use Samtli\Groups\GroupCreationService;
 use Samtli\Http\GroupController;
 use Samtli\Http\RedirectResponse;
 use Samtli\Http\Response;
+use Samtli\Memberships\MembershipRequestService;
 use Samtli\Repositories\GroupRepository;
+use Samtli\Repositories\MembershipRepository;
 use Samtli\Repositories\UserRepository;
 use Samtli\Security\CsrfTokenManager;
 use Samtli\Security\SessionAuthenticator;
@@ -57,6 +59,8 @@ $session = [];
 $csrf = new CsrfTokenManager($session);
 $controller = new GroupController(
     $service,
+    new MembershipRequestService($groups, new MembershipRepository($pdo)),
+    $groups,
     new SessionAuthenticator($session),
     $csrf,
     new TemplateRenderer(dirname(__DIR__, 2) . '/templates')
