@@ -6,6 +6,11 @@ use Samtli\View\Html;
 
 /** @var int $groupId */
 /** @var array{id: int|string, group_id: int|string, subject: string, first_name: string, last_name: string, posts: list<array{id: int|string, content: string, first_name: string, last_name: string, created_at: string}>} $discussion */
+/** @var string $replyCsrfToken */
+/** @var array<string, list<string>> $replyErrors */
+/** @var array<string, string> $replyOld */
+
+$replyFieldError = $replyErrors['content'][0] ?? null;
 
 ob_start();
 ?>
@@ -34,6 +39,32 @@ ob_start();
             </article>
         <?php endforeach; ?>
     </div>
+
+    <section class="reply-composer" aria-labelledby="reply-title">
+        <h2 id="reply-title">Reply to discussion</h2>
+
+        <?php if (isset($replyErrors['_form'])): ?>
+            <div class="form-alert" role="alert">
+                <?php echo Html::escape($replyErrors['_form'][0]); ?>
+            </div>
+        <?php endif; ?>
+
+        <form class="stack-form" action="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/<?php echo Html::escape((string) $discussion['id']); ?>/replies" method="post" novalidate>
+            <input type="hidden" name="_csrf" value="<?php echo Html::escape($replyCsrfToken); ?>">
+
+            <div class="form-field">
+                <label for="content">Reply <span class="required-mark">*</span></label>
+                <textarea class="<?php echo $replyFieldError ? 'form-input form-textarea is-invalid' : 'form-input form-textarea'; ?>" id="content" name="content" rows="5" required <?php echo $replyFieldError ? 'aria-invalid="true" aria-describedby="content_error"' : ''; ?>><?php echo Html::escape($replyOld['content'] ?? ''); ?></textarea>
+                <?php if ($replyFieldError): ?>
+                    <p class="field-error" id="content_error"><?php echo Html::escape((string) $replyFieldError); ?></p>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-actions">
+                <button class="button button--primary button--inline" type="submit">Post reply</button>
+            </div>
+        </form>
+    </section>
 </section>
 <?php
 $content = (string) ob_get_clean();

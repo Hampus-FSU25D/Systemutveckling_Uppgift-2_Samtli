@@ -6,6 +6,7 @@ use Samtli\Auth\AuthenticationService;
 use Samtli\Auth\RegistrationService;
 use Samtli\Database\Connection;
 use Samtli\Discussions\DiscussionCreationService;
+use Samtli\Discussions\ReplyCreationService;
 use Samtli\Groups\GroupCreationService;
 use Samtli\Http\DiscussionController;
 use Samtli\Http\GroupAdminController;
@@ -64,6 +65,7 @@ $groupController = new GroupController(
 );
 $discussionController = new DiscussionController(
     new DiscussionCreationService($memberships, $discussions),
+    new ReplyCreationService($memberships, $discussions),
     $memberships,
     $discussions,
     $authenticator,
@@ -84,6 +86,7 @@ $groupId = groupIdFromPath($path);
 $adminJoinRequest = adminJoinRequestFromPath($path);
 $discussionCreateGroupId = discussionCreateGroupIdFromPath($path);
 $discussionDetail = discussionDetailFromPath($path);
+$discussionReply = discussionReplyFromPath($path);
 
 $response = match (true) {
     $method === 'GET' && $path === '/' => new Response($templates->render('home', [
@@ -101,6 +104,7 @@ $response = match (true) {
     $method === 'POST' && $adminJoinRequest !== null && $adminJoinRequest['requestId'] !== null => $groupAdminController->approveJoinRequest($adminJoinRequest['groupId'], $adminJoinRequest['requestId'], $_POST),
     $method === 'GET' && $discussionCreateGroupId !== null => $discussionController->create($discussionCreateGroupId),
     $method === 'POST' && $discussionCreateGroupId !== null => $discussionController->store($discussionCreateGroupId, $_POST),
+    $method === 'POST' && $discussionReply !== null => $discussionController->storeReply($discussionReply['groupId'], $discussionReply['discussionId'], $_POST),
     $method === 'GET' && $discussionDetail !== null => $discussionController->show($discussionDetail['groupId'], $discussionDetail['discussionId']),
     $method === 'POST' && $groupId !== null && str_ends_with($path, '/join-requests') => $groupController->requestMembership($groupId, $_POST),
     $method === 'GET' && $groupId !== null => $groupController->show($groupId),
@@ -158,6 +162,21 @@ function discussionCreateGroupIdFromPath(string $path): ?int
 function discussionDetailFromPath(string $path): ?array
 {
     if (preg_match('#^/groups/([1-9][0-9]*)/discussions/([1-9][0-9]*)$#', $path, $matches) !== 1) {
+        return null;
+    }
+
+    return [
+        'groupId' => (int) $matches[1],
+        'discussionId' => (int) $matches[2],
+    ];
+}
+
+/**
+ * @return array{groupId: int, discussionId: int}|null
+ */
+function discussionReplyFromPath(string $path): ?array
+{
+    if (preg_match('#^/groups/([1-9][0-9]*)/discussions/([1-9][0-9]*)/replies$#', $path, $matches) !== 1) {
         return null;
     }
 

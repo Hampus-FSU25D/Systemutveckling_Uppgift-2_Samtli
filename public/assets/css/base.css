@@ -673,6 +673,19 @@ a:hover {
     color: var(--color-text);
 }
 
+.reply-composer {
+    margin-top: var(--space-8);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+}
+
+.reply-composer h2 {
+    margin: 0 0 var(--space-6);
+    font-size: 1.25rem;
+}
+
 .eyebrow {
     margin: 0 0 var(--space-2);
     color: var(--color-accent);

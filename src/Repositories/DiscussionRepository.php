@@ -97,4 +97,40 @@ final class DiscussionRepository
 
         return $discussion;
     }
+
+    public function existsInGroup(int $groupId, int $discussionId): bool
+    {
+        $statement = $this->pdo->prepare('SELECT COUNT(*) FROM discussions WHERE id = ? AND group_id = ?');
+        $statement->execute([$discussionId, $groupId]);
+
+        return (int) $statement->fetchColumn() > 0;
+    }
+
+    public function addReply(int $groupId, int $discussionId, int $userId, string $content): int
+    {
+        $this->pdo->beginTransaction();
+
+        try {
+            $post = $this->pdo->prepare(
+                'INSERT INTO posts (discussion_id, created_by, content) VALUES (?, ?, ?)'
+            );
+            $post->execute([$discussionId, $userId, $content]);
+            $postId = (int) $this->pdo->lastInsertId();
+
+            $discussion = $this->pdo->prepare(
+                'UPDATE discussions SET updated_at = CURRENT_TIMESTAMP WHERE id = ? AND group_id = ?'
+            );
+            $discussion->execute([$discussionId, $groupId]);
+
+            $this->pdo->commit();
+
+            return $postId;
+        } catch (Throwable $exception) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+
+            throw $exception;
+        }
+    }
 }
