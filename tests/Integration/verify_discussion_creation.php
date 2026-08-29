@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Samtli\Database\Connection;
 use Samtli\Discussions\DiscussionCreationService;
+use Samtli\Discussions\ReplyCreationService;
 use Samtli\Groups\GroupCreationService;
 use Samtli\Http\DiscussionController;
 use Samtli\Http\GroupController;
@@ -76,6 +77,7 @@ $session = [];
 $csrf = new CsrfTokenManager($session);
 $discussionController = new DiscussionController(
     $service,
+    new ReplyCreationService($memberships, $discussions),
     $memberships,
     $discussions,
     new SessionAuthenticator($session),

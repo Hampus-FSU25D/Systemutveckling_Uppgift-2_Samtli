@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Samtli\Http;
 
 use Samtli\Discussions\DiscussionCreationService;
+use Samtli\Discussions\ReplyCreationService;
 use Samtli\Repositories\DiscussionRepository;
 use Samtli\Repositories\MembershipRepository;
 use Samtli\Security\CsrfTokenManager;
@@ -15,6 +16,7 @@ final class DiscussionController
 {
     public function __construct(
         private readonly DiscussionCreationService $discussionCreation,
+        private readonly ReplyCreationService $replyCreation,
         private readonly MembershipRepository $memberships,
         private readonly DiscussionRepository $discussions,
         private readonly SessionAuthenticator $authenticator,
@@ -51,6 +53,9 @@ final class DiscussionController
             'title' => (string) $discussion['subject'],
             'groupId' => $groupId,
             'discussion' => $discussion,
+            'replyCsrfToken' => $this->csrf->token('discussions.reply'),
+            'replyErrors' => [],
+            'replyOld' => [],
         ]));
     }
 
@@ -108,6 +113,42 @@ final class DiscussionController
     }
 
     /**
+     * @param array<string, string> $post
+     */
+    public function storeReply(int $groupId, int $discussionId, array $post): Response|RedirectResponse
+    {
+        $userId = $this->authenticator->id();
+
+        if ($userId === null) {
+            return new RedirectResponse('/login');
+        }
+
+        if (!$this->memberships->isMember($groupId, $userId)) {
+            return new Response($this->templates->render('home', [
+                'title' => 'Forbidden',
+                'authenticatedUserId' => $userId,
+            ]), 403);
+        }
+
+        if (!$this->csrf->isValid('discussions.reply', $post['_csrf'] ?? '')) {
+            return new Response($this->renderDiscussion(
+                $groupId,
+                $discussionId,
+                ['_form' => ['Your session expired. Please submit the reply again.']],
+                $this->replyOldInput($post)
+            ), 419);
+        }
+
+        $result = $this->replyCreation->create($groupId, $discussionId, $userId, $post);
+
+        if (!$result->isSuccess()) {
+            return new Response($this->renderDiscussion($groupId, $discussionId, $result->fieldErrors(), $this->replyOldInput($post)), 422);
+        }
+
+        return new RedirectResponse("/groups/{$groupId}/discussions/{$discussionId}");
+    }
+
+    /**
      * @param array<string, list<string>> $errors
      * @param array<string, string> $old
      */
@@ -130,6 +171,42 @@ final class DiscussionController
     {
         return [
             'subject' => trim($post['subject'] ?? ''),
+            'content' => trim($post['content'] ?? ''),
+        ];
+    }
+
+    /**
+     * @param array<string, list<string>> $replyErrors
+     * @param array<string, string> $replyOld
+     */
+    private function renderDiscussion(int $groupId, int $discussionId, array $replyErrors = [], array $replyOld = []): string
+    {
+        $discussion = $this->discussions->findInGroupWithPosts($groupId, $discussionId);
+
+        if ($discussion === null) {
+            return $this->templates->render('home', [
+                'title' => 'Page not found',
+                'authenticatedUserId' => $this->authenticator->id(),
+            ]);
+        }
+
+        return $this->templates->render('discussions/show', [
+            'title' => (string) $discussion['subject'],
+            'groupId' => $groupId,
+            'discussion' => $discussion,
+            'replyCsrfToken' => $this->csrf->token('discussions.reply'),
+            'replyErrors' => $replyErrors,
+            'replyOld' => $replyOld,
+        ]);
+    }
+
+    /**
+     * @param array<string, string> $post
+     * @return array<string, string>
+     */
+    private function replyOldInput(array $post): array
+    {
+        return [
             'content' => trim($post['content'] ?? ''),
         ];
     }

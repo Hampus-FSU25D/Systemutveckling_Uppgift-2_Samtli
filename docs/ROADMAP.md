@@ -12,7 +12,7 @@ Prioriterad funktionalitet:
 - per-grupp-rollerna `member` och `administrator`
 - administratörsgodkännande av ansökningar - implementerat
 - diskussionsstart och detaljvy - implementerat
-- svar i diskussioner
+- svar i diskussioner - implementerat
 - rollhantering för gruppmedlemmar
 - 24-timmars, single-use inbjudningslänkar
 - server-side behörighetskontroller för all gruppdata
