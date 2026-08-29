@@ -5,7 +5,9 @@ declare(strict_types=1);
 use Samtli\Auth\AuthenticationService;
 use Samtli\Auth\RegistrationService;
 use Samtli\Database\Connection;
+use Samtli\Discussions\DiscussionCreationService;
 use Samtli\Groups\GroupCreationService;
+use Samtli\Http\DiscussionController;
 use Samtli\Http\GroupAdminController;
 use Samtli\Http\GroupController;
 use Samtli\Http\LoginController;
@@ -16,6 +18,7 @@ use Samtli\Memberships\MembershipRequestService;
 use Samtli\Memberships\MembershipApprovalService;
 use Samtli\Repositories\GroupRepository;
 use Samtli\Repositories\MembershipRepository;
+use Samtli\Repositories\DiscussionRepository;
 use Samtli\Repositories\UserRepository;
 use Samtli\Security\CsrfTokenManager;
 use Samtli\Security\SessionAuthenticator;
@@ -35,6 +38,7 @@ $pdo = Connection::fromEnvironment();
 $users = new UserRepository($pdo);
 $groups = new GroupRepository($pdo);
 $memberships = new MembershipRepository($pdo);
+$discussions = new DiscussionRepository($pdo);
 $authenticator = new SessionAuthenticator($_SESSION);
 
 $registerController = new RegisterController(
@@ -52,6 +56,16 @@ $groupController = new GroupController(
     new GroupCreationService($groups),
     new MembershipRequestService($groups, $memberships),
     $groups,
+    $memberships,
+    $discussions,
+    $authenticator,
+    $csrf,
+    $templates
+);
+$discussionController = new DiscussionController(
+    new DiscussionCreationService($memberships, $discussions),
+    $memberships,
+    $discussions,
     $authenticator,
     $csrf,
     $templates
@@ -68,6 +82,8 @@ $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $groupId = groupIdFromPath($path);
 $adminJoinRequest = adminJoinRequestFromPath($path);
+$discussionCreateGroupId = discussionCreateGroupIdFromPath($path);
+$discussionDetail = discussionDetailFromPath($path);
 
 $response = match (true) {
     $method === 'GET' && $path === '/' => new Response($templates->render('home', [
@@ -83,6 +99,9 @@ $response = match (true) {
     $method === 'POST' && $path === '/groups' => $groupController->store($_POST),
     $method === 'GET' && $adminJoinRequest !== null && $adminJoinRequest['requestId'] === null => $groupAdminController->joinRequests($adminJoinRequest['groupId'], pullFlash('success'), pullFlash('error')),
     $method === 'POST' && $adminJoinRequest !== null && $adminJoinRequest['requestId'] !== null => $groupAdminController->approveJoinRequest($adminJoinRequest['groupId'], $adminJoinRequest['requestId'], $_POST),
+    $method === 'GET' && $discussionCreateGroupId !== null => $discussionController->create($discussionCreateGroupId),
+    $method === 'POST' && $discussionCreateGroupId !== null => $discussionController->store($discussionCreateGroupId, $_POST),
+    $method === 'GET' && $discussionDetail !== null => $discussionController->show($discussionDetail['groupId'], $discussionDetail['discussionId']),
     $method === 'POST' && $groupId !== null && str_ends_with($path, '/join-requests') => $groupController->requestMembership($groupId, $_POST),
     $method === 'GET' && $groupId !== null => $groupController->show($groupId),
     default => new Response($templates->render('home', ['title' => 'Page not found']), 404),
@@ -121,5 +140,29 @@ function adminJoinRequestFromPath(string $path): ?array
     return [
         'groupId' => (int) $matches[1],
         'requestId' => isset($matches[2]) ? (int) $matches[2] : null,
+    ];
+}
+
+function discussionCreateGroupIdFromPath(string $path): ?int
+{
+    if (preg_match('#^/groups/([1-9][0-9]*)/discussions/create$#', $path, $matches) !== 1) {
+        return null;
+    }
+
+    return (int) $matches[1];
+}
+
+/**
+ * @return array{groupId: int, discussionId: int}|null
+ */
+function discussionDetailFromPath(string $path): ?array
+{
+    if (preg_match('#^/groups/([1-9][0-9]*)/discussions/([1-9][0-9]*)$#', $path, $matches) !== 1) {
+        return null;
+    }
+
+    return [
+        'groupId' => (int) $matches[1],
+        'discussionId' => (int) $matches[2],
     ];
 }

@@ -8,6 +8,7 @@ use Samtli\Http\GroupController;
 use Samtli\Http\RedirectResponse;
 use Samtli\Http\Response;
 use Samtli\Memberships\MembershipRequestService;
+use Samtli\Repositories\DiscussionRepository;
 use Samtli\Repositories\GroupRepository;
 use Samtli\Repositories\MembershipRepository;
 use Samtli\Security\CsrfTokenManager;
@@ -69,6 +70,8 @@ $controller = new GroupController(
     new GroupCreationService($groups),
     $membershipRequests,
     $groups,
+    $memberships,
+    new DiscussionRepository($pdo),
     new SessionAuthenticator($session),
     $csrf,
     new TemplateRenderer(dirname(__DIR__, 2) . '/templates')

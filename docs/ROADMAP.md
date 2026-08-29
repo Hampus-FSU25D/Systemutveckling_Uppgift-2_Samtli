@@ -11,7 +11,8 @@ Prioriterad funktionalitet:
 - gruppupptäckt och medlemsansökningar - implementerat
 - per-grupp-rollerna `member` och `administrator`
 - administratörsgodkännande av ansökningar - implementerat
-- diskussioner och svar
+- diskussionsstart och detaljvy - implementerat
+- svar i diskussioner
 - rollhantering för gruppmedlemmar
 - 24-timmars, single-use inbjudningslänkar
 - server-side behörighetskontroller för all gruppdata
