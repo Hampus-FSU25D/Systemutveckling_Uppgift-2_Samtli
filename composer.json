@@ -19,10 +19,12 @@
         "verify:schema": "php tests/Integration/verify_schema.php",
         "verify:registration": "php tests/Integration/verify_registration.php",
         "verify:login": "php tests/Integration/verify_login.php",
+        "verify:groups": "php tests/Integration/verify_group_creation.php",
         "test": [
             "@verify:schema",
             "@verify:registration",
-            "@verify:login"
+            "@verify:login",
+            "@verify:groups"
         ]
     }
 }
