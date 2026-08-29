@@ -15,6 +15,7 @@ use Samtli\Http\LoginController;
 use Samtli\Http\RedirectResponse;
 use Samtli\Http\RegisterController;
 use Samtli\Http\Response;
+use Samtli\Memberships\MemberRoleService;
 use Samtli\Memberships\MembershipRequestService;
 use Samtli\Memberships\MembershipApprovalService;
 use Samtli\Repositories\GroupRepository;
@@ -74,6 +75,7 @@ $discussionController = new DiscussionController(
 );
 $groupAdminController = new GroupAdminController(
     new MembershipApprovalService($memberships),
+    new MemberRoleService($memberships),
     $memberships,
     $authenticator,
     $csrf,
@@ -84,6 +86,7 @@ $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $groupId = groupIdFromPath($path);
 $adminJoinRequest = adminJoinRequestFromPath($path);
+$adminMemberRole = adminMemberRoleFromPath($path);
 $discussionCreateGroupId = discussionCreateGroupIdFromPath($path);
 $discussionDetail = discussionDetailFromPath($path);
 $discussionReply = discussionReplyFromPath($path);
@@ -100,6 +103,8 @@ $response = match (true) {
     $method === 'GET' && $path === '/groups' => $groupController->index(pullFlash('success'), pullFlash('error')),
     $method === 'GET' && $path === '/groups/create' => $groupController->create(),
     $method === 'POST' && $path === '/groups' => $groupController->store($_POST),
+    $method === 'GET' && $adminMemberRole !== null && $adminMemberRole['memberUserId'] === null => $groupAdminController->members($adminMemberRole['groupId'], pullFlash('success'), pullFlash('error')),
+    $method === 'POST' && $adminMemberRole !== null && $adminMemberRole['memberUserId'] !== null => $groupAdminController->updateMemberRole($adminMemberRole['groupId'], $adminMemberRole['memberUserId'], $_POST),
     $method === 'GET' && $adminJoinRequest !== null && $adminJoinRequest['requestId'] === null => $groupAdminController->joinRequests($adminJoinRequest['groupId'], pullFlash('success'), pullFlash('error')),
     $method === 'POST' && $adminJoinRequest !== null && $adminJoinRequest['requestId'] !== null => $groupAdminController->approveJoinRequest($adminJoinRequest['groupId'], $adminJoinRequest['requestId'], $_POST),
     $method === 'GET' && $discussionCreateGroupId !== null => $discussionController->create($discussionCreateGroupId),
@@ -144,6 +149,21 @@ function adminJoinRequestFromPath(string $path): ?array
     return [
         'groupId' => (int) $matches[1],
         'requestId' => isset($matches[2]) ? (int) $matches[2] : null,
+    ];
+}
+
+/**
+ * @return array{groupId: int, memberUserId: int|null}|null
+ */
+function adminMemberRoleFromPath(string $path): ?array
+{
+    if (preg_match('#^/groups/([1-9][0-9]*)/admin/members(?:/([1-9][0-9]*)/role)?$#', $path, $matches) !== 1) {
+        return null;
+    }
+
+    return [
+        'groupId' => (int) $matches[1],
+        'memberUserId' => isset($matches[2]) ? (int) $matches[2] : null,
     ];
 }
 

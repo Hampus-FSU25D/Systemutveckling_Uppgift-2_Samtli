@@ -51,6 +51,42 @@ final class MembershipRepository
         return (int) $statement->fetchColumn() > 0;
     }
 
+    public function memberExists(int $groupId, int $userId): bool
+    {
+        return $this->isMember($groupId, $userId);
+    }
+
+    public function changeMemberRole(int $groupId, int $userId, string $role): void
+    {
+        $statement = $this->pdo->prepare(
+            'UPDATE group_memberships SET role = ? WHERE group_id = ? AND user_id = ?'
+        );
+        $statement->execute([$role, $groupId, $userId]);
+    }
+
+    /**
+     * @return list<array{user_id: int|string, first_name: string, last_name: string, email: string, role: string, joined_at: string}>
+     */
+    public function membersForGroup(int $groupId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT
+                gm.user_id,
+                gm.role,
+                gm.joined_at,
+                u.first_name,
+                u.last_name,
+                u.email
+            FROM group_memberships gm
+            INNER JOIN users u ON u.id = gm.user_id
+            WHERE gm.group_id = ?
+            ORDER BY FIELD(gm.role, 'administrator', 'member'), u.first_name, u.last_name, u.id"
+        );
+        $statement->execute([$groupId]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * @return list<array{id: int|string, user_id: int|string, first_name: string, last_name: string, email: string, created_at: string}>
      */
