@@ -14,6 +14,8 @@
         "ext-pdo_mysql": "*"
     },
     "scripts": {
-        "check:syntax": "find public src templates -name '*.php' -print0 | xargs -0 -n1 php -l"
+        "check:syntax": "find public src templates tests bin -name '*.php' -print0 | xargs -0 -n1 php -l",
+        "migrate": "php bin/migrate.php",
+        "verify:schema": "php tests/Integration/verify_schema.php"
     }
 }
