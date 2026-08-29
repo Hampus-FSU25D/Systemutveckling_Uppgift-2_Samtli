@@ -5,6 +5,7 @@ Canonical production components should be implemented with shared PHP templates 
 | Component | Stitch screens | Canonical design decision | Variants allowed |
 | --- | --- | --- | --- |
 | Public header | `welcome_to_samtli`, auth forms, state pages | Centered Samtli brand, warm translucent or surface header, restrained height around 80px. | Compact mobile spacing. |
+| Wordmark/logo | `samtli_wordmark`, headers | Use the Stitch wordmark/brand direction as the identity reference; keep logo treatment consistent across public and authenticated headers. | Compact icon-only use where space is constrained. |
 | Authenticated header | `home_samtli`, `samtli_home_feed`, `discover_*`, group screens | One shared header with logo, primary nav, optional search, notifications and account trigger. | Active nav state, authenticated user initials, mobile collapse. |
 | Mobile header/navigation | Screens using hidden `md:` nav variants | Same hierarchy as desktop with condensed navigation and tap-sized controls. | Mobile menu disclosure. |
 | Page container | Most screens | Center content in max 1120px container with 24px desktop gutters and 16px mobile margins. | Narrow form container for auth/account screens. |

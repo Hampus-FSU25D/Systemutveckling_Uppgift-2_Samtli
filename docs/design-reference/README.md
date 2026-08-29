@@ -13,8 +13,6 @@ This directory contains the visual reference migrated from the supplied Google S
 - Shared components must be consolidated into canonical reusable application components.
 - Future design changes must consult this reference first.
 
-Some exported `screen.png` files are 28-byte placeholders. For those screens, inspect `code.html` and related valid screenshots to infer the intended layout.
-
 Do not create a visually different header, button, form control, group card or other shared component merely because an individual Stitch screen contains a slight generated variation. Inspect all relevant references and maintain one coherent Samtli design system.
 
 ## Files

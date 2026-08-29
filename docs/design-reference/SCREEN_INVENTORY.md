@@ -1,6 +1,6 @@
 ﻿# Screen Inventory
 
-The supplied Stitch archive contained 34 screen directories plus `samtli/DESIGN.md`.
+The supplied Stitch archive contained 35 screen directories plus `samtli/DESIGN.md`.
 
 | Stitch screen | Purpose | Assignment relevance | Phase |
 | --- | --- | --- | --- |
@@ -8,6 +8,7 @@ The supplied Stitch archive contained 34 screen directories plus `samtli/DESIGN.
 | `samtli_welcome_hampus` | Personalized welcome after authentication | Supporting authenticated state | VG |
 | `home_samtli` | Authenticated home with group/discussion overview | Required home surface | VG |
 | `samtli_home_feed` | Discussion feed and sidebar concepts | Supporting VG state | VG |
+| `samtli_wordmark` | Samtli wordmark/logo asset | Visual identity reference | Reference-only |
 | `register_samtli_1` | Registration form variant | Required account creation | VG |
 | `register_samtli_2` | Registration form variant with password affordance | Required account creation | VG |
 | `create_account_samtli` | Account creation from invitation context | Required invitation acceptance | VG |

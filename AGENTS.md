@@ -51,6 +51,10 @@ Visual consistency across the final application is more important than reproduci
 
 Assignment functionality overrides Stitch when they conflict. Stitch controls visual intent. The assignment controls functional behavior.
 
+## Binary Design Assets
+
+The original Stitch archive in `docs/design-reference/stitch_samtli_community_platform.zip` is the canonical source for imported design assets. Stitch screenshots and other binary assets must be copied or extracted with binary-safe filesystem operations, never reconstructed through text-only file-writing mechanisms. When importing or updating screenshots, validate destination files against the source using PNG signatures and hash comparison where appropriate.
+
 ## Shared Component Consistency
 
 Headers, navigation, buttons, form controls, badges, avatars, group cards, discussion rows, reply composers, admin tabs, account menus and state messages must use one coherent Samtli design system.
