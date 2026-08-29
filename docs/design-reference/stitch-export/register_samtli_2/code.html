@@ -1,0 +1,70 @@
+﻿<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-fixed-dim": "#afc6ff", "on-error": "#ffffff", "on-error-container": "#93000a", "surface-bright": "#faf9f7", "surface-dim": "#dadad8", "error-container": "#ffdad6", "on-tertiary-fixed": "#1b1c1c", "surface-variant": "#e3e2e0", "surface-container-low": "#f4f3f1", "secondary-container": "#9bb8fe", "error": "#ba1a1a", "primary-container": "#1c1b1b", "secondary": "#3f5d9c", "primary-fixed": "#e5e2e1", "on-tertiary-container": "#848484", "on-surface-variant": "#444748", "on-tertiary": "#ffffff", "surface-container-lowest": "#ffffff", "on-secondary": "#ffffff", "on-primary-fixed": "#1c1b1b", "surface": "#faf9f7", "surface-container-highest": "#e3e2e0", "primary": "#000000", "on-primary": "#ffffff", "outline": "#747878", "inverse-surface": "#2f3130", "on-background": "#1a1c1b", "on-primary-container": "#858383", "inverse-on-surface": "#f1f1ef", "on-tertiary-fixed-variant": "#464747", "on-primary-fixed-variant": "#474746", "surface-container-high": "#e9e8e6", "on-secondary-container": "#284785", "tertiary": "#000000", "background": "#faf9f7", "inverse-primary": "#c8c6c5", "surface-tint": "#5f5e5e", "primary-fixed-dim": "#c8c6c5", "on-surface": "#1a1c1b", "tertiary-fixed": "#e3e2e2", "secondary-fixed": "#d9e2ff", "on-secondary-fixed-variant": "#254583", "outline-variant": "#c4c7c7", "on-secondary-fixed": "#001944", "tertiary-fixed-dim": "#c7c6c6", "surface-container": "#efeeec" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "sm": "8px", "xl": "40px", "container-max": "1120px", "md": "16px", "lg": "24px", "gutter": "24px", "margin": "32px", "unit": "4px", "xs": "4px" }, "fontFamily": { "label-md": ["Manrope"], "body-sm": ["Manrope"], "headline-lg": ["Manrope"], "body-lg": ["Manrope"], "label-sm": ["Manrope"], "body-md": ["Manrope"], "headline-sm": ["Manrope"], "headline-xl-mobile": ["Manrope"], "headline-md": ["Manrope"], "headline-xl": ["Manrope"], "headline-lg-mobile": ["Manrope"] } } } }</script><style type="text/css">@layer base { body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom); } .pt-safe { padding-top: env(safe-area-inset-top); } } .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style></head><body class="bg-background text-on-background font-body-md"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="flex items-center justify-between h-14 px-lg"><div class="flex items-center gap-sm"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Samtli</span></div><div class="flex items-center gap-md"><button class="w-11 h-11 flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant">search</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1X10RQVZiPG0v5LtcI71c4VymNYJd0SGSXss38qaONcfi7VFDAItaZnOS3tN5DVOryfOVhn_FhI1NpsUqSavRDfg1HegZ9mEs0WfD8HO5DpCnLsjvw5j4KM7CxDs31rDcVuiw9FgKKIdtpF85UIkliU7ivqn31fLw3G_OTsVLjkkJKk5ir3-GTiEWfG3JbdY0GfCnE009D0fo6DvE2woKlCqtOgkiPy5mouGeFEvOI7y0JvJGZqKe4emNU"/></div></div></header><main class="pt-14 pb-20 bg-surface min-h-screen"><div class="flex flex-col w-full h-full">
+<div class="flex-1 flex flex-col justify-center px-lg py-xl">
+<div class="mb-margin">
+<h1 class="font-headline-xl-mobile text-headline-xl-mobile text-on-surface mb-xs">Create Account</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Join the community and start your journey.</p>
+</div>
+<form class="flex flex-col gap-md" id="register-form">
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-on-surface" for="fullName">Full Name</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant z-10 pointer-events-none">person</span>
+<input class="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow border-none shadow-[inset_0_0_0_1px_#E5E1DC] focus:shadow-[inset_0_0_0_1px_#000000]" id="fullName" name="fullName" placeholder="Jane Doe" required="" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-on-surface" for="email">Email Address</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant z-10 pointer-events-none">mail</span>
+<input class="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-sm focus:outline-none focus:ring-1 focus:ring-primary transition-shadow border-none shadow-[inset_0_0_0_1px_#E5E1DC] focus:shadow-[inset_0_0_0_1px_#000000]" id="email" name="email" placeholder="jane@example.com" required="" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-on-surface" for="password">Password</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant z-10 pointer-events-none">lock</span>
+<input class="w-full bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg py-sm pl-xl pr-xl focus:outline-none focus:ring-1 focus:ring-primary transition-shadow border-none shadow-[inset_0_0_0_1px_#E5E1DC] focus:shadow-[inset_0_0_0_1px_#000000]" id="password" name="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required="" type="password"/>
+<button aria-label="Toggle password visibility" class="absolute right-sm text-on-surface-variant p-unit flex items-center justify-center hover:text-on-surface transition-colors focus:outline-none" onclick="const p = document.getElementById('password'); const icon = this.querySelector('span'); if (p.type === 'password') { p.type = 'text'; icon.textContent = 'visibility'; } else { p.type = 'password'; icon.textContent = 'visibility_off'; }" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility_off</span>
+</button>
+</div>
+<p class="font-body-sm text-[12px] text-on-surface-variant mt-unit">Must be at least 8 characters long.</p>
+</div>
+<div class="mt-lg">
+<button class="w-full bg-secondary text-on-secondary font-label-md text-label-md py-md rounded-lg flex items-center justify-center gap-xs hover:bg-opacity-90 transition-opacity active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary" type="submit">
+          Register
+          <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</form>
+<div class="mt-xl text-center">
+<p class="font-body-md text-body-md text-on-surface-variant">
+        Already have an account?
+        <a class="font-label-md text-label-md text-secondary hover:underline ml-unit" href="#login">Log in here</a>
+</p>
+</div>
+</div>
+</div>
+<script>
+  document.getElementById('register-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+
+    btn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span>`;
+    btn.disabled = true;
+    btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+    setTimeout(() => {
+      btn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Success`;
+      btn.classList.replace('bg-secondary', 'bg-[#3f5d9c]'); // Using secondary color directly for visual change if needed, but sticking to design system tokens is better. Let's just change content.
+
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        btn.classList.remove('opacity-70', 'cursor-not-allowed');
+      }, 1500);
+    }, 1000);
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 bg-surface/80 backdrop-blur-xl pb-safe shadow-[0_-1px_0_rgba(0,0,0,0.05)]" data-active-classes="text-primary"><div class="flex justify-around items-center h-16"><a aria-current="page" class="flex flex-col items-center justify-center w-full h-full transition-colors text-primary" data-path="home-feed" href="#"><span class="material-symbols-outlined">home</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant transition-colors" data-path="discover" href="#"><span class="material-symbols-outlined">explore</span><span class="font-label-sm text-label-sm">Discover</span></a><a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant transition-colors" data-path="profile" href="#"><span class="material-symbols-outlined">person</span><span class="font-label-sm text-label-sm">Profile</span></a></div></nav></body></html>

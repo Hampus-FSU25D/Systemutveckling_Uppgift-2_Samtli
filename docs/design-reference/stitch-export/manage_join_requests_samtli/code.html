@@ -1,0 +1,91 @@
+﻿<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-fixed-dim": "#afc6ff", "on-error": "#ffffff", "on-error-container": "#93000a", "surface-bright": "#faf9f7", "surface-dim": "#dadad8", "error-container": "#ffdad6", "on-tertiary-fixed": "#1b1c1c", "surface-variant": "#e3e2e0", "surface-container-low": "#f4f3f1", "secondary-container": "#9bb8fe", "error": "#ba1a1a", "primary-container": "#1c1b1b", "secondary": "#3f5d9c", "primary-fixed": "#e5e2e1", "on-tertiary-container": "#848484", "on-surface-variant": "#444748", "on-tertiary": "#ffffff", "surface-container-lowest": "#ffffff", "on-secondary": "#ffffff", "on-primary-fixed": "#1c1b1b", "surface": "#faf9f7", "surface-container-highest": "#e3e2e0", "primary": "#000000", "on-primary": "#ffffff", "outline": "#747878", "inverse-surface": "#2f3130", "on-background": "#1a1c1b", "on-primary-container": "#858383", "inverse-on-surface": "#f1f1ef", "on-tertiary-fixed-variant": "#464747", "on-primary-fixed-variant": "#474746", "surface-container-high": "#e9e8e6", "on-secondary-container": "#284785", "tertiary": "#000000", "background": "#faf9f7", "inverse-primary": "#c8c6c5", "surface-tint": "#5f5e5e", "primary-fixed-dim": "#c8c6c5", "on-surface": "#1a1c1b", "tertiary-fixed": "#e3e2e2", "secondary-fixed": "#d9e2ff", "on-secondary-fixed-variant": "#254583", "outline-variant": "#c4c7c7", "on-secondary-fixed": "#001944", "tertiary-fixed-dim": "#c7c6c6", "surface-container": "#efeeec" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "sm": "8px", "xl": "40px", "container-max": "1120px", "md": "16px", "lg": "24px", "gutter": "24px", "margin": "32px", "unit": "4px", "xs": "4px" }, "fontFamily": { "label-md": ["Manrope"], "body-sm": ["Manrope"], "headline-lg": ["Manrope"], "body-lg": ["Manrope"], "label-sm": ["Manrope"], "body-md": ["Manrope"], "headline-sm": ["Manrope"], "headline-xl-mobile": ["Manrope"], "headline-md": ["Manrope"], "headline-xl": ["Manrope"], "headline-lg-mobile": ["Manrope"] } } } }</script><style type="text/css">@layer base { body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom); } .pt-safe { padding-top: env(safe-area-inset-top); } } .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style></head><body class="bg-background text-on-background font-body-md"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="flex items-center justify-between h-14 px-lg"><div class="flex items-center gap-sm"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Samtli</span></div><div class="flex items-center gap-md"><button class="w-11 h-11 flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant">search</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1X10RQVZiPG0v5LtcI71c4VymNYJd0SGSXss38qaONcfi7VFDAItaZnOS3tN5DVOryfOVhn_FhI1NpsUqSavRDfg1HegZ9mEs0WfD8HO5DpCnLsjvw5j4KM7CxDs31rDcVuiw9FgKKIdtpF85UIkliU7ivqn31fLw3G_OTsVLjkkJKk5ir3-GTiEWfG3JbdY0GfCnE009D0fo6DvE2woKlCqtOgkiPy5mouGeFEvOI7y0JvJGZqKe4emNU"/></div></div></header><main class="pt-14 pb-20 bg-surface min-h-screen"><div class="flex flex-col w-full bg-surface min-h-full">
+<!-- Secondary Navigation -->
+<div class="flex items-center gap-md px-4 py-2 border-b border-outline-variant bg-surface sticky top-0 z-10">
+<button class="flex items-center justify-center py-2 px-3 text-label-md font-label-md text-on-surface-variant hover:text-on-surface transition-colors">
+      Members
+    </button>
+<button class="flex flex-col items-center justify-center py-2 px-3 text-label-md font-label-md text-primary relative">
+      Join requests
+      <span class="absolute bottom-[-10px] left-0 right-0 h-0.5 bg-primary rounded-t-full"></span>
+</button>
+</div>
+<!-- Content Area -->
+<div class="flex flex-col gap-4 p-4">
+<div class="flex flex-col gap-1 mb-2">
+<h2 class="text-headline-md font-headline-md text-on-surface">Review Requests</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Review pending requests to join the group.</p>
+</div>
+<!-- Request Card 1 -->
+<div class="flex flex-col p-4 bg-surface-container-lowest rounded-xl border border-outline-variant gap-3">
+<div class="flex items-start gap-3 w-full">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A portrait photograph of a young woman with curly hair, soft natural lighting, muted colors, matching the app's minimalist and warm aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdGlitq50AdZTahlXs5PjhOY_W5UjVrG2kJh4yFh1pr5_RakZ1fY_GkhTxKiTYLmm9IzqunV-tIapDiUyKxGUKv-DuXpvaGbKhDjI12Kn09LaYYs3NHaRTX0GpF9EvsOPmQGgN9Yd5kaXgccgR69Dpqt-7ZWsb3TcM-5693xOCzwUlrQLCBumJ2qHKzNdDEYcwokpOvkCJhpVB07_VVEucVksuvQkPhx0gLveS3dxL_T_7zf1X1Xx1RA"/>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex justify-between items-baseline gap-2">
+<h3 class="text-label-md font-label-md text-on-surface truncate">Elara Vance</h3>
+<span class="text-label-sm font-label-sm text-on-surface-variant whitespace-nowrap">2h ago</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mt-1">
+            "I shoot mostly analogue and would love to join the critiques."
+          </p>
+</div>
+</div>
+<div class="flex gap-2 w-full mt-2">
+<button class="flex-1 py-2 px-4 bg-surface rounded-lg border border-outline-variant text-label-md font-label-md text-on-surface active:bg-surface-variant transition-colors">
+          Decline
+        </button>
+<button class="flex-1 py-2 px-4 bg-primary rounded-lg text-label-md font-label-md text-on-primary active:bg-primary/90 transition-colors">
+          Approve
+        </button>
+</div>
+</div>
+<!-- Request Card 2 -->
+<div class="flex flex-col p-4 bg-surface-container-lowest rounded-xl border border-outline-variant gap-3">
+<div class="flex items-start gap-3 w-full">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A portrait photograph of a man in his 30s with short beard and glasses, looking thoughtful, earthy tones, minimalist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_15sRhJSg9fojD4kXdisMw1no87Qu2o3CMIgfQhSi63GV9xOjTC-qNridRQKwLx3tklggpFiv8so_dSXroa0nNkXUqDefvHsTG9i7l-03AywrIIaBwwdlusfJOHeEYbkXEfJP5ga4QzE-IbhZAcssAGIbBkBfgmu5taWhzSgtHiEZKhq6sP2014ZHw2hz27JsHGx_7kkJr1zvMo1z-gQsHzCfJDJvAu_jE1HgZHzQRlQjYm3MuRf4fw"/>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex justify-between items-baseline gap-2">
+<h3 class="text-label-md font-label-md text-on-surface truncate">Julian Rossi</h3>
+<span class="text-label-sm font-label-sm text-on-surface-variant whitespace-nowrap">5h ago</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mt-1">
+            "Looking to connect with other local landscape photographers."
+          </p>
+</div>
+</div>
+<div class="flex gap-2 w-full mt-2">
+<button class="flex-1 py-2 px-4 bg-surface rounded-lg border border-outline-variant text-label-md font-label-md text-on-surface active:bg-surface-variant transition-colors">
+          Decline
+        </button>
+<button class="flex-1 py-2 px-4 bg-primary rounded-lg text-label-md font-label-md text-on-primary active:bg-primary/90 transition-colors">
+          Approve
+        </button>
+</div>
+</div>
+<!-- Request Card 3 -->
+<div class="flex flex-col p-4 bg-surface-container-lowest rounded-xl border border-outline-variant gap-3">
+<div class="flex items-start gap-3 w-full">
+<div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-headline-sm font-headline-sm">
+          M
+        </div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex justify-between items-baseline gap-2">
+<h3 class="text-label-md font-label-md text-on-surface truncate">Maya Lin</h3>
+<span class="text-label-sm font-label-sm text-on-surface-variant whitespace-nowrap">1d ago</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2 mt-1">
+            "Interested in the upcoming portrait workshops."
+          </p>
+</div>
+</div>
+<div class="flex gap-2 w-full mt-2">
+<button class="flex-1 py-2 px-4 bg-surface rounded-lg border border-outline-variant text-label-md font-label-md text-on-surface active:bg-surface-variant transition-colors">
+          Decline
+        </button>
+<button class="flex-1 py-2 px-4 bg-primary rounded-lg text-label-md font-label-md text-on-primary active:bg-primary/90 transition-colors">
+          Approve
+        </button>
+</div>
+</div>
+</div>
+</div></main><nav class="fixed bottom-0 w-full z-50 bg-surface/80 backdrop-blur-xl pb-safe shadow-[0_-1px_0_rgba(0,0,0,0.05)]" data-active-classes="text-primary"><div class="flex justify-around items-center h-16"><a aria-current="page" class="flex flex-col items-center justify-center w-full h-full transition-colors text-primary" data-path="home-feed" href="#"><span class="material-symbols-outlined">home</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant transition-colors" data-path="discover" href="#"><span class="material-symbols-outlined">explore</span><span class="font-label-sm text-label-sm">Discover</span></a><a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant transition-colors" data-path="profile" href="#"><span class="material-symbols-outlined">person</span><span class="font-label-sm text-label-sm">Profile</span></a></div></nav></body></html>
