@@ -6,12 +6,14 @@ use Samtli\Auth\AuthenticationService;
 use Samtli\Auth\RegistrationService;
 use Samtli\Database\Connection;
 use Samtli\Groups\GroupCreationService;
+use Samtli\Http\GroupAdminController;
 use Samtli\Http\GroupController;
 use Samtli\Http\LoginController;
 use Samtli\Http\RedirectResponse;
 use Samtli\Http\RegisterController;
 use Samtli\Http\Response;
 use Samtli\Memberships\MembershipRequestService;
+use Samtli\Memberships\MembershipApprovalService;
 use Samtli\Repositories\GroupRepository;
 use Samtli\Repositories\MembershipRepository;
 use Samtli\Repositories\UserRepository;
@@ -54,10 +56,18 @@ $groupController = new GroupController(
     $csrf,
     $templates
 );
+$groupAdminController = new GroupAdminController(
+    new MembershipApprovalService($memberships),
+    $memberships,
+    $authenticator,
+    $csrf,
+    $templates
+);
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $groupId = groupIdFromPath($path);
+$adminJoinRequest = adminJoinRequestFromPath($path);
 
 $response = match (true) {
     $method === 'GET' && $path === '/' => new Response($templates->render('home', [
@@ -71,6 +81,8 @@ $response = match (true) {
     $method === 'GET' && $path === '/groups' => $groupController->index(pullFlash('success'), pullFlash('error')),
     $method === 'GET' && $path === '/groups/create' => $groupController->create(),
     $method === 'POST' && $path === '/groups' => $groupController->store($_POST),
+    $method === 'GET' && $adminJoinRequest !== null && $adminJoinRequest['requestId'] === null => $groupAdminController->joinRequests($adminJoinRequest['groupId'], pullFlash('success'), pullFlash('error')),
+    $method === 'POST' && $adminJoinRequest !== null && $adminJoinRequest['requestId'] !== null => $groupAdminController->approveJoinRequest($adminJoinRequest['groupId'], $adminJoinRequest['requestId'], $_POST),
     $method === 'POST' && $groupId !== null && str_ends_with($path, '/join-requests') => $groupController->requestMembership($groupId, $_POST),
     $method === 'GET' && $groupId !== null => $groupController->show($groupId),
     default => new Response($templates->render('home', ['title' => 'Page not found']), 404),
@@ -95,4 +107,19 @@ function groupIdFromPath(string $path): ?int
     }
 
     return (int) $matches[1];
+}
+
+/**
+ * @return array{groupId: int, requestId: int|null}|null
+ */
+function adminJoinRequestFromPath(string $path): ?array
+{
+    if (preg_match('#^/groups/([1-9][0-9]*)/admin/join-requests(?:/([1-9][0-9]*)/approve)?$#', $path, $matches) !== 1) {
+        return null;
+    }
+
+    return [
+        'groupId' => (int) $matches[1],
+        'requestId' => isset($matches[2]) ? (int) $matches[2] : null,
+    ];
 }

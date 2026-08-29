@@ -10,7 +10,7 @@ Prioriterad funktionalitet:
 - gruppskapande - implementerat
 - gruppupptäckt och medlemsansökningar - implementerat
 - per-grupp-rollerna `member` och `administrator`
-- administratörsgodkännande av ansökningar
+- administratörsgodkännande av ansökningar - implementerat
 - diskussioner och svar
 - rollhantering för gruppmedlemmar
 - 24-timmars, single-use inbjudningslänkar

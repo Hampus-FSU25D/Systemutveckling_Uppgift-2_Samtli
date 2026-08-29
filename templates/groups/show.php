@@ -11,8 +11,9 @@ ob_start();
 <section class="bootstrap-panel" aria-labelledby="page-title">
     <p class="eyebrow">Group created</p>
     <h1 id="page-title">Your group is ready.</h1>
-    <p>You are this group's administrator. Group discussions and member flows will be added in upcoming branches.</p>
+    <p>You are this group's administrator. Group discussions will be added in upcoming branches.</p>
     <p class="note">Group ID: <?php echo Html::escape((string) $groupId); ?></p>
+    <p class="note"><a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/join-requests">Review join requests</a></p>
 </section>
 <?php
 $content = (string) ob_get_clean();
