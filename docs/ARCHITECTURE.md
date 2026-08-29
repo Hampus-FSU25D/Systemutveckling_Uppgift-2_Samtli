@@ -26,6 +26,16 @@ Templates är serverrenderade PHP-vyer för presentation. Affärsregler ska inte
 
 Databasschema och seed-data ska ligga under `database/`. Migreringar ska vara SQL-baserade och passa MariaDB/MySQL.
 
+`database/migrations/` innehåller versionsstyrda SQL-migreringar som körs i lexikografisk ordning. `src/Database/Connection.php` skapar PDO-anslutningar från miljövariabler och `src/Database/Migrator.php` ansvarar för migreringslås, tabellen `schema_migrations`, att hoppa över redan körda migreringar och att stoppa vid fel.
+
+Migreringar körs manuellt via CLI, inte automatiskt i HTTP-requester:
+
+```bash
+docker compose exec app php bin/migrate.php
+```
+
+Datamodellen dokumenteras i `docs/database/SCHEMA.md`.
+
 ## Princip
 
 Strukturen ska göra informationsflöden och behörigheter lätta att följa, men undvika onödiga abstraktioner innan funktionaliteten kräver dem.

@@ -32,6 +32,8 @@ The codebase is organized around Controllers, Services, Repositories, Security h
 
 See `docs/ARCHITECTURE.md`.
 
+The database schema is documented in `docs/database/SCHEMA.md`.
+
 ## Design
 
 Google Stitch mockups are stored in `docs/design-reference/` and are the visual source of truth for implementation. Common components must remain visually consistent across the application.
@@ -54,6 +56,18 @@ Start the stack:
 
 ```bash
 docker compose up --build
+```
+
+Apply database migrations:
+
+```bash
+docker compose exec app php bin/migrate.php
+```
+
+The equivalent Composer command inside the application container is:
+
+```bash
+composer migrate
 ```
 
 Open:
