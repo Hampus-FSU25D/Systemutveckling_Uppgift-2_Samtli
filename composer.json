@@ -24,6 +24,7 @@
         "verify:approvals": "php tests/Integration/verify_join_request_approval.php",
         "verify:discussions": "php tests/Integration/verify_discussion_creation.php",
         "verify:replies": "php tests/Integration/verify_discussion_replies.php",
+        "verify:roles": "php tests/Integration/verify_member_roles.php",
         "test": [
             "@verify:schema",
             "@verify:registration",
@@ -32,7 +33,8 @@
             "@verify:memberships",
             "@verify:approvals",
             "@verify:discussions",
-            "@verify:replies"
+            "@verify:replies",
+            "@verify:roles"
         ]
     }
 }

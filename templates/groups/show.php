@@ -26,6 +26,7 @@ ob_start();
     <?php if (($isAdministrator ?? true) === true): ?>
         <div class="admin-link-row">
             <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/join-requests">Review join requests</a>
+            <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/members">Manage members</a>
         </div>
     <?php endif; ?>
 
