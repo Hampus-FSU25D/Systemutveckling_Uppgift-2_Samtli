@@ -11,7 +11,7 @@ ob_start();
     <?php if (($authenticatedUserId ?? null) !== null): ?>
         <h1 id="page-title">You are logged in.</h1>
         <p>The authenticated session is active. Group features will be added in upcoming branches.</p>
-        <p class="note"><a href="/groups/create">Create a group</a> to start shaping a community.</p>
+        <p class="note"><a href="/groups">Discover groups</a> or <a href="/groups/create">create a group</a> to start shaping a community.</p>
     <?php else: ?>
         <h1 id="page-title">PHP environment is running</h1>
         <p>The project foundation is ready for server-rendered community features.</p>

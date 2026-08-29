@@ -8,7 +8,7 @@ The project is built as a course assignment and portfolio project. The goal is a
 
 ## Current Status
 
-The repository foundation, database schema, user registration, login flow and group creation are implemented. Membership applications, discussions and invitations are still planned feature work. The first milestone remains a full VG implementation of the assignment scope.
+The repository foundation, database schema, user registration, login flow, group creation, group discovery and membership request flow are implemented. Administrator approval, discussions and invitations are still planned feature work. The first milestone remains a full VG implementation of the assignment scope.
 
 ## Core Assignment Scope
 

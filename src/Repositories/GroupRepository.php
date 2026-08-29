@@ -40,4 +40,39 @@ final class GroupRepository
             throw $exception;
         }
     }
+
+    public function exists(int $groupId): bool
+    {
+        $statement = $this->pdo->prepare('SELECT COUNT(*) FROM groups WHERE id = ?');
+        $statement->execute([$groupId]);
+
+        return (int) $statement->fetchColumn() > 0;
+    }
+
+    /**
+     * @return list<array{id: int|string, name: string, description: string|null, created_at: string, join_request_status: string|null}>
+     */
+    public function discoverableForUser(int $userId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT
+                g.id,
+                g.name,
+                g.description,
+                g.created_at,
+                jr.status AS join_request_status
+            FROM groups g
+            LEFT JOIN group_memberships gm
+                ON gm.group_id = g.id
+                AND gm.user_id = ?
+            LEFT JOIN group_join_requests jr
+                ON jr.group_id = g.id
+                AND jr.user_id = ?
+            WHERE gm.user_id IS NULL
+            ORDER BY g.created_at DESC, g.id DESC"
+        );
+        $statement->execute([$userId, $userId]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
