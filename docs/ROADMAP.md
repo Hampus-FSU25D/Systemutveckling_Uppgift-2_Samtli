@@ -13,7 +13,7 @@ Prioriterad funktionalitet:
 - administratörsgodkännande av ansökningar - implementerat
 - diskussionsstart och detaljvy - implementerat
 - svar i diskussioner - implementerat
-- rollhantering för gruppmedlemmar
+- rollhantering för gruppmedlemmar - implementerat
 - 24-timmars, single-use inbjudningslänkar
 - server-side behörighetskontroller för all gruppdata
 - Postman-verifiering där API-liknande flöden behövs
