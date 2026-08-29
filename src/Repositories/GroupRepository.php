@@ -50,6 +50,18 @@ final class GroupRepository
     }
 
     /**
+     * @return array{id: int|string, name: string, description: string|null}|null
+     */
+    public function find(int $groupId): ?array
+    {
+        $statement = $this->pdo->prepare('SELECT id, name, description FROM groups WHERE id = ?');
+        $statement->execute([$groupId]);
+        $group = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $group === false ? null : $group;
+    }
+
+    /**
      * @return list<array{id: int|string, name: string, description: string|null, created_at: string, join_request_status: string|null}>
      */
     public function discoverableForUser(int $userId): array

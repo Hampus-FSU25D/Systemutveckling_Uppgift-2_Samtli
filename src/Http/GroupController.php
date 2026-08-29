@@ -6,7 +6,9 @@ namespace Samtli\Http;
 
 use Samtli\Groups\GroupCreationService;
 use Samtli\Memberships\MembershipRequestService;
+use Samtli\Repositories\DiscussionRepository;
 use Samtli\Repositories\GroupRepository;
+use Samtli\Repositories\MembershipRepository;
 use Samtli\Security\CsrfTokenManager;
 use Samtli\Security\SessionAuthenticator;
 use Samtli\View\TemplateRenderer;
@@ -17,6 +19,8 @@ final class GroupController
         private readonly GroupCreationService $groups,
         private readonly MembershipRequestService $membershipRequests,
         private readonly GroupRepository $groupRepository,
+        private readonly MembershipRepository $memberships,
+        private readonly DiscussionRepository $discussions,
         private readonly SessionAuthenticator $authenticator,
         private readonly CsrfTokenManager $csrf,
         private readonly TemplateRenderer $templates
@@ -78,13 +82,34 @@ final class GroupController
 
     public function show(int $groupId): Response|RedirectResponse
     {
-        if (!$this->authenticator->check()) {
+        $userId = $this->authenticator->id();
+
+        if ($userId === null) {
             return new RedirectResponse('/login');
         }
 
+        $group = $this->groupRepository->find($groupId);
+
+        if ($group === null) {
+            return new Response($this->templates->render('home', [
+                'title' => 'Page not found',
+                'authenticatedUserId' => $userId,
+            ]), 404);
+        }
+
+        if (!$this->memberships->isMember($groupId, $userId)) {
+            return new Response($this->templates->render('home', [
+                'title' => 'Forbidden',
+                'authenticatedUserId' => $userId,
+            ]), 403);
+        }
+
         return new Response($this->templates->render('groups/show', [
-            'title' => 'Group created',
+            'title' => (string) $group['name'],
             'groupId' => $groupId,
+            'group' => $group,
+            'discussions' => $this->discussions->forGroup($groupId),
+            'isAdministrator' => $this->memberships->isAdministrator($groupId, $userId),
         ]));
     }
 
