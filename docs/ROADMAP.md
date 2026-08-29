@@ -6,9 +6,9 @@ Första milstolpen är en komplett och säker implementation av alla G- och VG-k
 
 Prioriterad funktionalitet:
 
-- registrering och inloggning
-- gruppskapande
-- medlemskap och medlemsansökningar
+- registrering och inloggning - implementerat
+- gruppskapande - implementerat
+- gruppupptäckt och medlemsansökningar - implementerat
 - per-grupp-rollerna `member` och `administrator`
 - administratörsgodkännande av ansökningar
 - diskussioner och svar
