@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "${APP_PORT:-38515}:80"
+    environment:
+      APP_ENV: "${APP_ENV:-local}"
+      APP_DEBUG: "${APP_DEBUG:-true}"
+      APP_URL: "${APP_URL:-http://localhost:38515}"
+      DB_HOST: "${DB_HOST:-db}"
+      DB_PORT: "${DB_PORT:-3306}"
+      DB_DATABASE: "${DB_DATABASE:-samtli}"
+      DB_USERNAME: "${DB_USERNAME:-samtli}"
+      DB_PASSWORD: "${DB_PASSWORD:-change-me}"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: "${DB_DATABASE:-samtli}"
+      MARIADB_USER: "${DB_USERNAME:-samtli}"
+      MARIADB_PASSWORD: "${DB_PASSWORD:-change-me}"
+      MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-change-root-me}"
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:

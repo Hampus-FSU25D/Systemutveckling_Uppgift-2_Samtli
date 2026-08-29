@@ -1,0 +1,78 @@
+﻿<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={theme:{extend:{"colors":{"on-error":"#ffffff","secondary":"#3f5d9c","tertiary-container":"#1b1c1c","secondary-container":"#9bb8fe","primary-container":"#1c1b1b","primary-fixed-dim":"#c8c6c5","surface-bright":"#faf9f7","secondary-fixed-dim":"#afc6ff","tertiary-fixed-dim":"#c7c6c6","on-secondary-fixed-variant":"#254583","primary":"#000000","surface-container-highest":"#e3e2e0","error":"#ba1a1a","on-secondary":"#ffffff","on-secondary-container":"#284785","on-primary-fixed":"#1c1b1b","surface-variant":"#e3e2e0","on-tertiary-fixed-variant":"#464747","on-primary-container":"#858383","on-secondary-fixed":"#001944","on-tertiary-fixed":"#1b1c1c","tertiary":"#000000","on-background":"#1a1c1b","surface-container":"#efeeec","error-container":"#ffdad6","surface-container-high":"#e9e8e6","on-surface-variant":"#444748","background":"#faf9f7","outline":"#747878","inverse-primary":"#c8c6c5","surface-dim":"#dadad8","surface":"#faf9f7","on-error-container":"#93000a","on-tertiary":"#ffffff","surface-container-low":"#f4f3f1","primary-fixed":"#e5e2e1","surface-tint":"#5f5e5e","on-primary":"#ffffff","on-tertiary-container":"#848484","surface-container-lowest":"#ffffff","on-primary-fixed-variant":"#474746","inverse-on-surface":"#f1f1ef","secondary-fixed":"#d9e2ff","tertiary-fixed":"#e3e2e2","inverse-surface":"#2f3130","on-surface":"#1a1c1b","outline-variant":"#c4c7c7"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"gutter":"24px","md":"16px","margin":"32px","lg":"24px","sm":"8px","xl":"40px","container-max":"1120px","unit":"4px","xs":"4px"},"fontFamily":{"label-md":["Manrope"],"headline-xl":["Manrope"],"label-sm":["Manrope"],"headline-lg-mobile":["Manrope"],"body-sm":["Manrope"],"body-md":["Manrope"],"headline-xl-mobile":["Manrope"],"headline-md":["Manrope"],"body-lg":["Manrope"],"headline-lg":["Manrope"],"headline-sm":["Manrope"]},"fontSize":{"label-md":["14px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"700"}],"label-sm":["12px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"700"}],"body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-xl-mobile":["30px",{"lineHeight":"36px","fontWeight":"700"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}]}}}}</script><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md"><div class="h-20 max-w-[1120px] mx-auto px-lg flex items-center justify-center"><div class="flex items-center gap-sm"><img alt="Samtli" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc8JJs_0oOeE_aAjNe-OQmVivtqFks76F8DipnxIQsGipFJTy9xRMxHyNd5JGzsToh1aFF0hvL4GvMPMcmkoLDP0Dz_l215Iag8LXkd9j3mq-ljIbqHP3uKA8L4mdaJeD6RBS3M3sSJrC2KkMEnZmImYHC8ZRSXaONIru-bGj9jdG-rLp5XliTCi6dr2E32lY0BG-zx4o_4HpfwsaYT46hl9fknXSu10t9zJ0pWptX26EJGxcelunOkg"/><span class="font-headline-md text-primary tracking-tight">Samtli</span></div></div></header><main class="w-full pt-20 min-h-screen flex items-center justify-center"><div class="flex flex-col w-full px-4 md:px-0 py-margin gap-xl">
+<div class="w-full max-w-container-max mx-auto px-4 md:px-gutter space-y-xl">
+<!-- Header -->
+<header class="flex flex-col gap-sm pb-lg border-b border-surface-container-highest">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">System States</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">A collection of empty states and error treatments used across the application. These focus on clarity, providing clear next steps while maintaining the established design language.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- 1. No groups joined -->
+<section class="flex flex-col h-full bg-surface-container-lowest rounded-xl border border-surface-container-highest p-xl shadow-sm transition-shadow duration-300 hover:shadow-md group relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-surface-bright to-surface-container opacity-50 z-0 pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center justify-center text-center h-full min-h-[320px] gap-lg">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-transform duration-300 group-hover:scale-110">
+<span aria-hidden="true" class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 0;">groups</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">No groups joined</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">You haven't joined any groups yet. Discover communities that match your interests.</p>
+</div>
+<button class="mt-sm inline-flex items-center justify-center gap-sm px-6 py-3 rounded-full bg-secondary text-on-secondary font-label-md text-label-md transition-colors duration-200 hover:bg-on-secondary-container hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-surface-container-lowest" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-xl">search</span>
+            Discover groups
+          </button>
+</div>
+</section>
+<!-- 2. No pending requests -->
+<section class="flex flex-col h-full bg-surface-container-lowest rounded-xl border border-surface-container-highest p-xl shadow-sm transition-shadow duration-300 hover:shadow-md group relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-tr from-surface-container to-surface-bright opacity-30 z-0 pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center justify-center text-center h-full min-h-[320px] gap-lg">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-transform duration-300 group-hover:-rotate-12">
+<span aria-hidden="true" class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 0;">notifications_paused</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">No pending requests</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">You're all caught up. New connection requests will appear here.</p>
+</div>
+</div>
+</section>
+<!-- 3. Access Denied -->
+<section class="flex flex-col h-full bg-surface-container-lowest rounded-xl border border-error-container p-xl shadow-sm transition-shadow duration-300 hover:shadow-md relative overflow-hidden">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-error-container/20 rounded-full blur-3xl z-0 pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center justify-center text-center h-full min-h-[320px] gap-lg">
+<div class="w-16 h-16 rounded-full bg-error-container flex items-center justify-center text-on-error-container">
+<span aria-hidden="true" class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Access Denied</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">You don't have the necessary permissions to view this content.</p>
+</div>
+<button class="mt-sm inline-flex items-center justify-center gap-sm px-6 py-3 rounded-full border border-surface-container-highest bg-transparent text-on-surface font-label-md text-label-md transition-colors duration-200 hover:bg-surface-container hover:text-on-surface focus:outline-none focus:ring-2 focus:ring-outline focus:ring-offset-2 focus:ring-offset-surface-container-lowest" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-xl">arrow_back</span>
+            Return to Samtli
+          </button>
+</div>
+</section>
+<!-- 4. 404 Page Not Found -->
+<section class="flex flex-col h-full bg-surface-container-lowest rounded-xl border border-surface-container-highest p-xl shadow-sm transition-shadow duration-300 hover:shadow-md relative overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center">
+<span class="font-headline-xl text-[120px] leading-none text-outline-variant font-bold select-none">404</span>
+</div>
+<div class="relative z-10 flex flex-col items-center justify-center text-center h-full min-h-[320px] gap-lg">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span aria-hidden="true" class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 0;">explore_off</span>
+</div>
+<div class="flex flex-col gap-unit">
+<h2 class="font-headline-md text-headline-md text-on-surface">Page not found</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mx-auto">The page you are looking for might have been removed or is temporarily unavailable.</p>
+</div>
+<button class="mt-sm inline-flex items-center justify-center gap-sm px-6 py-3 rounded-full bg-secondary text-on-secondary font-label-md text-label-md transition-colors duration-200 hover:bg-on-secondary-container hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-surface-container-lowest" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-xl">home</span>
+            Go home
+          </button>
+</div>
+</section>
+</div>
+</div>
+</div></main></body></html>

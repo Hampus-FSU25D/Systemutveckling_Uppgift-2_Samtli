@@ -1,0 +1,19 @@
+{
+    "name": "hampus-fsu25d/samtli",
+    "description": "Server-rendered PHP community platform for interest-based groups and discussions.",
+    "type": "project",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Samtli\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.4",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
+    },
+    "scripts": {
+        "check:syntax": "find public src templates -name '*.php' -print0 | xargs -0 -n1 php -l"
+    }
+}

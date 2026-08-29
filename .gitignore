@@ -20,6 +20,3 @@ coverage/
 *.sqlite
 *.sqlite3
 database/data/
-
-stitch_samtli_community_platform/
-stitch_samtli_community_platform*.zip

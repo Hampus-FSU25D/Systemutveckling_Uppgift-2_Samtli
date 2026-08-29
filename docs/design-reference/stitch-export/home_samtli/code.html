@@ -1,0 +1,209 @@
+﻿<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-fixed-dim": "#afc6ff", "on-error": "#ffffff", "on-error-container": "#93000a", "surface-bright": "#faf9f7", "surface-dim": "#dadad8", "error-container": "#ffdad6", "on-tertiary-fixed": "#1b1c1c", "surface-variant": "#e3e2e0", "surface-container-low": "#f4f3f1", "secondary-container": "#9bb8fe", "error": "#ba1a1a", "primary-container": "#1c1b1b", "secondary": "#3f5d9c", "primary-fixed": "#e5e2e1", "on-tertiary-container": "#848484", "on-surface-variant": "#444748", "on-tertiary": "#ffffff", "surface-container-lowest": "#ffffff", "on-secondary": "#ffffff", "on-primary-fixed": "#1c1b1b", "surface": "#faf9f7", "surface-container-highest": "#e3e2e0", "primary": "#000000", "on-primary": "#ffffff", "outline": "#747878", "inverse-surface": "#2f3130", "on-background": "#1a1c1b", "on-primary-container": "#858383", "inverse-on-surface": "#f1f1ef", "on-tertiary-fixed-variant": "#464747", "on-primary-fixed-variant": "#474746", "surface-container-high": "#e9e8e6", "on-secondary-container": "#284785", "tertiary": "#000000", "background": "#faf9f7", "inverse-primary": "#c8c6c5", "surface-tint": "#5f5e5e", "primary-fixed-dim": "#c8c6c5", "on-surface": "#1a1c1b", "tertiary-fixed": "#e3e2e2", "secondary-fixed": "#d9e2ff", "on-secondary-fixed-variant": "#254583", "outline-variant": "#c4c7c7", "on-secondary-fixed": "#001944", "tertiary-fixed-dim": "#c7c6c6", "surface-container": "#efeeec" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "sm": "8px", "xl": "40px", "container-max": "1120px", "md": "16px", "lg": "24px", "gutter": "24px", "margin": "32px", "unit": "4px", "xs": "4px" }, "fontFamily": { "label-md": ["Manrope"], "body-sm": ["Manrope"], "headline-lg": ["Manrope"], "body-lg": ["Manrope"], "label-sm": ["Manrope"], "body-md": ["Manrope"], "headline-sm": ["Manrope"], "headline-xl-mobile": ["Manrope"], "headline-md": ["Manrope"], "headline-xl": ["Manrope"], "headline-lg-mobile": ["Manrope"] } } } }</script><style type="text/css">@layer base { body { -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom); } .pt-safe { padding-top: env(safe-area-inset-top); } } .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }</style></head><body class="bg-background text-on-background font-body-md"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="flex items-center justify-between h-14 px-lg"><div class="flex items-center gap-sm"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Samtli</span></div><div class="flex items-center gap-md"><button class="w-11 h-11 flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant">search</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1X10RQVZiPG0v5LtcI71c4VymNYJd0SGSXss38qaONcfi7VFDAItaZnOS3tN5DVOryfOVhn_FhI1NpsUqSavRDfg1HegZ9mEs0WfD8HO5DpCnLsjvw5j4KM7CxDs31rDcVuiw9FgKKIdtpF85UIkliU7ivqn31fLw3G_OTsVLjkkJKk5ir3-GTiEWfG3JbdY0GfCnE009D0fo6DvE2woKlCqtOgkiPy5mouGeFEvOI7y0JvJGZqKe4emNU"/></div></div></header><main class="pt-14 pb-20 bg-surface min-h-screen"><div class="flex flex-col w-full px-md gap-xl pb-margin relative">
+<!-- Personalized Greeting -->
+<section class="flex flex-col gap-xs relative z-10 pt-md">
+<div class="flex items-center gap-sm text-secondary">
+<span class="material-symbols-outlined text-[20px]">routine</span>
+<span class="font-label-md text-label-md">Good morning</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">
+      Welcome back, Hampus.
+    </h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+      Here is what's unfolding in your communities today.
+    </p>
+</section>
+<!-- Your Groups (Horizontal Scroll) -->
+<section class="flex flex-col gap-md -mx-md px-md">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Your Groups</h2>
+<button class="font-label-md text-label-md text-secondary px-sm py-xs active:bg-secondary/10 rounded-full transition-colors">
+        View All
+      </button>
+</div>
+<div class="flex overflow-x-auto no-scrollbar gap-md pb-xs snap-x" id="groups-scroll">
+<!-- Group 1 -->
+<button class="flex flex-col items-center gap-sm shrink-0 w-[72px] snap-start group">
+<div class="w-16 h-16 rounded-2xl overflow-hidden shadow-sm relative bg-surface-container-highest transition-transform group-active:scale-95">
+<img class="w-full h-full object-cover" data-alt="A minimalist, top-down photograph of small terracotta pots with fresh green herbs on a warm wooden table, soft natural daylight, Scandinavian aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGIj10zpEv1VayIyL9TgwwUJ3VefPVo55TQKk-dYNcedeQvF_Lhl8Es1nSHKPX13hlNLmx3MlOjC9I3AUZwjpPiZPNcrnOKOG-gBfVbSFpDKu_xkhnKTgGdKmC2aH2ptdAqBdr5Sum0DvLXhG7B-rVHgvZr4ToPwVIS5Tde72jK9qN3N5aVrvc-p_hdFwRWlgSoYGoK6o4_g8Jh8aUbABD1B-1r6SNNx_TH-9wme2eFIROl7fbtStS-Q"/>
+<div class="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full border-2 border-surface flex items-center justify-center"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface text-center line-clamp-1 group-active:text-secondary transition-colors">Urban Gardens</span>
+</button>
+<!-- Group 2 -->
+<button class="flex flex-col items-center gap-sm shrink-0 w-[72px] snap-start group">
+<div class="w-16 h-16 rounded-2xl overflow-hidden shadow-sm relative bg-surface-container-highest transition-transform group-active:scale-95">
+<img class="w-full h-full object-cover" data-alt="A close-up of a perfectly poured cortado coffee in a matte ceramic cup resting on a light birch wood saucer, moody ambient lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4RBJrqtA7ZBUK1Rx-GNBISvUcS_Va2BivAHOvRxLZN5jDSSqKKj-OLi7qo9VsK8ZpSzXVE6P_ci_DcBBGnLeHPChzuAcAj2erTq0OxQGImJXOrHNh7uAImIwvwFrftbiFQVMpY9aaht2olmRxhi8Z7FZ54wIreEe59EscXCjHq0g-IybzCqLJsgGCobuIlJPP12EoEObkcBLofiydOJ391axrUTjUWrzF4PmQ8zQ7n0oCaSiPfEP_3A"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center line-clamp-1 group-active:text-secondary transition-colors">Coffee Snobs</span>
+</button>
+<!-- Group 3 -->
+<button class="flex flex-col items-center gap-sm shrink-0 w-[72px] snap-start group">
+<div class="w-16 h-16 rounded-2xl overflow-hidden shadow-sm relative bg-surface-container-highest transition-transform group-active:scale-95">
+<img class="w-full h-full object-cover" data-alt="Abstract architectural photography of a curved concrete wall with striking sunlight and shadow patterns, minimalist composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA7bzIq20n7RZajXY51_5OBkAn1curyetJ9kvn2_MG0g59RGQVEvBMS_lpIqNlEBE4eeH9gIgt0CdFds4SCs2Ai2r5kHe-hyqW2jVxvlIksQ66Ibdw_vZnsXlrZSxgb5zUc0vaX2f18nLpzs8ShgBThw5Mpzm7zSPCkaIRzk6NPG3hdutrvegXskXjRehqZiJkSvyUKKXy0bfRMJwelwhcabRZxVlYnKWw1Kup0AoqWpQD67QhCcEAVA"/>
+<div class="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full border-2 border-surface flex items-center justify-center"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface text-center line-clamp-1 group-active:text-secondary transition-colors">Nordic Design</span>
+</button>
+<!-- Group 4 -->
+<button class="flex flex-col items-center gap-sm shrink-0 w-[72px] snap-start group">
+<div class="w-16 h-16 rounded-2xl overflow-hidden shadow-sm relative bg-surface-container-highest transition-transform group-active:scale-95">
+<img class="w-full h-full object-cover" data-alt="A beautifully crafted fixed-gear bicycle leaning against a pale yellow brick wall, bright and airy feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmmSmF3quXnzsyTunK1MoW-P59g6HnJtUxn-WItDVwzB842LDzzf1gLF7Gotfuf_qRt4a0O6skXc50zOc6mYyU-uwlh7DPyjbzGsD55QlcA5MBSxkbc4KZZuhRRxmhWmHrKgldELnVPY0IoO9GH15HA6shKIHPCrOnaSCEUJfWehZnsxYWVc6aIc_QGyMBJ7dugSE6VWhJ7uzt7CSNtCTX-oAGyXNxEFvxBJMdVHjCbVKSMOgkkXWEjg"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center line-clamp-1 group-active:text-secondary transition-colors">City Cycling</span>
+</button>
+<!-- Add New -->
+<button class="flex flex-col items-center gap-sm shrink-0 w-[72px] snap-start group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center shadow-sm transition-transform group-active:scale-95">
+<span class="material-symbols-outlined text-secondary text-[28px]">add</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary text-center line-clamp-1">Discover</span>
+</button>
+<!-- Spacer for scroll -->
+<div class="w-xs shrink-0"></div>
+</div>
+</section>
+<!-- Latest Threads -->
+<section class="flex flex-col gap-md">
+<div class="flex items-center justify-between pb-sm">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Latest Threads</h2>
+<button class="flex items-center gap-xs font-label-md text-label-md text-on-surface-variant active:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+        Filter
+      </button>
+</div>
+<div class="flex flex-col gap-md">
+<!-- Thread Card 1 -->
+<article class="bg-surface-container-lowest shadow-sm rounded-2xl p-md flex flex-col gap-sm active:bg-surface-container-lowest/80 transition-colors relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-md bg-surface-container-high overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Minimalist top-down view of terracotta pots and herbs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6uSHHdqMMTM7PfP9YIw9sVnCS-Sh4dYHenub9Lmb6yQOTQEoKYatGsWWuFaY-dATuNQd7JqGVFBG2tdEuytulpS5pYe0sqjkgZvNH2Mx-3E2NhvF8FdxCHTbqjkOWK8u4vl1dytiU6afSuys3iulO9tPNwrqfKmR2CM9yo0QANywGLmvfFJxWG3PJ4lvZckQgVjuGvrijsuCvZTYozYjxVFBWcHuUrMd7LdbOVfi7NOP89FvE12ifgA"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Urban Gardens</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant opacity-70">2h ago</span>
+</div>
+<div class="flex flex-col gap-xs mt-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight line-clamp-2">
+            Tips for winterizing balcony planters in minus degrees?
+          </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+            First real frost hit last night and I'm worried about my perennials. Does anyone have experience with wrapping pots in burlap vs just bringing them close to the wall?
+          </p>
+</div>
+<div class="flex items-center justify-between mt-sm pt-sm border-t border-surface-variant">
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="font-label-sm text-label-sm">12</span>
+</button>
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+<span class="font-label-sm text-label-sm">14</span>
+</button>
+</div>
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-surface-container-lowest object-cover z-20" data-alt="Portrait of a smiling woman with glasses, warm lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy5Kgrc6R-m9UHh56UGviVoignd_bk8O7XlbLcLcIHYVp1MVwMms1zb1tdLdrRTeRKSEw0ICdt-jAEH7X6EH6dNTSgY4ieNixCl3QHbvFzPE4aj57mBzlVf7lTPihF28SmVxgWfC0yoCKXgBpu1h1l7B68ITechlFqvYmsaqcQ3hMZ00bZIWtCx4EwP133rlDAKt9yWVnCH3bwaYoPrDsXxGG8cp3sVppp1csrgQkuZpZYiZdpMZ_REg"/>
+<img class="w-6 h-6 rounded-full border-2 border-surface-container-lowest object-cover z-10" data-alt="Portrait of a man with a beanie hat, outdoors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_R_d3iXImxGGlQ9SOXKA_htcyvP6p5e4ZBtSfG2hKT2IrTqhWOsdIvsG2yPJ4ZwjpTTvWw-8nQ_KipHBupI3_tggTZaxDcnGT7cJkQUBeq_y4EzOkTplgdjb2bUgW1bmcQATpcatcc9GNzkGVfjtDjmwLlXjwCjygfHSNmBw4CtxO549jHKbHk7Tx4GGSl2NNwS1o3YunaSRwlIn9ZTAfqWRNnMDpRE5rqrGmR28vdEI30dnz5W0Fvw"/>
+<div class="w-6 h-6 rounded-full border-2 border-surface-container-lowest bg-surface-container-high flex items-center justify-center z-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant scale-75">+4</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Thread Card 2 -->
+<article class="bg-surface-container-lowest shadow-sm rounded-2xl p-md flex flex-col gap-sm active:bg-surface-container-lowest/80 transition-colors relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-md bg-surface-container-high overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Abstract architectural photography of a curved concrete wall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmKYFNngVCRaiUr_RjHP13Dtuym_2Bn_Pnd7yoSxSTy1rPfdRAIXPWMBVvi0BtUyE3WXhtCDSc3GjjQ4HMzZs-iKYI-zgm0WLWd_0FJ-1WxY0ifUnzHvxmzfeVLnuH5cLXpxr7f2sUGprFMEZ3SzrMgLv6HCXAY4sH8L6WMuYsN1parxNeQ4oPStw6MeAhWy-hJNj7DW3lMbrFdyrBTu4MKxc-HKZo-bz8_ABCWH79O0zE7L9iR3wSBg"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Nordic Design</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant opacity-70">5h ago</span>
+</div>
+<div class="flex flex-col gap-xs mt-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight line-clamp-2">
+            Thoughts on the new Alvar Aalto exhibition?
+          </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+            I visited the museum this weekend and was blown away by the curation of his early glassware prototypes. Highly recommend checking it out before it closes in May.
+          </p>
+</div>
+<div class="flex items-center justify-between mt-sm pt-sm border-t border-surface-variant">
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="font-label-sm text-label-sm">45</span>
+</button>
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+<span class="font-label-sm text-label-sm">32</span>
+</button>
+</div>
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-surface-container-lowest object-cover z-20" data-alt="Portrait of an older man with white hair and a kind expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWcwY_DJ8acsHkv4bP7pJE9ymI2A63LgnMp-8G8-ueJRIGO3KuQXQy3Y43wqkGVNX8TtauvA0Giw06poGYfZSkNrBD32vSHtLrj8AqxbDmseRkRsWVXGMEokIfu9PQScFELRG3XtmOlrxv4QdhMBURZ77FA_raY0FUYatmJjH39uCyjzok5kxeftjAWXvYjxdT5tQFgvNtFd67hNr1OKifzzD86llcY-S61FSqcsdgRbJdhXU-Xjq6Tg"/>
+<img class="w-6 h-6 rounded-full border-2 border-surface-container-lowest object-cover z-10" data-alt="Portrait of a young woman with a bob haircut, looking thoughtful." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgOkjQYGhcVek67vDA151jWpbjdNFYBEEiEEvmtprypF9-5jpioik9MyhslLutU6UUHC5NnqVh1u032b0F_ogmfu1Y-co8OMzqEhlsKuWFfyUtyDIJCaYR5UJW9s3AkMnZDOVscMs_l-I-8rxKVoQquwbU1Ge-bDlJ610XDq-NS3Wm3BC5xO461tD7SwX4lhuI8N-vU0kz_VolFYct08xwwlvUi3RGowh1DbMztNYABg0lW5HQla4Vzw"/>
+<div class="w-6 h-6 rounded-full border-2 border-surface-container-lowest bg-surface-container-high flex items-center justify-center z-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant scale-75">+12</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Thread Card 3 (Image heavy) -->
+<article class="bg-surface-container-lowest shadow-sm rounded-2xl p-md flex flex-col gap-sm active:bg-surface-container-lowest/80 transition-colors relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-md bg-surface-container-high overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A close-up of a perfectly poured cortado coffee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPd2nXkDdhE1kEt6WXAudHg-eyRW6mSAByHHWJSLdU3N1vJm0jE2qUZhsGvaXeOdcO5KFUcI3kUxHNAw48MosFbfQgmNbvGPPpZ3K3HP_t8f4XZjcyub7xliPvjBGVhYSrApZqzZPhaozAY7XzefzIJvJMk-Jnf0r7FaW3PkyB6sgnLQoTv8b5Ye-Kop4QzgQceSHbOKU1orHBeShUSPqP_-p3Lc_XzjNPK0g0RT7jA6MYZsDf2uyk9A"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Coffee Snobs</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant opacity-70">Yesterday</span>
+</div>
+<div class="flex flex-col gap-xs mt-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight line-clamp-2">
+            Just pulled my first perfect shot on the new Flair 58!
+          </h3>
+<div class="mt-sm rounded-xl overflow-hidden h-40 bg-surface-container w-full relative">
+<img class="w-full h-full object-cover absolute inset-0" data-alt="A glistening shot of espresso being pulled from a manual lever espresso maker into a clear glass cup, rich crema, dark moody background, high resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJWclSDk4wpk_X_F8ARaHFOYZOI28sVt3Ac91JlIgRVIt8n7tLlkWK70AcbeX5PK8qWyy1IUGKxrAv15KkXj0AG_HHcaSaVHfwHBYEWbTxKrRRP14YfJoMZbZr9MY74SPye_oW2K0OCeYREzTxGBSJPH_T_mUUeyrvdD9QwnbF3VGuUBK7AQrnVouTyjh4CEP2ZEVaXIhPXYUVmDGdUc_oCNCXR3lop9yHjypDZog_51xy61JSVwrxPg"/>
+</div>
+</div>
+<div class="flex items-center justify-between mt-sm pt-sm border-t border-surface-variant">
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span class="font-label-sm text-label-sm">89</span>
+</button>
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+<span class="font-label-sm text-label-sm">24</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+</div>
+<script>
+  // Simple intersection observer to add a subtle fade-in effect to cards as they scroll into view
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll('article');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(10px)';
+      card.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+      observer.observe(card);
+    });
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 bg-surface/80 backdrop-blur-xl pb-safe shadow-[0_-1px_0_rgba(0,0,0,0.05)]" data-active-classes="text-primary"><div class="flex justify-around items-center h-16"><a aria-current="page" class="flex flex-col items-center justify-center w-full h-full transition-colors text-primary" data-path="home-feed" href="#"><span class="material-symbols-outlined">home</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant transition-colors" data-path="discover" href="#"><span class="material-symbols-outlined">explore</span><span class="font-label-sm text-label-sm">Discover</span></a><a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant transition-colors" data-path="profile" href="#"><span class="material-symbols-outlined">person</span><span class="font-label-sm text-label-sm">Profile</span></a></div></nav></body></html>
