@@ -2,6 +2,10 @@
 
 This document describes the authoritative relational model for the initial VG scope. The schema is defined by SQL migrations in `database/migrations/` and applied with `php bin/migrate.php`.
 
+## Entity Relationship Diagram
+
+![Samtli entity relationship diagram](samtli-erd.png)
+
 ## Tables
 
 ### `users`
