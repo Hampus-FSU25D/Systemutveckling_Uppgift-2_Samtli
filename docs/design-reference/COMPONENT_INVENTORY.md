@@ -16,7 +16,7 @@ Canonical production components should be implemented with shared PHP templates 
 | Input | Login, register, account, group/discussion forms | Implemented in `public/assets/css/base.css` as `.form-input`: white surface, 1px warm-gray border, 4px radius and near-black focus border. | Password visibility affordance. |
 | Textarea | Group and discussion creation, reply composer | Same visual treatment as inputs, larger vertical padding, no framework-specific resize behavior required. | Taller composer variant. |
 | Form field | Auth/account/create screens | Implemented by auth templates with label, control and helper/error text grouped consistently with 4-16px rhythm. | Required/helper/error states. |
-| Validation message | `log_in_error_samtli`, `application_states_ui_feedback_samtli` | Implemented as `.field-error` and `.form-alert`: muted red text/container with clear field or form association. | Inline field error, form-level alert. |
+| Validation message | `log_in_error_samtli`, `application_states_ui_feedback_samtli` | Implemented as `.field-error` and `.form-alert`: muted red text/container with clear field or form association, including generic login failure messaging. | Inline field error, form-level alert. |
 | User avatar | Feed, discussion and account contexts | Square initials avatar with 4px radius and muted earth-tone fills. | 32px compact, 40px list, larger profile/admin contexts. |
 | Group icon | Discover, home sidebar, group pages | Stroke icon or minimal tile in neutral container, not photo-heavy by default. | Category-specific icon. |
 | Membership badge | Group/discover screens | Small neutral or cobalt-tinted badge with label-md/label-sm typography. | Pending, member, joined. |
