@@ -1,0 +1,13 @@
+.git/
+.env
+vendor/
+tmp/
+logs/
+.cache/
+.idea/
+.vscode/
+*.log
+*.sql
+*.dump
+*.sqlite
+*.sqlite3
