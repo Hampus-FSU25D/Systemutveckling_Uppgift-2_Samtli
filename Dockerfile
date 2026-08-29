@@ -8,7 +8,7 @@ COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.con
 
 WORKDIR /var/www/html
 
-COPY composer.json ./
+COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-interaction --no-progress --optimize-autoloader
 
 COPY . .

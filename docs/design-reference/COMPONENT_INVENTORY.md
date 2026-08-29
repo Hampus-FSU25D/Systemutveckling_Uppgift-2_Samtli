@@ -4,19 +4,19 @@ Canonical production components should be implemented with shared PHP templates 
 
 | Component | Stitch screens | Canonical design decision | Variants allowed |
 | --- | --- | --- | --- |
-| Public header | `welcome_to_samtli`, auth forms, state pages | Centered Samtli brand, warm translucent or surface header, restrained height around 80px. | Compact mobile spacing. |
+| Public header | `welcome_to_samtli`, auth forms, state pages | Implemented in `templates/layouts/public.php` with centered Samtli brand, warm translucent header and restrained height around 80px. | Compact mobile spacing. |
 | Wordmark/logo | `samtli_wordmark`, headers | Use the Stitch wordmark/brand direction as the identity reference; keep logo treatment consistent across public and authenticated headers. | Compact icon-only use where space is constrained. |
 | Authenticated header | `home_samtli`, `samtli_home_feed`, `discover_*`, group screens | One shared header with logo, primary nav, optional search, notifications and account trigger. | Active nav state, authenticated user initials, mobile collapse. |
 | Mobile header/navigation | Screens using hidden `md:` nav variants | Same hierarchy as desktop with condensed navigation and tap-sized controls. | Mobile menu disclosure. |
 | Page container | Most screens | Center content in max 1120px container with 24px desktop gutters and 16px mobile margins. | Narrow form container for auth/account screens. |
-| Primary button | Forms, group actions, admin actions | Cobalt/secondary background, white text, 4-8px radius depending context, label weight 600. | Full-width form submit, icon-leading action. |
+| Primary button | Forms, group actions, admin actions | Implemented in `public/assets/css/base.css` as `.button--primary`: cobalt/secondary background, white text, 4px radius and label weight 700 for auth forms. | Full-width form submit, icon-leading action. |
 | Secondary button | Cancel, explore, return actions | White or transparent surface with subtle warm-gray border and near-black text. | Disabled state and compact toolbar use. |
 | Text button | Login/register links, footer/action links | Cobalt or near-black text, underline on hover only where link-like. | Destructive text variant. |
 | Destructive button | Logout/error-adjacent actions | Muted red text or error container treatment, never only client-side. | Icon-leading logout. |
-| Input | Login, register, account, group/discussion forms | White or lowest surface background, 1px warm-gray border, 4px radius, cobalt/primary focus border. | Password visibility affordance. |
+| Input | Login, register, account, group/discussion forms | Implemented in `public/assets/css/base.css` as `.form-input`: white surface, 1px warm-gray border, 4px radius and near-black focus border. | Password visibility affordance. |
 | Textarea | Group and discussion creation, reply composer | Same visual treatment as inputs, larger vertical padding, no framework-specific resize behavior required. | Taller composer variant. |
-| Form field | Auth/account/create screens | Label, control and helper/error text grouped consistently with 8-16px rhythm. | Required/helper/error states. |
-| Validation message | `log_in_error_samtli`, `application_states_ui_feedback_samtli` | Muted red text/container with clear association to field or form. | Inline field error, form-level alert. |
+| Form field | Auth/account/create screens | Implemented by auth templates with label, control and helper/error text grouped consistently with 4-16px rhythm. | Required/helper/error states. |
+| Validation message | `log_in_error_samtli`, `application_states_ui_feedback_samtli` | Implemented as `.field-error` and `.form-alert`: muted red text/container with clear field or form association. | Inline field error, form-level alert. |
 | User avatar | Feed, discussion and account contexts | Square initials avatar with 4px radius and muted earth-tone fills. | 32px compact, 40px list, larger profile/admin contexts. |
 | Group icon | Discover, home sidebar, group pages | Stroke icon or minimal tile in neutral container, not photo-heavy by default. | Category-specific icon. |
 | Membership badge | Group/discover screens | Small neutral or cobalt-tinted badge with label-md/label-sm typography. | Pending, member, joined. |

@@ -2,24 +2,53 @@
 
 declare(strict_types=1);
 
-$environment = getenv('APP_ENV') ?: 'local';
+use Samtli\Auth\RegistrationService;
+use Samtli\Database\Connection;
+use Samtli\Http\RedirectResponse;
+use Samtli\Http\RegisterController;
+use Samtli\Http\Response;
+use Samtli\Repositories\UserRepository;
+use Samtli\Security\CsrfTokenManager;
+use Samtli\View\TemplateRenderer;
 
-?><!doctype html>
-<html lang="sv">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Samtli</title>
-    <link rel="stylesheet" href="/assets/css/base.css">
-</head>
-<body>
-    <main class="bootstrap-page">
-        <section class="bootstrap-panel" aria-labelledby="page-title">
-            <p class="eyebrow">Samtli</p>
-            <h1 id="page-title">PHP-miljön är igång</h1>
-            <p>Projektgrunden kör PHP <?php echo htmlspecialchars(PHP_VERSION, ENT_QUOTES, 'UTF-8'); ?> i miljö <?php echo htmlspecialchars($environment, ENT_QUOTES, 'UTF-8'); ?>.</p>
-            <p class="note">Forumfunktioner byggs i kommande feature branches.</p>
-        </section>
-    </main>
-</body>
-</html>
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+session_start([
+    'cookie_httponly' => true,
+    'cookie_samesite' => 'Lax',
+    'use_strict_mode' => true,
+]);
+
+$templates = new TemplateRenderer(dirname(__DIR__) . '/templates');
+$csrf = new CsrfTokenManager($_SESSION);
+$controller = new RegisterController(
+    new RegistrationService(new UserRepository(Connection::fromEnvironment())),
+    $csrf,
+    $templates
+);
+
+$path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+$response = match ([$method, $path]) {
+    ['GET', '/'] => new Response($templates->render('home', ['title' => 'Samtli'])),
+    ['GET', '/register'] => $controller->show(),
+    ['POST', '/register'] => $controller->store($_POST),
+    ['GET', '/login'] => new Response($templates->render('auth/login-placeholder', [
+        'title' => 'Log in',
+        'flash' => pullFlash('success'),
+    ])),
+    default => new Response($templates->render('home', ['title' => 'Page not found']), 404),
+};
+
+if ($response instanceof Response || $response instanceof RedirectResponse) {
+    $response->send();
+}
+
+function pullFlash(string $key): ?string
+{
+    $message = $_SESSION['_flash'][$key] ?? null;
+    unset($_SESSION['_flash'][$key]);
+
+    return is_string($message) ? $message : null;
+}
