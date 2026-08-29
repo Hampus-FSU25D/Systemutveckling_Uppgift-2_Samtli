@@ -14,7 +14,7 @@ Canonical production components should be implemented with shared PHP templates 
 | Text button | Login/register links, footer/action links | Cobalt or near-black text, underline on hover only where link-like. | Destructive text variant. |
 | Destructive button | Logout/error-adjacent actions | Muted red text or error container treatment, never only client-side. | Icon-leading logout. |
 | Input | Login, register, account, group/discussion forms | Implemented in `public/assets/css/base.css` as `.form-input`: white surface, 1px warm-gray border, 4px radius and near-black focus border. | Password visibility affordance. |
-| Textarea | Group and discussion creation, reply composer | Same visual treatment as inputs, larger vertical padding, no framework-specific resize behavior required. | Taller composer variant. |
+| Textarea | Group and discussion creation, reply composer | Implemented in `public/assets/css/base.css` as `.form-textarea` with the same visual treatment as inputs and larger vertical padding. | Taller composer variant. |
 | Form field | Auth/account/create screens | Implemented by auth templates with label, control and helper/error text grouped consistently with 4-16px rhythm. | Required/helper/error states. |
 | Validation message | `log_in_error_samtli`, `application_states_ui_feedback_samtli` | Implemented as `.field-error` and `.form-alert`: muted red text/container with clear field or form association, including generic login failure messaging. | Inline field error, form-level alert. |
 | User avatar | Feed, discussion and account contexts | Square initials avatar with 4px radius and muted earth-tone fills. | 32px compact, 40px list, larger profile/admin contexts. |
@@ -28,7 +28,7 @@ Canonical production components should be implemented with shared PHP templates 
 | Reply composer | Replying discussion screen | Textarea with clear submit action below or aligned right; preserve content focus. | Empty, focused, submitting. |
 | Admin navigation/tabs | `manage_*` screens | One shared admin tab/nav pattern for overview, join requests, members and invitations. | Active tab, count badge. |
 | Empty state | Empty group, empty requests, state screens | Centered or section-level neutral panel, concise heading, optional icon and one next action. | Page-level, list-level. |
-| Success state | Joined/invitation feedback screens | Warm minimal confirmation with semantic success color used sparingly. | Inline alert, page confirmation. |
+| Success state | Joined/invitation feedback screens | Warm minimal confirmation with semantic success color used sparingly; group creation currently uses a minimal page confirmation after redirect. | Inline alert, page confirmation. |
 | Error state | Login error, invitation unavailable, 404 | Clear message, muted red only where error-specific, one recovery action. | Field-level, page-level. |
 | Invitation card | Invitation screens/admin invitations | Card with group context, expiry/single-use state and primary accept/copy action. | Valid, expired, used, copied. |
 | Account menu | Authenticated header/account screen | Initials avatar trigger with small menu; account page uses same identity primitives. | Open/closed, logout visible. |
