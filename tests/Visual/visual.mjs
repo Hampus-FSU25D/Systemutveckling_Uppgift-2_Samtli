@@ -104,7 +104,8 @@ async function runVisualSuite(runMode) {
   const worst = rows.reduce((max, row) => Math.max(max, row.mismatchPercentage), 0);
   console.log(`${runMode} captured ${rows.length} screens. Worst mismatch: ${(worst * 100).toFixed(2)}%.`);
   if (runMode === 'test' && rows.some((row) => row.result === 'REVIEW')) {
-    console.log('Some screens exceed the visual review threshold; see artifacts/visual/report.md.');
+    console.error('Some screens exceed the visual review threshold; see artifacts/visual/report.md.');
+    process.exitCode = 1;
   }
 }
 

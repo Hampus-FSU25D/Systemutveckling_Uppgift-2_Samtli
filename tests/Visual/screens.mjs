@@ -6,6 +6,7 @@ export const screens = [
     auth: 'guest',
     state: 'guest-full-page',
     variant: 'canonical-public-home',
+    notes: 'Intentional production deviation: Stitch shows About, but Samtli has no About route or section, so the real header omits that dead-end nav item.',
     tags: ['full-page', 'guest'],
   },
   {
@@ -60,6 +61,7 @@ export const screens = [
     auth: 'guest',
     state: 'registration-form',
     variant: 'canonical-registration',
+    notes: 'Intentional production deviation: Stitch mobile chrome includes Profile, but Samtli has no profile route yet, so production mobile nav only links to real routes.',
     tags: ['full-page', 'guest', 'form'],
   },
   {
@@ -115,6 +117,7 @@ export const screens = [
     auth: 'member',
     state: 'discover-groups',
     variant: 'discover-variant',
+    notes: 'Intentional production deviation: mobile bottom navigation uses Home, Explore, and Create because these are implemented routes.',
     tags: ['full-page', 'authenticated', 'member-state'],
   },
   {
@@ -321,4 +324,3 @@ export const screens = [
     tags: ['full-page', 'error-state', 'form'],
   },
 ];
-

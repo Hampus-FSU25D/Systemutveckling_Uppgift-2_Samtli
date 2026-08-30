@@ -7,8 +7,10 @@ use Samtli\View\Html;
 /** @var string $title */
 /** @var string $content */
 /** @var string|null $mainClass */
+/** @var bool|null $showFooter */
 
 $layoutUserId = $authenticatedUserId ?? ($_SESSION['auth_user_id'] ?? null);
+$isAuthenticatedLayout = is_int($layoutUserId) && $layoutUserId > 0;
 
 ?><!doctype html>
 <html lang="en">
@@ -33,7 +35,7 @@ $layoutUserId = $authenticatedUserId ?? ($_SESSION['auth_user_id'] ?? null);
                 </nav>
             </div>
             <nav class="public-actions" aria-label="Account">
-                <?php if (is_int($layoutUserId) && $layoutUserId > 0): ?>
+                <?php if ($isAuthenticatedLayout): ?>
                     <a class="public-actions__primary" href="/groups/create">Create group</a>
                 <?php else: ?>
                     <a href="/login">Log in</a>
@@ -45,5 +47,25 @@ $layoutUserId = $authenticatedUserId ?? ($_SESSION['auth_user_id'] ?? null);
     <main class="<?php echo Html::escape($mainClass ?? 'auth-page'); ?>">
         <?php echo $content; ?>
     </main>
+    <?php if (($showFooter ?? false) === true): ?>
+        <footer class="public-footer">
+            <div class="public-footer__inner">
+                <span>Samtli</span>
+                <div class="public-footer__links" aria-label="Policy pages planned">
+                    <span>Privacy</span>
+                    <span>Terms</span>
+                    <span>Community Guidelines</span>
+                </div>
+                <span>&copy; 2024 Samtli. Built for community.</span>
+            </div>
+        </footer>
+    <?php endif; ?>
+    <?php if ($isAuthenticatedLayout): ?>
+        <nav class="mobile-tabbar" aria-label="Mobile primary">
+            <a href="/">Home</a>
+            <a href="/groups">Explore</a>
+            <a href="/groups/create">Create</a>
+        </nav>
+    <?php endif; ?>
 </body>
 </html>

@@ -143,4 +143,5 @@ ob_start();
 <?php
 $content = (string) ob_get_clean();
 $mainClass = ($authenticatedUserId ?? null) !== null ? 'home-main home-main--feed' : 'home-main';
+$showFooter = ($authenticatedUserId ?? null) === null;
 require __DIR__ . '/layouts/public.php';

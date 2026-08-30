@@ -29,15 +29,18 @@ try {
     addMembership($pdo, $photographyId, $adminId, 'administrator', '2026-01-04 09:00:00');
     addMembership($pdo, $photographyId, $memberId, 'member', '2026-01-05 10:00:00');
 
-    $emptyGroupId = createGroup($pdo, 'Empty Photography', 'A quiet photo room ready for its first discussion.', $adminId);
+    $emptyGroupId = createGroup($pdo, 'Photography', 'Capturing the world through a lens.', $adminId);
     addMembership($pdo, $emptyGroupId, $adminId, 'administrator', '2026-01-06 10:00:00');
+    addMembership($pdo, $emptyGroupId, $memberId, 'member', '2026-01-06 11:00:00');
 
-    $designGroupId = createGroup($pdo, 'Nordic Design', 'For Scandinavian interiors, product craft and visual culture.', $outsiderId);
-    addMembership($pdo, $designGroupId, $outsiderId, 'administrator', '2026-01-07 10:00:00');
+    $fictionGroupId = createGroup($pdo, 'Slow Fiction Collective', 'Deep dives into contemporary literary fiction. We read one book a month and discuss it thoroughly.', $outsiderId);
+    addMembership($pdo, $fictionGroupId, $outsiderId, 'administrator', '2026-01-07 10:00:00');
 
-    $coffeeGroupId = createGroup($pdo, 'Coffee Shops', 'Local cafe finds, brewing notes and good tables for conversation.', $outsiderId);
-    addMembership($pdo, $coffeeGroupId, $outsiderId, 'administrator', '2026-01-08 10:00:00');
-    createJoinRequest($pdo, $coffeeGroupId, $memberId, 'pending', '2026-02-01 12:00:00');
+    $sourdoughGroupId = createGroup($pdo, 'Sourdough Starters', 'A place to troubleshoot your bake, share recipes, and obsess over crumb structure.', $outsiderId);
+    addMembership($pdo, $sourdoughGroupId, $outsiderId, 'administrator', '2026-01-08 10:00:00');
+
+    $gardenGroupId = createGroup($pdo, 'Urban Gardeners Co-op', 'Sharing tips, seeds, and harvests for city dwellers growing their own food in small spaces.', $outsiderId);
+    addMembership($pdo, $gardenGroupId, $outsiderId, 'administrator', '2026-01-09 10:00:00');
 
     createJoinRequest($pdo, $photographyId, $requesterId, 'pending', '2026-02-02 08:00:00');
     createJoinRequest($pdo, $photographyId, $secondRequesterId, 'pending', '2026-02-03 08:00:00');
@@ -100,8 +103,14 @@ try {
 
 function cleanupVisualData(PDO $pdo): void
 {
-    $groupIds = $pdo->query("SELECT id FROM groups WHERE name IN ('Photography', 'Empty Photography', 'Nordic Design', 'Coffee Shops')")->fetchAll(PDO::FETCH_COLUMN);
     $userIds = $pdo->query("SELECT id FROM users WHERE email LIKE 'visual.%@samtli.test'")->fetchAll(PDO::FETCH_COLUMN);
+    $groupIds = $pdo->query("SELECT id FROM groups WHERE name IN ('Photography', 'Urban Gardeners Co-op', 'Sourdough Starters', 'Slow Fiction Collective')")->fetchAll(PDO::FETCH_COLUMN);
+
+    if ($userIds !== []) {
+        $placeholders = implode(',', array_fill(0, count($userIds), '?'));
+        $createdGroupIds = ids($pdo, "SELECT id FROM groups WHERE created_by IN ({$placeholders})", $userIds);
+        $groupIds = array_values(array_unique(array_merge($groupIds, $createdGroupIds)));
+    }
 
     if ($groupIds !== []) {
         $placeholders = implode(',', array_fill(0, count($groupIds), '?'));
@@ -121,6 +130,7 @@ function cleanupVisualData(PDO $pdo): void
     if ($userIds !== []) {
         executeIn($pdo, 'DELETE FROM group_join_requests WHERE user_id IN (%s)', $userIds);
         executeIn($pdo, 'DELETE FROM group_memberships WHERE user_id IN (%s)', $userIds);
+        executeIn($pdo, 'DELETE FROM group_invitations WHERE used_by IN (%s)', $userIds);
         executeIn($pdo, 'DELETE FROM users WHERE id IN (%s)', $userIds);
     }
 }
@@ -196,4 +206,3 @@ function createInvitation(PDO $pdo, int $groupId, int $createdBy, string $token,
     $statement = $pdo->prepare('INSERT INTO group_invitations (group_id, created_by, token_hash, expires_at, used_at, used_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)');
     $statement->execute([$groupId, $createdBy, hash('sha256', $token), $expiresAt, $usedAt, $usedBy, '2026-02-04 08:00:00']);
 }
-
