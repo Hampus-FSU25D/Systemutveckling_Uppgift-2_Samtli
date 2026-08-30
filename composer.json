@@ -29,6 +29,7 @@
         "verify:access": "php tests/Integration/verify_group_access_controls.php",
         "verify:home": "php tests/Integration/verify_home_design.php",
         "verify:home-feed": "php tests/Integration/verify_home_feed.php",
+        "verify:docker-startup": "php tests/Integration/verify_docker_startup.php",
         "test": [
             "@verify:schema",
             "@verify:registration",
@@ -42,7 +43,8 @@
             "@verify:invitations",
             "@verify:access",
             "@verify:home",
-            "@verify:home-feed"
+            "@verify:home-feed",
+            "@verify:docker-startup"
         ]
     }
 }

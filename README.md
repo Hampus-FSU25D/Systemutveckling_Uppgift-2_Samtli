@@ -104,6 +104,8 @@ The public URL is a deployment target. It is not claimed as live by this reposit
 
 Coolify should inject production environment variables and connect the application container to a persistent MariaDB resource.
 
+The Docker image runs `php bin/migrate.php` before Apache starts, so a fresh Coolify database is initialized automatically. Set `MIGRATE_ON_START=false` only if migrations are being handled by a separate deployment step.
+
 ## Assignment
 
 See `docs/ASSIGNMENT.md`.
