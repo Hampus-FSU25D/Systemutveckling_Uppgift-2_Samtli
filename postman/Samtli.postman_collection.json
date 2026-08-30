@@ -1,0 +1,871 @@
+{
+  "info": {
+    "name": "Samtli Assignment Verification",
+    "description": "End-to-end Postman collection for the Samtli PHP assignment flows: registration, login, group creation, membership request, administrator approval, discussion creation, replies and invitation links.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:38515"
+    },
+    {
+      "key": "password",
+      "value": "correct horse battery staple"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Open Register",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('register page loads', function () { pm.response.to.have.status(200); });",
+              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.test('register CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
+              "pm.collectionVariables.set('csrf_register', token[1]);",
+              "pm.collectionVariables.set('run_id', Date.now().toString());",
+              "pm.collectionVariables.set('admin_email', `postman-admin-${pm.collectionVariables.get('run_id')}@example.test`);",
+              "pm.collectionVariables.set('applicant_email', `postman-applicant-${pm.collectionVariables.get('run_id')}@example.test`);",
+              "pm.collectionVariables.set('invitee_email', `postman-invitee-${pm.collectionVariables.get('run_id')}@example.test`);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/register"
+      }
+    },
+    {
+      "name": "02 Register Admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_register}}"
+            },
+            {
+              "key": "first_name",
+              "value": "Postman"
+            },
+            {
+              "key": "last_name",
+              "value": "Admin"
+            },
+            {
+              "key": "email",
+              "value": "{{admin_email}}"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}"
+            },
+            {
+              "key": "password_confirmation",
+              "value": "{{password}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}/register"
+      }
+    },
+    {
+      "name": "03 Open Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('login page loads', function () { pm.response.to.have.status(200); });",
+              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.test('login CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
+              "pm.collectionVariables.set('csrf_login', token[1]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/login"
+      }
+    },
+    {
+      "name": "04 Login Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('admin login reaches authenticated home', function () { pm.response.to.have.status(200); });",
+              "pm.test('admin session is active', function () { pm.expect(pm.response.text()).to.include('You are logged in.'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_login}}"
+            },
+            {
+              "key": "email",
+              "value": "{{admin_email}}"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}/login"
+      }
+    },
+    {
+      "name": "05 Open Create Group",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('create group page loads', function () { pm.response.to.have.status(200); });",
+              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.test('group create CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
+              "pm.collectionVariables.set('csrf_group_create', token[1]);",
+              "pm.collectionVariables.set('group_name', `Postman Group ${pm.collectionVariables.get('run_id')}`);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/groups/create"
+      }
+    },
+    {
+      "name": "06 Create Group",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('group creation redirects', function () { pm.response.to.have.status(302); });",
+              "const location = pm.response.headers.get('Location') || '';",
+              "const match = location.match(/\\/groups\\/(\\d+)/);",
+              "pm.test('group id is returned in redirect', function () { pm.expect(match).to.not.equal(null); });",
+              "pm.collectionVariables.set('group_id', match[1]);"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_group_create}}"
+            },
+            {
+              "key": "name",
+              "value": "{{group_name}}"
+            },
+            {
+              "key": "description",
+              "value": "A Postman-created group for assignment verification."
+            }
+          ]
+        },
+        "url": "{{base_url}}/groups"
+      }
+    },
+    {
+      "name": "07 Open Start Discussion",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('start discussion page loads', function () { pm.response.to.have.status(200); });",
+              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.test('discussion CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
+              "pm.collectionVariables.set('csrf_discussion_create', token[1]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/groups/{{group_id}}/discussions/create"
+      }
+    },
+    {
+      "name": "08 Start Discussion",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('discussion creation redirects', function () { pm.response.to.have.status(302); });",
+              "const location = pm.response.headers.get('Location') || '';",
+              "const match = location.match(/\\/discussions\\/(\\d+)/);",
+              "pm.test('discussion id is returned in redirect', function () { pm.expect(match).to.not.equal(null); });",
+              "pm.collectionVariables.set('discussion_id', match[1]);"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_discussion_create}}"
+            },
+            {
+              "key": "subject",
+              "value": "Postman verification thread"
+            },
+            {
+              "key": "content",
+              "value": "This first post was created through Postman."
+            }
+          ]
+        },
+        "url": "{{base_url}}/groups/{{group_id}}/discussions/create"
+      }
+    },
+    {
+      "name": "09 Open Discussion",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('discussion page loads', function () { pm.response.to.have.status(200); });",
+              "pm.test('discussion content is visible', function () { pm.expect(pm.response.text()).to.include('Postman verification thread'); });",
+              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.test('reply CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
+              "pm.collectionVariables.set('csrf_reply', token[1]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/groups/{{group_id}}/discussions/{{discussion_id}}"
+      }
+    },
+    {
+      "name": "10 Post Reply",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('reply redirects to discussion', function () { pm.response.to.have.status(302); });",
+              "pm.test('reply redirect targets discussion', function () { pm.expect(pm.response.headers.get('Location')).to.include(`/groups/${pm.collectionVariables.get('group_id')}/discussions/${pm.collectionVariables.get('discussion_id')}`); });"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_reply}}"
+            },
+            {
+              "key": "content",
+              "value": "This reply was created through Postman."
+            }
+          ]
+        },
+        "url": "{{base_url}}/groups/{{group_id}}/discussions/{{discussion_id}}/replies"
+      }
+    },
+    {
+      "name": "11 Open Invitations Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('invitations page loads', function () { pm.response.to.have.status(200); });",
+              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.test('invitation CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
+              "pm.collectionVariables.set('csrf_invitation_create', token[1]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/groups/{{group_id}}/admin/invitations"
+      }
+    },
+    {
+      "name": "12 Create Invitation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('invitation creation redirects', function () { pm.response.to.have.status(302); });"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_invitation_create}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}/groups/{{group_id}}/admin/invitations"
+      }
+    },
+    {
+      "name": "13 Capture Invitation Link",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('invitation page loads after create', function () { pm.response.to.have.status(200); });",
+              "const match = pm.response.text().match(/<code>(https?:\\/\\/[^<]+\\/invitations\\/[a-f0-9]{64})<\\/code>/);",
+              "pm.test('absolute invitation link is visible', function () { pm.expect(match).to.not.equal(null); });",
+              "pm.collectionVariables.set('invite_url', match[1]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/groups/{{group_id}}/admin/invitations"
+      }
+    },
+    {
+      "name": "14 Register Applicant",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/register', function (err, res) {",
+              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "  pm.collectionVariables.set('csrf_register_applicant', token[1]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_register_applicant}}"
+            },
+            {
+              "key": "first_name",
+              "value": "Postman"
+            },
+            {
+              "key": "last_name",
+              "value": "Applicant"
+            },
+            {
+              "key": "email",
+              "value": "{{applicant_email}}"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}"
+            },
+            {
+              "key": "password_confirmation",
+              "value": "{{password}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}/register"
+      }
+    },
+    {
+      "name": "15 Login Applicant",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/login', function (err, res) {",
+              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "  pm.collectionVariables.set('csrf_login_applicant', token[1]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_login_applicant}}"
+            },
+            {
+              "key": "email",
+              "value": "{{applicant_email}}"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}/login"
+      }
+    },
+    {
+      "name": "16 Open Discover As Applicant",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('discover page loads', function () { pm.response.to.have.status(200); });",
+              "pm.test('created group is discoverable', function () { pm.expect(pm.response.text()).to.include(pm.collectionVariables.get('group_name')); });",
+              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.test('join request CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
+              "pm.collectionVariables.set('csrf_join_request', token[1]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/groups"
+      }
+    },
+    {
+      "name": "17 Request Membership",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('membership request redirects', function () { pm.response.to.have.status(302); });",
+              "pm.test('membership request returns to discover', function () { pm.expect(pm.response.headers.get('Location')).to.equal('/groups'); });"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_join_request}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}/groups/{{group_id}}/join-requests"
+      }
+    },
+    {
+      "name": "18 Login Admin Again",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/login', function (err, res) {",
+              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "  pm.collectionVariables.set('csrf_login_admin_again', token[1]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_login_admin_again}}"
+            },
+            {
+              "key": "email",
+              "value": "{{admin_email}}"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}/login"
+      }
+    },
+    {
+      "name": "19 Open Join Requests",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('join requests page loads', function () { pm.response.to.have.status(200); });",
+              "pm.test('applicant request is visible', function () { pm.expect(pm.response.text()).to.include(pm.collectionVariables.get('applicant_email')); });",
+              "const csrf = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "const action = pm.response.text().match(/action=\"(\\/groups\\/\\d+\\/admin\\/join-requests\\/\\d+\\/approve)\"/);",
+              "pm.test('approval form exists', function () { pm.expect(csrf).to.not.equal(null); pm.expect(action).to.not.equal(null); });",
+              "pm.collectionVariables.set('csrf_approval', csrf[1]);",
+              "pm.collectionVariables.set('approval_path', action[1]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/groups/{{group_id}}/admin/join-requests"
+      }
+    },
+    {
+      "name": "20 Approve Membership",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('approval redirects', function () { pm.response.to.have.status(302); });",
+              "pm.test('approval returns to admin requests', function () { pm.expect(pm.response.headers.get('Location')).to.include('/admin/join-requests'); });"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_approval}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}{{approval_path}}"
+      }
+    },
+    {
+      "name": "21 Register Invitee",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/register', function (err, res) {",
+              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "  pm.collectionVariables.set('csrf_register_invitee', token[1]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_register_invitee}}"
+            },
+            {
+              "key": "first_name",
+              "value": "Postman"
+            },
+            {
+              "key": "last_name",
+              "value": "Invitee"
+            },
+            {
+              "key": "email",
+              "value": "{{invitee_email}}"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}"
+            },
+            {
+              "key": "password_confirmation",
+              "value": "{{password}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}/register"
+      }
+    },
+    {
+      "name": "22 Login Invitee",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/login', function (err, res) {",
+              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "  pm.collectionVariables.set('csrf_login_invitee', token[1]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_login_invitee}}"
+            },
+            {
+              "key": "email",
+              "value": "{{invitee_email}}"
+            },
+            {
+              "key": "password",
+              "value": "{{password}}"
+            }
+          ]
+        },
+        "url": "{{base_url}}/login"
+      }
+    },
+    {
+      "name": "23 Open Invitation As Invitee",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('invitation page loads', function () { pm.response.to.have.status(200); });",
+              "pm.test('invitation page names group', function () { pm.expect(pm.response.text()).to.include(pm.collectionVariables.get('group_name')); });",
+              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.test('accept CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
+              "pm.collectionVariables.set('csrf_invitation_accept', token[1]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{invite_url}}"
+      }
+    },
+    {
+      "name": "24 Accept Invitation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('invitation accept redirects to group', function () { pm.response.to.have.status(302); });",
+              "pm.test('invitation accept returns to group page', function () { pm.expect(pm.response.headers.get('Location')).to.equal(`/groups/${pm.collectionVariables.get('group_id')}`); });"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "followRedirects": false
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "_csrf",
+              "value": "{{csrf_invitation_accept}}"
+            }
+          ]
+        },
+        "url": "{{invite_url}}/accept"
+      }
+    },
+    {
+      "name": "25 Reopen Used Invitation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('used invitation is gone', function () { pm.response.to.have.status(410); });",
+              "pm.test('used invitation page is unavailable', function () { pm.expect(pm.response.text()).to.include('Invitation unavailable'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{invite_url}}"
+      }
+    }
+  ]
+}

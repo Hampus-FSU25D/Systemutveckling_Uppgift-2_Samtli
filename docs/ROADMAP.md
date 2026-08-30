@@ -16,7 +16,7 @@ Prioriterad funktionalitet:
 - rollhantering för gruppmedlemmar - implementerat
 - 24-timmars, single-use inbjudningslänkar - implementerat
 - server-side behörighetskontroller för all gruppdata - verifierat
-- Postman-verifiering där API-liknande flöden behövs
+- Postman-verifiering där API-liknande flöden behövs - collection skapad
 
 Portfoliofunktioner får inte försena VG-kraven.
 
