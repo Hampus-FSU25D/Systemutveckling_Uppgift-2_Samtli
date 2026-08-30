@@ -11,14 +11,18 @@ use Samtli\Groups\GroupCreationService;
 use Samtli\Http\DiscussionController;
 use Samtli\Http\GroupAdminController;
 use Samtli\Http\GroupController;
+use Samtli\Http\InvitationController;
 use Samtli\Http\LoginController;
 use Samtli\Http\RedirectResponse;
 use Samtli\Http\RegisterController;
 use Samtli\Http\Response;
+use Samtli\Invitations\InvitationAcceptanceService;
+use Samtli\Invitations\InvitationCreationService;
 use Samtli\Memberships\MemberRoleService;
 use Samtli\Memberships\MembershipRequestService;
 use Samtli\Memberships\MembershipApprovalService;
 use Samtli\Repositories\GroupRepository;
+use Samtli\Repositories\InvitationRepository;
 use Samtli\Repositories\MembershipRepository;
 use Samtli\Repositories\DiscussionRepository;
 use Samtli\Repositories\UserRepository;
@@ -40,6 +44,7 @@ $pdo = Connection::fromEnvironment();
 $users = new UserRepository($pdo);
 $groups = new GroupRepository($pdo);
 $memberships = new MembershipRepository($pdo);
+$invitations = new InvitationRepository($pdo);
 $discussions = new DiscussionRepository($pdo);
 $authenticator = new SessionAuthenticator($_SESSION);
 
@@ -76,7 +81,15 @@ $discussionController = new DiscussionController(
 $groupAdminController = new GroupAdminController(
     new MembershipApprovalService($memberships),
     new MemberRoleService($memberships),
+    new InvitationCreationService($groups, $memberships, $invitations),
     $memberships,
+    $authenticator,
+    $csrf,
+    $templates
+);
+$invitationController = new InvitationController(
+    new InvitationAcceptanceService($memberships, $invitations),
+    $invitations,
     $authenticator,
     $csrf,
     $templates
@@ -87,6 +100,8 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $groupId = groupIdFromPath($path);
 $adminJoinRequest = adminJoinRequestFromPath($path);
 $adminMemberRole = adminMemberRoleFromPath($path);
+$adminInvitation = adminInvitationFromPath($path);
+$invitation = invitationFromPath($path);
 $discussionCreateGroupId = discussionCreateGroupIdFromPath($path);
 $discussionDetail = discussionDetailFromPath($path);
 $discussionReply = discussionReplyFromPath($path);
@@ -103,6 +118,8 @@ $response = match (true) {
     $method === 'GET' && $path === '/groups' => $groupController->index(pullFlash('success'), pullFlash('error')),
     $method === 'GET' && $path === '/groups/create' => $groupController->create(),
     $method === 'POST' && $path === '/groups' => $groupController->store($_POST),
+    $method === 'GET' && $adminInvitation !== null => $groupAdminController->invitations($adminInvitation, pullFlash('invite_url'), pullFlash('success'), pullFlash('error')),
+    $method === 'POST' && $adminInvitation !== null => $groupAdminController->createInvitation($adminInvitation, $_POST),
     $method === 'GET' && $adminMemberRole !== null && $adminMemberRole['memberUserId'] === null => $groupAdminController->members($adminMemberRole['groupId'], pullFlash('success'), pullFlash('error')),
     $method === 'POST' && $adminMemberRole !== null && $adminMemberRole['memberUserId'] !== null => $groupAdminController->updateMemberRole($adminMemberRole['groupId'], $adminMemberRole['memberUserId'], $_POST),
     $method === 'GET' && $adminJoinRequest !== null && $adminJoinRequest['requestId'] === null => $groupAdminController->joinRequests($adminJoinRequest['groupId'], pullFlash('success'), pullFlash('error')),
@@ -111,6 +128,8 @@ $response = match (true) {
     $method === 'POST' && $discussionCreateGroupId !== null => $discussionController->store($discussionCreateGroupId, $_POST),
     $method === 'POST' && $discussionReply !== null => $discussionController->storeReply($discussionReply['groupId'], $discussionReply['discussionId'], $_POST),
     $method === 'GET' && $discussionDetail !== null => $discussionController->show($discussionDetail['groupId'], $discussionDetail['discussionId']),
+    $method === 'GET' && $invitation !== null && !$invitation['accept'] => $invitationController->show($invitation['token'], pullFlash('error')),
+    $method === 'POST' && $invitation !== null && $invitation['accept'] => $invitationController->accept($invitation['token'], $_POST),
     $method === 'POST' && $groupId !== null && str_ends_with($path, '/join-requests') => $groupController->requestMembership($groupId, $_POST),
     $method === 'GET' && $groupId !== null => $groupController->show($groupId),
     default => new Response($templates->render('home', ['title' => 'Page not found']), 404),
@@ -164,6 +183,30 @@ function adminMemberRoleFromPath(string $path): ?array
     return [
         'groupId' => (int) $matches[1],
         'memberUserId' => isset($matches[2]) ? (int) $matches[2] : null,
+    ];
+}
+
+function adminInvitationFromPath(string $path): ?int
+{
+    if (preg_match('#^/groups/([1-9][0-9]*)/admin/invitations$#', $path, $matches) !== 1) {
+        return null;
+    }
+
+    return (int) $matches[1];
+}
+
+/**
+ * @return array{token: string, accept: bool}|null
+ */
+function invitationFromPath(string $path): ?array
+{
+    if (preg_match('#^/invitations/([a-f0-9]{64})(/accept)?$#', $path, $matches) !== 1) {
+        return null;
+    }
+
+    return [
+        'token' => $matches[1],
+        'accept' => isset($matches[2]),
     ];
 }
 
