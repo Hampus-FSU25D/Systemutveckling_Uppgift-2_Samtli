@@ -17,7 +17,7 @@ ob_start();
             <?php echo Html::escape(strtoupper(substr((string) ($group['name'] ?? 'S'), 0, 1)) ?: 'S'); ?>
         </div>
         <div class="group-hero__content">
-            <p class="eyebrow">Group</p>
+            <p class="group-kicker"><?php echo ($isAdministrator ?? false) === true ? 'Administrator' : 'Member group'; ?></p>
             <h1 id="page-title"><?php echo Html::escape((string) ($group['name'] ?? 'Your group is ready.')); ?></h1>
             <p><?php echo Html::escape((string) ($group['description'] ?? 'You are this group administrator.')); ?></p>
         </div>
@@ -44,14 +44,21 @@ ob_start();
             <a class="button button--primary button--inline" href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">Start discussion</a>
         </div>
     <?php else: ?>
+        <div class="section-heading section-heading--compact">
+            <h2>Recent discussions</h2>
+            <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">New discussion</a>
+        </div>
         <div class="discussion-list" role="list">
             <?php foreach (($discussions ?? []) as $discussion): ?>
+                <?php $replyCount = (int) $discussion['reply_count']; ?>
                 <a class="discussion-row" role="listitem" href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/<?php echo Html::escape((string) $discussion['id']); ?>">
-                    <div>
+                    <span class="discussion-row__avatar" aria-hidden="true">
+                        <?php echo Html::escape(strtoupper(substr((string) $discussion['first_name'], 0, 1) . substr((string) $discussion['last_name'], 0, 1))); ?>
+                    </span>
+                    <div class="discussion-row__body">
                         <h2><?php echo Html::escape((string) $discussion['subject']); ?></h2>
-                        <p><?php echo Html::escape((string) $discussion['first_name'] . ' ' . (string) $discussion['last_name']); ?></p>
+                        <p><?php echo Html::escape((string) $discussion['first_name'] . ' ' . (string) $discussion['last_name']); ?> <span aria-hidden="true">&middot;</span> <?php echo Html::escape((string) $replyCount . ' ' . ($replyCount === 1 ? 'reply' : 'replies')); ?></p>
                     </div>
-                    <span><?php echo Html::escape((string) $discussion['reply_count']); ?> replies</span>
                 </a>
             <?php endforeach; ?>
         </div>

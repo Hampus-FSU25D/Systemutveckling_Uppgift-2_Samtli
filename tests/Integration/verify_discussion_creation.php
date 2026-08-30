@@ -179,6 +179,9 @@ $authenticator->login($memberId);
 $groupPage = $groupController->show($groupId);
 assertTrue($groupPage instanceof Response, 'member group page renders');
 assertTrue(str_contains($groupPage->body(), 'group-actions'), 'group page groups action controls when discussions exist');
+assertTrue(str_contains($groupPage->body(), 'Member group'), 'member group page renders meaningful membership label');
+assertTrue(str_contains($groupPage->body(), 'Recent discussions'), 'group page labels the discussion list');
+assertTrue(str_contains($groupPage->body(), 'discussion-row__avatar'), 'group page renders author initials in discussion rows');
 assertTrue(str_contains($groupPage->body(), 'Controller Discussion'), 'group page lists created discussion');
 assertTrue(str_contains($groupPage->body(), 'Start discussion'), 'group page links to discussion creation');
 
