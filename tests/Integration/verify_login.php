@@ -111,7 +111,7 @@ $homeHtml = (new TemplateRenderer(dirname(__DIR__, 2) . '/templates'))->render('
     'title' => 'Samtli',
     'authenticatedUserId' => $userId,
 ]);
-assertTrue(str_contains($homeHtml, 'You are logged in.'), 'home page can render a minimal authenticated state');
+assertTrue(str_contains($homeHtml, 'Welcome back.'), 'home page can render authenticated feed state');
 
 cleanupUsers($pdo, ['login-test@example.test', 'xss-login@example.test']);
 

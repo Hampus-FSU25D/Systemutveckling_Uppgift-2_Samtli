@@ -8,6 +8,8 @@ use Samtli\View\Html;
 /** @var string $content */
 /** @var string|null $mainClass */
 
+$layoutUserId = $authenticatedUserId ?? ($_SESSION['auth_user_id'] ?? null);
+
 ?><!doctype html>
 <html lang="en">
 <head>
@@ -21,10 +23,27 @@ use Samtli\View\Html;
 </head>
 <body>
     <header class="public-header">
-        <a class="brand-link" href="/" aria-label="Samtli home">
-            <span class="brand-mark" aria-hidden="true">S</span>
-            <span class="brand-name">Samtli</span>
-        </a>
+        <div class="public-header__inner">
+            <div class="public-header__left">
+                <a class="brand-link" href="/" aria-label="Samtli home">
+                    <span class="brand-mark" aria-hidden="true">S</span>
+                    <span class="brand-name">Samtli</span>
+                </a>
+                <nav class="public-nav" aria-label="Primary">
+                    <a href="/">About</a>
+                    <a href="/groups">Explore</a>
+                </nav>
+            </div>
+            <nav class="public-actions" aria-label="Account">
+                <?php if (is_int($layoutUserId) && $layoutUserId > 0): ?>
+                    <a href="/groups">Discover</a>
+                    <a class="public-actions__primary" href="/groups/create">Create group</a>
+                <?php else: ?>
+                    <a href="/login">Log in</a>
+                    <a class="public-actions__primary" href="/register">Create account</a>
+                <?php endif; ?>
+            </nav>
+        </div>
     </header>
     <main class="<?php echo Html::escape($mainClass ?? 'auth-page'); ?>">
         <?php echo $content; ?>
