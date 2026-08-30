@@ -1,0 +1,31 @@
+{
+  "name": "systemutveckling_uppgift-2_samtli",
+  "version": "1.0.0",
+  "description": "Samtli is a server-rendered PHP community platform for interest-based groups, discussions and role-based membership management.",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "visual:validate": "node tests/Visual/visual.mjs validate",
+    "visual:baseline": "node tests/Visual/visual.mjs baseline",
+    "visual:test": "node tests/Visual/visual.mjs test",
+    "visual:report": "node tests/Visual/visual.mjs report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hampus-FSU25D/Systemutveckling_Uppgift-2_Samtli.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Hampus-FSU25D/Systemutveckling_Uppgift-2_Samtli/issues"
+  },
+  "homepage": "https://github.com/Hampus-FSU25D/Systemutveckling_Uppgift-2_Samtli#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0"
+  }
+}

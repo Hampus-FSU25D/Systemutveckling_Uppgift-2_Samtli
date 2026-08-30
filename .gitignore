@@ -15,6 +15,7 @@ temp/
 .cache/
 coverage/
 output/
+artifacts/
 
 *.sql
 !database/migrations/*.sql
