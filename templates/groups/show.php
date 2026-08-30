@@ -27,6 +27,7 @@ ob_start();
         <div class="admin-link-row">
             <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/join-requests">Review join requests</a>
             <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/members">Manage members</a>
+            <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/invitations">Invitations</a>
         </div>
     <?php endif; ?>
 

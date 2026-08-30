@@ -7,9 +7,11 @@ use Samtli\Groups\GroupCreationService;
 use Samtli\Http\GroupAdminController;
 use Samtli\Http\RedirectResponse;
 use Samtli\Http\Response;
+use Samtli\Invitations\InvitationCreationService;
 use Samtli\Memberships\MemberRoleService;
 use Samtli\Memberships\MembershipApprovalService;
 use Samtli\Repositories\GroupRepository;
+use Samtli\Repositories\InvitationRepository;
 use Samtli\Repositories\MembershipRepository;
 use Samtli\Security\CsrfTokenManager;
 use Samtli\Security\SessionAuthenticator;
@@ -69,6 +71,7 @@ $csrf = new CsrfTokenManager($session);
 $controller = new GroupAdminController(
     new MembershipApprovalService($memberships),
     $roles,
+    new InvitationCreationService($groups, $memberships, new InvitationRepository($pdo)),
     $memberships,
     new SessionAuthenticator($session),
     $csrf,
