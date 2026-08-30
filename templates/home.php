@@ -10,12 +10,12 @@ ob_start();
     <p class="eyebrow">Samtli</p>
     <?php if (($authenticatedUserId ?? null) !== null): ?>
         <h1 id="page-title">You are logged in.</h1>
-        <p>The authenticated session is active. Group features will be added in upcoming branches.</p>
+        <p>Create groups, request membership, join discussions and manage invitations from your Samtli account.</p>
         <p class="note"><a href="/groups">Discover groups</a> or <a href="/groups/create">create a group</a> to start shaping a community.</p>
     <?php else: ?>
-        <h1 id="page-title">PHP environment is running</h1>
-        <p>The project foundation is ready for server-rendered community features.</p>
-        <p class="note"><a href="/register">Create an account</a> or <a href="/login">log in</a> to try the authentication flow.</p>
+        <h1 id="page-title">Find your next discussion group</h1>
+        <p>Samtli is a server-rendered community platform for interest-based groups, memberships and discussions.</p>
+        <p class="note"><a href="/register">Create an account</a> or <a href="/login">log in</a> to start participating.</p>
     <?php endif; ?>
 </section>
 <?php
