@@ -105,11 +105,14 @@ $invitation = invitationFromPath($path);
 $discussionCreateGroupId = discussionCreateGroupIdFromPath($path);
 $discussionDetail = discussionDetailFromPath($path);
 $discussionReply = discussionReplyFromPath($path);
+$authenticatedUserId = $authenticator->id();
 
 $response = match (true) {
     $method === 'GET' && $path === '/' => new Response($templates->render('home', [
         'title' => 'Samtli',
-        'authenticatedUserId' => $authenticator->id(),
+        'authenticatedUserId' => $authenticatedUserId,
+        'homeGroups' => $authenticatedUserId === null ? [] : $groups->forUser($authenticatedUserId),
+        'homeDiscussions' => $authenticatedUserId === null ? [] : $discussions->latestForUserGroups($authenticatedUserId, 5),
     ])),
     $method === 'GET' && $path === '/register' => $registerController->show(),
     $method === 'POST' && $path === '/register' => $registerController->store($_POST),

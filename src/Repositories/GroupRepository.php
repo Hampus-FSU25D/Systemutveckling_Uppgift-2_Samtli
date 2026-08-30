@@ -62,6 +62,30 @@ final class GroupRepository
     }
 
     /**
+     * @return list<array{id: int|string, name: string, description: string|null, role: string, joined_at: string}>
+     */
+    public function forUser(int $userId, int $limit = 6): array
+    {
+        $limit = max(1, min(12, $limit));
+        $statement = $this->pdo->prepare(
+            "SELECT
+                g.id,
+                g.name,
+                g.description,
+                gm.role,
+                gm.joined_at
+            FROM group_memberships gm
+            INNER JOIN groups g ON g.id = gm.group_id
+            WHERE gm.user_id = ?
+            ORDER BY gm.joined_at DESC, g.id DESC
+            LIMIT {$limit}"
+        );
+        $statement->execute([$userId]);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @return list<array{id: int|string, name: string, description: string|null, created_at: string, join_request_status: string|null}>
      */
     public function discoverableForUser(int $userId): array
