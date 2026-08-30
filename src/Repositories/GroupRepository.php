@@ -86,7 +86,7 @@ final class GroupRepository
     }
 
     /**
-     * @return list<array{id: int|string, name: string, description: string|null, created_at: string, join_request_status: string|null}>
+     * @return list<array{id: int|string, name: string, description: string|null, created_at: string, join_request_status: string|null, member_count: int|string}>
      */
     public function discoverableForUser(int $userId): array
     {
@@ -96,15 +96,19 @@ final class GroupRepository
                 g.name,
                 g.description,
                 g.created_at,
-                jr.status AS join_request_status
+                jr.status AS join_request_status,
+                COUNT(all_memberships.user_id) AS member_count
             FROM groups g
-            LEFT JOIN group_memberships gm
-                ON gm.group_id = g.id
-                AND gm.user_id = ?
+            LEFT JOIN group_memberships current_membership
+                ON current_membership.group_id = g.id
+                AND current_membership.user_id = ?
             LEFT JOIN group_join_requests jr
                 ON jr.group_id = g.id
                 AND jr.user_id = ?
-            WHERE gm.user_id IS NULL
+            LEFT JOIN group_memberships all_memberships
+                ON all_memberships.group_id = g.id
+            WHERE current_membership.user_id IS NULL
+            GROUP BY g.id, g.name, g.description, g.created_at, jr.status
             ORDER BY g.created_at DESC, g.id DESC"
         );
         $statement->execute([$userId, $userId]);

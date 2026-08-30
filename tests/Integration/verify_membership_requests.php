@@ -42,6 +42,7 @@ $discoverableById = groupsById($discoverable);
 assertTrue(isset($discoverableById[$publicGroupId]), 'discoverable groups include groups the user can request');
 assertTrue(!isset($discoverableById[$ownedGroupId]), 'discoverable groups exclude current memberships');
 assertSame(null, $discoverableById[$publicGroupId]['join_request_status'] ?? null, 'discoverable groups expose missing request status as null');
+assertSame(1, (int) ($discoverableById[$publicGroupId]['member_count'] ?? 0), 'discoverable groups expose real member count');
 
 $request = $membershipRequests->request($publicGroupId, $applicantId);
 assertTrue($request->isSuccess(), 'non-member can request membership');
@@ -100,6 +101,10 @@ assertTrue(str_contains($discoverPage->body(), 'Membership request sent.'), 'dis
 assertTrue(!str_contains($discoverPage->body(), '<script>alert("xss")</script>'), 'discover page does not render raw group HTML');
 assertTrue(str_contains($discoverPage->body(), '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;'), 'discover page escapes group names');
 assertTrue(str_contains($discoverPage->body(), 'Request pending'), 'discover page renders pending request state');
+assertTrue(str_contains($discoverPage->body(), 'data-group-search'), 'discover page renders wired search input');
+assertTrue(str_contains($discoverPage->body(), 'data-group-card'), 'discover page renders searchable group cards');
+assertTrue(str_contains($discoverPage->body(), 'data-group-filter-empty'), 'discover page renders no-match search state');
+assertTrue(str_contains($discoverPage->body(), '1 member'), 'discover page renders real member count');
 
 $authenticator->login($creatorId);
 $validCsrf = $csrf->token('groups.join_request');

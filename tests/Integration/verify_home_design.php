@@ -18,7 +18,9 @@ assertContains($guestHome, 'Photography', 'guest home includes visual group coll
 assertContains($guestHome, 'Create account', 'guest home includes account CTA');
 assertContains($guestHome, 'class="brand-name"', 'header renders the text wordmark');
 assertNotContains($guestHome, 'brand-mark', 'header does not render an icon logo mark');
-assertNotContains($guestHome, '>About</a>', 'header does not render a redundant about navigation item');
+assertNotContains($guestHome, '>About</a>', 'guest header does not render a dead-end about navigation item');
+assertNotContains($guestHome, '<a href="/">Privacy</a>', 'footer does not render placeholder privacy links');
+assertNotContains($guestHome, '<a href="/">Terms</a>', 'footer does not render placeholder terms links');
 assertNotContains($guestHome, 'PHP environment is running', 'guest home does not render bootstrap placeholder copy');
 assertNotContains($guestHome, 'bootstrap-panel', 'guest home does not use placeholder panel');
 
@@ -30,7 +32,11 @@ assertContains($authenticatedHome, 'home-feed', 'authenticated home uses feed la
 assertContains($authenticatedHome, 'Welcome back', 'authenticated home uses personalized welcome surface');
 assertContains($authenticatedHome, 'Your Groups', 'authenticated home includes groups overview');
 assertContains($authenticatedHome, 'Latest Threads', 'authenticated home includes thread overview');
-assertNotContains($authenticatedHome, '>Discover</a>', 'authenticated header does not duplicate explore navigation');
+assertNotContains($authenticatedHome, '>About</a>', 'authenticated header does not render public about navigation');
+assertNotContains($authenticatedHome, '>Profile</a>', 'mobile navigation does not render a missing profile route');
+assertContains($authenticatedHome, '<a href="/groups/create">Create</a>', 'mobile navigation links to real group creation route');
+assertNotContains($authenticatedHome, 'public-actions" aria-label="Account">
+                                    <a href="/groups">Discover</a>', 'authenticated account actions do not duplicate explore navigation');
 assertNotContains($authenticatedHome, 'You are logged in.', 'authenticated home does not render login status placeholder');
 
 echo "Home design verification passed.\n";
