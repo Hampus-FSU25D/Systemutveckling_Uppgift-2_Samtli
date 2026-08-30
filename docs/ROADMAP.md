@@ -14,7 +14,7 @@ Prioriterad funktionalitet:
 - diskussionsstart och detaljvy - implementerat
 - svar i diskussioner - implementerat
 - rollhantering för gruppmedlemmar - implementerat
-- 24-timmars, single-use inbjudningslänkar
+- 24-timmars, single-use inbjudningslänkar - implementerat
 - server-side behörighetskontroller för all gruppdata
 - Postman-verifiering där API-liknande flöden behövs
 
