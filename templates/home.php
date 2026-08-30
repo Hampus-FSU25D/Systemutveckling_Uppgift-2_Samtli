@@ -2,7 +2,24 @@
 
 declare(strict_types=1);
 
+use Samtli\View\Html;
+
 /** @var int|null $authenticatedUserId */
+/** @var list<array{id: int|string, name: string, description: string|null, role?: string, joined_at?: string}>|null $homeGroups */
+/** @var list<array{id: int|string, group_id: int|string, subject: string, created_at: string, updated_at: string, group_name: string, first_name: string, last_name: string, first_post_content: string|null, reply_count: int|string}>|null $homeDiscussions */
+
+$homeGroups = $homeGroups ?? [];
+$homeDiscussions = $homeDiscussions ?? [];
+$homeInitial = static function (string $name): string {
+    $name = trim($name);
+
+    return strtoupper(substr($name, 0, 1) ?: 'S');
+};
+$homeDate = static function (string $timestamp): string {
+    $time = strtotime($timestamp);
+
+    return $time === false ? $timestamp : date('M j, Y', $time);
+};
 
 ob_start();
 ?>
@@ -20,59 +37,60 @@ ob_start();
                 <a href="/groups">View all</a>
             </div>
 
-            <div class="home-group-strip" role="list">
-                <a class="home-group-tile" role="listitem" href="/groups">
-                    <span class="home-group-tile__image home-group-tile__image--garden" aria-hidden="true"></span>
-                    <span>Urban Gardens</span>
-                </a>
-                <a class="home-group-tile" role="listitem" href="/groups">
-                    <span class="home-group-tile__image home-group-tile__image--coffee" aria-hidden="true"></span>
-                    <span>Coffee Snobs</span>
-                </a>
-                <a class="home-group-tile" role="listitem" href="/groups">
-                    <span class="home-group-tile__image home-group-tile__image--design" aria-hidden="true"></span>
-                    <span>Nordic Design</span>
-                </a>
-                <a class="home-group-tile" role="listitem" href="/groups/create">
-                    <span class="home-group-tile__image home-group-tile__image--add" aria-hidden="true">+</span>
-                    <span>Discover</span>
-                </a>
-            </div>
+            <?php if ($homeGroups === []): ?>
+                <div class="home-empty-state">
+                    <h3>No groups yet</h3>
+                    <p>Explore communities or create the first space for your interests.</p>
+                    <a href="/groups">Discover groups</a>
+                </div>
+            <?php else: ?>
+                <div class="home-group-strip" role="list">
+                    <?php foreach (array_slice($homeGroups, 0, 3) as $group): ?>
+                        <a class="home-group-tile" role="listitem" href="/groups/<?php echo Html::escape((string) $group['id']); ?>">
+                            <span class="home-group-tile__image home-group-tile__image--initial" aria-hidden="true"><?php echo Html::escape($homeInitial((string) $group['name'])); ?></span>
+                            <span><?php echo Html::escape((string) $group['name']); ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                    <a class="home-group-tile" role="listitem" href="/groups">
+                        <span class="home-group-tile__image home-group-tile__image--add" aria-hidden="true">+</span>
+                        <span>Discover</span>
+                    </a>
+                </div>
+            <?php endif; ?>
         </section>
 
         <section class="home-section" aria-labelledby="latest-threads-title">
             <div class="home-section__heading">
                 <h2 id="latest-threads-title">Latest Threads</h2>
-                <a href="/groups">Filter</a>
+                <a href="/groups">Browse groups</a>
             </div>
 
-            <div class="home-thread-list">
-                <article class="home-thread-card">
-                    <div class="home-thread-card__meta">
-                        <span>Urban Gardens</span>
-                        <span>2h ago</span>
-                    </div>
-                    <h3>Tips for winterizing balcony planters in minus degrees?</h3>
-                    <p>First real frost hit last night and I am worried about my perennials. Does anyone have experience with wrapping pots?</p>
-                    <div class="home-thread-card__footer">
-                        <span>14 replies</span>
-                        <span>12 saved</span>
-                    </div>
-                </article>
-
-                <article class="home-thread-card">
-                    <div class="home-thread-card__meta">
-                        <span>Nordic Design</span>
-                        <span>5h ago</span>
-                    </div>
-                    <h3>Thoughts on the new Alvar Aalto exhibition?</h3>
-                    <p>I visited the museum this weekend and was struck by the early glassware prototypes and the careful curation.</p>
-                    <div class="home-thread-card__footer">
-                        <span>32 replies</span>
-                        <span>45 saved</span>
-                    </div>
-                </article>
-            </div>
+            <?php if ($homeDiscussions === []): ?>
+                <div class="home-empty-state">
+                    <h3>No threads yet</h3>
+                    <p>New discussions from your groups will appear here.</p>
+                    <a href="<?php echo $homeGroups === [] ? '/groups/create' : '/groups/' . Html::escape((string) $homeGroups[0]['id']) . '/discussions/create'; ?>">
+                        <?php echo $homeGroups === [] ? 'Create a group' : 'Start a discussion'; ?>
+                    </a>
+                </div>
+            <?php else: ?>
+                <div class="home-thread-list">
+                    <?php foreach ($homeDiscussions as $discussion): ?>
+                        <a class="home-thread-card" href="/groups/<?php echo Html::escape((string) $discussion['group_id']); ?>/discussions/<?php echo Html::escape((string) $discussion['id']); ?>">
+                            <div class="home-thread-card__meta">
+                                <span><?php echo Html::escape((string) $discussion['group_name']); ?></span>
+                                <span><?php echo Html::escape($homeDate((string) $discussion['updated_at'])); ?></span>
+                            </div>
+                            <h3><?php echo Html::escape((string) $discussion['subject']); ?></h3>
+                            <p><?php echo Html::escape((string) ($discussion['first_post_content'] ?? '')); ?></p>
+                            <div class="home-thread-card__footer">
+                                <span><?php echo Html::escape((string) $discussion['first_name'] . ' ' . (string) $discussion['last_name']); ?></span>
+                                <span><?php echo Html::escape((string) $discussion['reply_count']); ?> replies</span>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </section>
     </section>
 <?php else: ?>

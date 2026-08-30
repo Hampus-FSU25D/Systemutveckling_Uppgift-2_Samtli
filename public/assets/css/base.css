@@ -393,6 +393,13 @@ a:hover {
     background: linear-gradient(135deg, #cfd7df, #f2f3f1);
 }
 
+.home-group-tile__image--initial {
+    background: #d9e2ff;
+    color: #254583;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
 .home-group-tile__image--add {
     color: var(--color-accent);
     font-size: 2rem;
@@ -411,6 +418,12 @@ a:hover {
     border: 1px solid var(--color-border);
     border-radius: 16px;
     background: var(--color-surface);
+    color: var(--color-text);
+}
+
+.home-thread-card:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 28%, var(--color-border));
+    text-decoration: none;
 }
 
 .home-thread-card__meta,
@@ -432,6 +445,31 @@ a:hover {
 .home-thread-card p {
     margin: 0;
     color: var(--color-muted);
+}
+
+.home-empty-state {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+}
+
+.home-empty-state h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.home-empty-state p {
+    margin: 0;
+    color: var(--color-muted);
+}
+
+.home-empty-state a {
+    justify-self: start;
+    font-size: 0.875rem;
+    font-weight: 700;
 }
 
 .auth-panel {
