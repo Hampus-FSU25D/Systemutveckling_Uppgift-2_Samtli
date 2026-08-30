@@ -16,6 +16,8 @@ assertContains($guestHome, 'home-hero', 'guest home uses hero layout');
 assertContains($guestHome, 'Find your community.', 'guest home uses Stitch welcome headline');
 assertContains($guestHome, 'Photography', 'guest home includes visual group collage content');
 assertContains($guestHome, 'Create account', 'guest home includes account CTA');
+assertContains($guestHome, 'class="brand-name"', 'header renders the text wordmark');
+assertNotContains($guestHome, 'brand-mark', 'header does not render an icon logo mark');
 assertNotContains($guestHome, 'PHP environment is running', 'guest home does not render bootstrap placeholder copy');
 assertNotContains($guestHome, 'bootstrap-panel', 'guest home does not use placeholder panel');
 

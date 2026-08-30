@@ -134,6 +134,9 @@ assertTrue(str_contains($xssResponse->body(), '&lt;script&gt;alert(&quot;xss&quo
 $escaped = Html::escape('<script>alert("xss")</script>');
 assertSame('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;', $escaped, 'HTML helper escapes script-like form values');
 
+$registerHtml = $controller->show()->body();
+assertTrue(!str_contains($registerHtml, 'placeholder="........"'), 'registration password fields do not use dot placeholder text');
+
 cleanupUsers($pdo, $testEmails);
 
 echo "Registration verification passed.\n";

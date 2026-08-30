@@ -80,24 +80,13 @@ a:hover {
 .brand-link {
     gap: var(--space-2);
     color: var(--color-text);
-    font-size: 1.25rem;
-    font-weight: 500;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0;
 }
 
 .brand-link:hover {
     text-decoration: none;
-}
-
-.brand-mark {
-    display: grid;
-    width: 40px;
-    height: 40px;
-    place-items: center;
-    border-radius: var(--radius-lg);
-    background: var(--color-surface-low);
-    color: var(--color-accent);
-    font-size: 0.875rem;
-    font-weight: 700;
 }
 
 .brand-name {
@@ -497,18 +486,6 @@ a:hover {
     border-radius: var(--radius-lg);
     background: var(--color-surface);
     box-shadow: 0 4px 12px rgba(26, 26, 26, 0.05);
-}
-
-.auth-icon {
-    display: grid;
-    width: 48px;
-    height: 48px;
-    place-items: center;
-    align-self: center;
-    border-radius: var(--radius-lg);
-    background: var(--color-surface-low);
-    color: var(--color-text);
-    font-weight: 700;
 }
 
 .auth-heading {
@@ -1232,10 +1209,6 @@ p {
         padding: 0 12px;
     }
 
-    .brand-mark {
-        display: none;
-    }
-
     .brand-name {
         font-size: 1.25rem;
     }
@@ -1310,10 +1283,6 @@ p {
         border: 0;
         background: transparent;
         box-shadow: none;
-    }
-
-    .auth-icon {
-        display: none;
     }
 
     .auth-heading h1 {

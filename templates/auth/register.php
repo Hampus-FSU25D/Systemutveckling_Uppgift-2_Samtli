@@ -57,7 +57,7 @@ ob_start();
 
         <div class="form-field">
             <label for="password">Password</label>
-            <input class="<?php echo $fieldClass('password'); ?>" id="password" name="password" type="password" placeholder="........" autocomplete="new-password" required minlength="8" <?php echo $fieldError('password') ? 'aria-invalid="true" aria-describedby="password_help password_error"' : 'aria-describedby="password_help"'; ?>>
+            <input class="<?php echo $fieldClass('password'); ?>" id="password" name="password" type="password" autocomplete="new-password" required minlength="8" <?php echo $fieldError('password') ? 'aria-invalid="true" aria-describedby="password_help password_error"' : 'aria-describedby="password_help"'; ?>>
             <p class="field-help" id="password_help">Minimum 8 characters.</p>
             <?php if ($fieldError('password')): ?>
                 <p class="field-error" id="password_error"><?php echo Html::escape((string) $fieldError('password')); ?></p>
@@ -66,7 +66,7 @@ ob_start();
 
         <div class="form-field">
             <label for="password_confirmation">Confirm Password</label>
-            <input class="<?php echo $fieldClass('password_confirmation'); ?>" id="password_confirmation" name="password_confirmation" type="password" placeholder="........" autocomplete="new-password" required <?php echo $fieldError('password_confirmation') ? 'aria-invalid="true" aria-describedby="password_confirmation_error"' : ''; ?>>
+            <input class="<?php echo $fieldClass('password_confirmation'); ?>" id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" required <?php echo $fieldError('password_confirmation') ? 'aria-invalid="true" aria-describedby="password_confirmation_error"' : ''; ?>>
             <?php if ($fieldError('password_confirmation')): ?>
                 <p class="field-error" id="password_confirmation_error"><?php echo Html::escape((string) $fieldError('password_confirmation')); ?></p>
             <?php endif; ?>
