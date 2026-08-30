@@ -108,6 +108,8 @@ Coolify should inject production environment variables and connect the applicati
 
 See `docs/ASSIGNMENT.md`.
 
+Postman verification is documented in `docs/POSTMAN.md`, with the collection stored at `postman/Samtli.postman_collection.json`.
+
 ## Roadmap
 
 See `docs/ROADMAP.md`.
