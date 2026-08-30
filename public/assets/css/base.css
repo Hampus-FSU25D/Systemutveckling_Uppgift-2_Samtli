@@ -788,6 +788,80 @@ a:hover {
     color: var(--color-muted);
 }
 
+.group-hero {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    gap: var(--space-6);
+    align-items: end;
+    margin-bottom: var(--space-6);
+    padding: var(--space-8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent 48%),
+        var(--color-surface);
+}
+
+.group-hero__mark {
+    display: grid;
+    width: 72px;
+    height: 72px;
+    place-items: center;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-low);
+    color: var(--color-accent);
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.group-hero__content {
+    min-width: 0;
+}
+
+.group-hero__content h1 {
+    margin-bottom: var(--space-2);
+    overflow-wrap: anywhere;
+}
+
+.group-hero__content p:last-child {
+    max-width: 680px;
+    margin: 0;
+    color: var(--color-muted);
+    overflow-wrap: anywhere;
+}
+
+.group-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.group-admin-nav {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin: 0 0 var(--space-8);
+}
+
+.group-admin-nav a {
+    display: inline-grid;
+    min-height: 40px;
+    place-items: center;
+    padding: 0 var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.group-admin-nav a:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 30%, var(--color-border));
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
 .group-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -872,6 +946,28 @@ a:hover {
     background: var(--color-surface);
 }
 
+.empty-state--centered {
+    display: grid;
+    justify-items: center;
+    width: min(100%, 480px);
+    margin: var(--space-10) auto 0;
+    padding: var(--space-10);
+    text-align: center;
+}
+
+.empty-state__icon {
+    display: grid;
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--space-2);
+    place-items: center;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-low);
+    color: var(--color-accent);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
 .empty-state h2 {
     margin: 0 0 var(--space-2);
     font-size: 1.25rem;
@@ -879,6 +975,10 @@ a:hover {
 
 .empty-state p {
     color: var(--color-muted);
+}
+
+.empty-state .button {
+    margin-top: var(--space-2);
 }
 
 .request-list {
@@ -1322,6 +1422,38 @@ p {
 
     .page-shell {
         padding: 0 var(--space-6) var(--space-10);
+    }
+
+    .group-hero {
+        grid-template-columns: 48px minmax(0, 1fr);
+        align-items: start;
+        padding: var(--space-4);
+    }
+
+    .group-hero__mark {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+
+    .group-actions {
+        grid-column: 1 / -1;
+        justify-content: stretch;
+    }
+
+    .group-actions .button {
+        width: 100%;
+    }
+
+    .group-admin-nav {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .empty-state--centered {
+        width: 100%;
+        margin-top: var(--space-6);
+        padding: var(--space-6);
     }
 
     .page-heading__row {

@@ -29,13 +29,11 @@ $layoutUserId = $authenticatedUserId ?? ($_SESSION['auth_user_id'] ?? null);
                     <span class="brand-name">Samtli</span>
                 </a>
                 <nav class="public-nav" aria-label="Primary">
-                    <a href="/">About</a>
                     <a href="/groups">Explore</a>
                 </nav>
             </div>
             <nav class="public-actions" aria-label="Account">
                 <?php if (is_int($layoutUserId) && $layoutUserId > 0): ?>
-                    <a href="/groups">Discover</a>
                     <a class="public-actions__primary" href="/groups/create">Create group</a>
                 <?php else: ?>
                     <a href="/login">Log in</a>

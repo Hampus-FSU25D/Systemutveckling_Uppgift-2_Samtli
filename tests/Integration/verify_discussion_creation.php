@@ -38,6 +38,12 @@ $groupId = (int) (new GroupCreationService($groups))->create([
 ], $adminId)->groupId();
 addMember($pdo, $groupId, $memberId);
 
+$emptyGroupId = (int) (new GroupCreationService($groups))->create([
+    'name' => 'Empty Discussion Test Group',
+    'description' => 'Used for empty group layout verification.',
+], $adminId)->groupId();
+addMember($pdo, $emptyGroupId, $memberId);
+
 $result = $service->create($groupId, $memberId, [
     'subject' => ' Everyday image thread ',
     'content' => ' Share the frame that made you stop today. ',
@@ -111,6 +117,12 @@ assertTrue($forbiddenCreate instanceof Response, 'non-member discussion form ret
 assertSame(403, $forbiddenCreate->statusCode(), 'non-member discussion form is forbidden');
 
 $authenticator->login($memberId);
+$emptyMemberGroupPage = $groupController->show($emptyGroupId);
+assertTrue($emptyMemberGroupPage instanceof Response, 'member empty group page renders');
+assertTrue(str_contains($emptyMemberGroupPage->body(), 'group-hero'), 'group page uses polished hero layout');
+assertTrue(str_contains($emptyMemberGroupPage->body(), 'empty-state--centered'), 'empty group state is compact and centered');
+assertSame(1, substr_count($emptyMemberGroupPage->body(), 'Start discussion'), 'empty group page renders one primary start discussion action');
+assertTrue(!str_contains($emptyMemberGroupPage->body(), 'admin-link-row'), 'group page does not render raw admin text links');
 
 $invalidCsrf = $discussionController->store($groupId, [
     '_csrf' => 'invalid-token',
@@ -166,6 +178,7 @@ assertSame(403, $forbiddenDetail->statusCode(), 'non-member discussion detail is
 $authenticator->login($memberId);
 $groupPage = $groupController->show($groupId);
 assertTrue($groupPage instanceof Response, 'member group page renders');
+assertTrue(str_contains($groupPage->body(), 'group-actions'), 'group page groups action controls when discussions exist');
 assertTrue(str_contains($groupPage->body(), 'Controller Discussion'), 'group page lists created discussion');
 assertTrue(str_contains($groupPage->body(), 'Start discussion'), 'group page links to discussion creation');
 
@@ -175,7 +188,7 @@ echo "Discussion creation verification passed.\n";
 
 function cleanup(PDO $pdo): void
 {
-    $pdo->exec("DELETE FROM groups WHERE name = 'Discussion Test Group'");
+    $pdo->exec("DELETE FROM groups WHERE name IN ('Discussion Test Group', 'Empty Discussion Test Group')");
     $pdo->exec("DELETE FROM users WHERE email IN ('discussion-admin@example.test', 'discussion-member@example.test', 'discussion-non-member@example.test')");
 }
 

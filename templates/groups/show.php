@@ -12,19 +12,24 @@ use Samtli\View\Html;
 ob_start();
 ?>
 <section class="page-shell" aria-labelledby="page-title">
-    <div class="page-heading">
-        <p class="eyebrow">Group</p>
-        <div class="page-heading__row">
-            <div>
-                <h1 id="page-title"><?php echo Html::escape((string) ($group['name'] ?? 'Your group is ready.')); ?></h1>
-                <p><?php echo Html::escape((string) ($group['description'] ?? 'You are this group administrator.')); ?></p>
-            </div>
-            <a class="button button--primary button--inline" href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">Start discussion</a>
+    <div class="group-hero">
+        <div class="group-hero__mark" aria-hidden="true">
+            <?php echo Html::escape(strtoupper(substr((string) ($group['name'] ?? 'S'), 0, 1)) ?: 'S'); ?>
         </div>
+        <div class="group-hero__content">
+            <p class="eyebrow">Group</p>
+            <h1 id="page-title"><?php echo Html::escape((string) ($group['name'] ?? 'Your group is ready.')); ?></h1>
+            <p><?php echo Html::escape((string) ($group['description'] ?? 'You are this group administrator.')); ?></p>
+        </div>
+        <?php if (($discussions ?? []) !== []): ?>
+            <div class="group-actions">
+                <a class="button button--primary button--inline" href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">Start discussion</a>
+            </div>
+        <?php endif; ?>
     </div>
 
     <?php if (($isAdministrator ?? true) === true): ?>
-        <div class="admin-link-row">
+        <div class="group-admin-nav" aria-label="Group administration">
             <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/join-requests">Review join requests</a>
             <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/members">Manage members</a>
             <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/invitations">Invitations</a>
@@ -32,9 +37,11 @@ ob_start();
     <?php endif; ?>
 
     <?php if (($discussions ?? []) === []): ?>
-        <div class="empty-state">
+        <div class="empty-state empty-state--centered">
+            <div class="empty-state__icon" aria-hidden="true">#</div>
             <h2>No discussions yet</h2>
-            <p>Start the first thread for this group.</p>
+            <p>Start the first conversation in this group.</p>
+            <a class="button button--primary button--inline" href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">Start discussion</a>
         </div>
     <?php else: ?>
         <div class="discussion-list" role="list">
