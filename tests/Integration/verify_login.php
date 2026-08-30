@@ -113,6 +113,10 @@ $homeHtml = (new TemplateRenderer(dirname(__DIR__, 2) . '/templates'))->render('
 ]);
 assertTrue(str_contains($homeHtml, 'Welcome back.'), 'home page can render authenticated feed state');
 
+$loginHtml = $controller->show()->body();
+assertTrue(!str_contains($loginHtml, 'auth-icon'), 'login form does not render decorative arrow icon');
+assertTrue(!str_contains($loginHtml, 'placeholder="........"'), 'login password field does not use dot placeholder text');
+
 cleanupUsers($pdo, ['login-test@example.test', 'xss-login@example.test']);
 
 echo "Login verification passed.\n";

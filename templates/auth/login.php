@@ -20,8 +20,6 @@ ob_start();
     <?php endif; ?>
 
     <div class="auth-card__body">
-        <div class="auth-icon" aria-hidden="true">-></div>
-
         <div class="auth-heading">
             <h1 id="login-title">Welcome back</h1>
             <p>Enter your details to access your Samtli account.</p>
@@ -43,7 +41,7 @@ ob_start();
 
             <div class="form-field">
                 <label for="password">Password</label>
-                <input class="<?php echo $error !== null ? 'form-input is-invalid' : 'form-input'; ?>" id="password" name="password" type="password" placeholder="........" autocomplete="current-password" required <?php echo $error !== null ? 'aria-invalid="true" aria-describedby="login_error"' : ''; ?>>
+                <input class="<?php echo $error !== null ? 'form-input is-invalid' : 'form-input'; ?>" id="password" name="password" type="password" autocomplete="current-password" required <?php echo $error !== null ? 'aria-invalid="true" aria-describedby="login_error"' : ''; ?>>
             </div>
 
             <?php if ($error !== null): ?>

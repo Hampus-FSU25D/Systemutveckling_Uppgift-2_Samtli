@@ -26,7 +26,6 @@ $layoutUserId = $authenticatedUserId ?? ($_SESSION['auth_user_id'] ?? null);
         <div class="public-header__inner">
             <div class="public-header__left">
                 <a class="brand-link" href="/" aria-label="Samtli home">
-                    <span class="brand-mark" aria-hidden="true">S</span>
                     <span class="brand-name">Samtli</span>
                 </a>
                 <nav class="public-nav" aria-label="Primary">
