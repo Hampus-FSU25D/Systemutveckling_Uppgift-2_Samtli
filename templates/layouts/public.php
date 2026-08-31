@@ -23,6 +23,8 @@ $layoutUser = isset($authenticatedUser) && is_array($authenticatedUser)
 $layoutCsrf = new CsrfTokenManager($_SESSION);
 $logoutToken = $layoutCsrf->token('logout');
 $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$stylesheetPath = dirname(__DIR__, 2) . '/public/assets/css/base.css';
+$stylesheetVersion = is_file($stylesheetPath) ? (string) filemtime($stylesheetPath) : '1';
 
 ?><!doctype html>
 <html lang="en">
@@ -39,7 +41,7 @@ $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/base.css">
+    <link rel="stylesheet" href="/assets/css/base.css?v=<?php echo Html::escape($stylesheetVersion); ?>">
 </head>
 <body>
     <header class="public-header">

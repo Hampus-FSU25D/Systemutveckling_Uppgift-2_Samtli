@@ -33,6 +33,40 @@ $hiddenGroupId = (int) (new GroupCreationService($groups))->create([
     'description' => 'A group this user has not joined.',
 ], $outsiderId)->groupId();
 
+$smallGroupId = (int) (new GroupCreationService($groups))->create([
+    'name' => 'Small Public Group',
+    'description' => 'A smaller public community.',
+], $ownerId)->groupId();
+addMember($pdo, $smallGroupId, $outsiderId);
+
+$topOneOwnerId = createUser($pdo, 'home-feed-top-one-owner@example.test', 'TopOne');
+$topTwoOwnerId = createUser($pdo, 'home-feed-top-two-owner@example.test', 'TopTwo');
+$topThreeOwnerId = createUser($pdo, 'home-feed-top-three-owner@example.test', 'TopThree');
+$topOneGroupId = (int) (new GroupCreationService($groups))->create([
+    'name' => 'Top Public One',
+    'description' => 'The largest public community in this fixture.',
+], $topOneOwnerId)->groupId();
+$topTwoGroupId = (int) (new GroupCreationService($groups))->create([
+    'name' => 'Top Public Two',
+    'description' => 'The second largest public community in this fixture.',
+], $topTwoOwnerId)->groupId();
+$topThreeGroupId = (int) (new GroupCreationService($groups))->create([
+    'name' => 'Top Public Three',
+    'description' => 'The third largest public community in this fixture.',
+], $topThreeOwnerId)->groupId();
+
+for ($index = 1; $index <= 7; $index++) {
+    addMember($pdo, $topOneGroupId, createUser($pdo, "home-feed-top-one-{$index}@example.test", 'TopOne'));
+}
+
+for ($index = 1; $index <= 6; $index++) {
+    addMember($pdo, $topTwoGroupId, createUser($pdo, "home-feed-top-two-{$index}@example.test", 'TopTwo'));
+}
+
+for ($index = 1; $index <= 5; $index++) {
+    addMember($pdo, $topThreeGroupId, createUser($pdo, "home-feed-top-three-{$index}@example.test", 'TopThree'));
+}
+
 $discussionCreation = new DiscussionCreationService($memberships, $discussions);
 $photoDiscussion = $discussionCreation->create($photoGroupId, $ownerId, [
     'subject' => 'Street photo thread',
@@ -48,9 +82,12 @@ assertTrue($hiddenDiscussion->isSuccess(), 'fixture discussion is created in out
 
 $homeGroups = $groups->forUser($ownerId);
 $homeDiscussions = $discussions->latestForUserGroups($ownerId, 5);
+$featuredGroups = $groups->topByMemberCount(3);
 
-assertSame(['Photo Group'], array_column($homeGroups, 'name'), 'home groups only include memberships for the current user');
+assertSame(['Small Public Group', 'Photo Group'], array_column($homeGroups, 'name'), 'home groups only include memberships for the current user');
 assertSame(['Street photo thread'], array_column($homeDiscussions, 'subject'), 'home discussions only include threads from current user groups');
+assertSame(['Top Public One', 'Top Public Two', 'Top Public Three'], array_column($featuredGroups, 'name'), 'guest home featured groups use top real communities');
+assertSame([8, 7, 6], array_map('intval', array_column($featuredGroups, 'member_count')), 'guest home featured groups include real member counts');
 
 $authenticatedHome = $templates->render('home', [
     'title' => 'Samtli',
@@ -80,14 +117,29 @@ $emptyHome = $templates->render('home', [
 assertContains($emptyHome, 'No groups yet', 'authenticated home has an honest empty groups state');
 assertContains($emptyHome, 'No threads yet', 'authenticated home has an honest empty discussions state');
 
+$guestHome = $templates->render('home', [
+    'title' => 'Samtli',
+    'authenticatedUserId' => null,
+    'homeFeaturedGroups' => $featuredGroups,
+]);
+
+assertContains($guestHome, 'Top Public One', 'guest home renders top real community');
+assertContains($guestHome, 'Top Public Two', 'guest home renders second real community');
+assertContains($guestHome, 'Top Public Three', 'guest home renders third real community');
+assertContains($guestHome, '21 members already connecting', 'guest home renders real member total from featured groups');
+assertNotContains($guestHome, '4.2k members', 'guest home does not render fake landing member count');
+assertNotContains($guestHome, '>Web Dev<', 'guest home does not render fake landing community');
+assertNotContains($guestHome, '>Golf<', 'guest home does not render fake landing community');
+
 cleanup($pdo);
 
 echo "Home feed verification passed.\n";
 
 function cleanup(PDO $pdo): void
 {
-    $pdo->exec("DELETE FROM groups WHERE name IN ('Photo Group', 'Hidden Group')");
-    $pdo->exec("DELETE FROM users WHERE email IN ('home-feed-owner@example.test', 'home-feed-outsider@example.test', 'home-feed-empty@example.test')");
+    $pdo->exec("DELETE FROM groups WHERE name IN ('Photo Group', 'Hidden Group', 'Small Public Group', 'Top Public One', 'Top Public Two', 'Top Public Three')");
+    $pdo->exec("DELETE FROM users WHERE email IN ('home-feed-owner@example.test', 'home-feed-outsider@example.test', 'home-feed-empty@example.test', 'home-feed-top-one-owner@example.test', 'home-feed-top-two-owner@example.test', 'home-feed-top-three-owner@example.test')");
+    $pdo->exec("DELETE FROM users WHERE email LIKE 'home-feed-top-one-%@example.test' OR email LIKE 'home-feed-top-two-%@example.test' OR email LIKE 'home-feed-top-three-%@example.test'");
 }
 
 function createUser(PDO $pdo, string $email, string $firstName): int
@@ -136,4 +188,10 @@ function assertSame(mixed $expected, mixed $actual, string $message): void
     }
 
     echo "PASS: {$message}\n";
+}
+
+function addMember(PDO $pdo, int $groupId, int $userId): void
+{
+    $statement = $pdo->prepare('INSERT INTO group_memberships (group_id, user_id, role) VALUES (?, ?, ?)');
+    $statement->execute([$groupId, $userId, 'member']);
 }

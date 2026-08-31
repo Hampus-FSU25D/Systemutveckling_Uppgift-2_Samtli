@@ -16,9 +16,22 @@ await login(page, fixture.users.member.email, fixture.basePassword);
 
 await expect(page.getByRole('navigation', { name: 'Primary' }).getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/');
 await expect(page.getByRole('navigation', { name: 'Primary' }).getByRole('link', { name: 'Explore' })).toHaveAttribute('href', '/groups');
+const logoRect = await page.locator('.brand-logo').boundingBox();
+if (logoRect === null || logoRect.width > 180 || logoRect.height > 40) {
+  throw new Error(`Header logo rendered at an invalid size: ${JSON.stringify(logoRect)}`);
+}
 await expect(page.locator('.account-menu summary')).toBeVisible();
+const accountTriggerRect = await page.locator('.account-menu summary').boundingBox();
+if (accountTriggerRect === null || accountTriggerRect.width !== 44 || accountTriggerRect.height !== 44) {
+  throw new Error(`Account trigger rendered at an invalid size: ${JSON.stringify(accountTriggerRect)}`);
+}
+await expect(page.locator('.account-menu__name')).toHaveCount(0);
 await page.locator('.account-menu summary').click();
-await expect(page.getByRole('link', { name: 'Account settings' })).toBeVisible();
+await expect(page.locator('.account-menu__identity')).toContainText('Mira Stone');
+const accountPanel = page.locator('.account-menu__panel');
+await expect(accountPanel.getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/');
+await expect(accountPanel.getByRole('link', { name: 'Explore groups' })).toHaveAttribute('href', '/groups');
+await expect(accountPanel.getByRole('link', { name: 'Account settings' })).toBeVisible();
 await expect(page.locator('.account-menu button', { hasText: 'Log out' })).toBeVisible();
 
 await page.goto(new URL('/groups', baseUrl).toString(), { waitUntil: 'networkidle' });
@@ -37,9 +50,9 @@ await page.fill('#email', 'nora.visual@samtli.test');
 await page.getByRole('button', { name: 'Save changes' }).click();
 await page.waitForURL(new URL('/account', baseUrl).toString());
 await expect(page.getByText('Account updated.')).toBeVisible();
-await expect(page.locator('.account-menu summary')).toContainText('Nora Visual');
-
 await page.locator('.account-menu summary').click();
+await expect(page.locator('.account-menu__identity')).toContainText('Nora Visual');
+
 await page.locator('.account-menu button', { hasText: 'Log out' }).click();
 await page.waitForURL(new URL('/', baseUrl).toString());
 await page.goto(new URL('/account', baseUrl).toString(), { waitUntil: 'networkidle' });

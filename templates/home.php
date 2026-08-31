@@ -7,14 +7,23 @@ use Samtli\View\Html;
 /** @var int|null $authenticatedUserId */
 /** @var list<array{id: int|string, name: string, description: string|null, role?: string, joined_at?: string}>|null $homeGroups */
 /** @var list<array{id: int|string, group_id: int|string, subject: string, created_at: string, updated_at: string, group_name: string, first_name: string, last_name: string, first_post_content: string|null, reply_count: int|string}>|null $homeDiscussions */
+/** @var list<array{id: int|string, name: string, description: string|null, member_count: int|string}>|null $homeFeaturedGroups */
 
 $homeGroups = $homeGroups ?? [];
 $homeDiscussions = $homeDiscussions ?? [];
+$homeFeaturedGroups = $homeFeaturedGroups ?? [];
 $homeInitial = static function (string $name): string {
     $name = trim($name);
 
     return strtoupper(substr($name, 0, 1) ?: 'S');
 };
+$memberLabel = static function (int $count): string {
+    return $count . ' ' . ($count === 1 ? 'member' : 'members');
+};
+$featuredMemberTotal = array_sum(array_map(
+    static fn (array $group): int => (int) ($group['member_count'] ?? 0),
+    $homeFeaturedGroups
+));
 $homeDate = static function (string $timestamp): string {
     $time = strtotime($timestamp);
 
@@ -108,35 +117,39 @@ ob_start();
             </div>
 
             <div class="home-hero__proof" aria-label="Community activity">
-                <div class="home-avatar-stack" aria-hidden="true">
-                    <span>A</span>
-                    <span>K</span>
-                    <span>M</span>
-                </div>
-                <p>Join members already connecting around practical interests.</p>
+                <?php if ($homeFeaturedGroups !== []): ?>
+                    <div class="home-avatar-stack" aria-hidden="true">
+                        <?php foreach (array_slice($homeFeaturedGroups, 0, 3) as $group): ?>
+                            <span><?php echo Html::escape($homeInitial((string) $group['name'])); ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+                <p><?php echo $featuredMemberTotal > 0 ? Html::escape($memberLabel($featuredMemberTotal) . ' already connecting around practical interests.') : 'Start the first community around a practical interest.'; ?></p>
             </div>
         </div>
 
         <div class="home-hero__visual" aria-label="Featured communities">
-            <article class="home-collage-card home-collage-card--tall">
-                <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=900&q=80" alt="Camera and photos on a table">
-                <div>
-                    <span>Photography</span>
-                    <p>4.2k members</p>
+            <?php if ($homeFeaturedGroups === []): ?>
+                <div class="home-collage-empty">
+                    <span aria-hidden="true">S</span>
+                    <p>No communities yet</p>
+                    <a href="/register">Create the first account</a>
                 </div>
-            </article>
-            <article class="home-collage-card home-collage-card--code">
-                <span aria-hidden="true">{}</span>
-                <div>
-                    <span>Web Dev</span>
-                </div>
-            </article>
-            <article class="home-collage-card">
-                <img src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=700&q=80" alt="Golf ball on grass">
-                <div>
-                    <span>Golf</span>
-                </div>
-            </article>
+            <?php else: ?>
+                <?php foreach (array_slice($homeFeaturedGroups, 0, 3) as $index => $group): ?>
+                    <?php $memberCount = (int) ($group['member_count'] ?? 0); ?>
+                    <a
+                        class="home-collage-card <?php echo $index === 0 ? 'home-collage-card--tall' : ''; ?>"
+                        href="/groups"
+                    >
+                        <span class="home-collage-card__initial" aria-hidden="true"><?php echo Html::escape($homeInitial((string) $group['name'])); ?></span>
+                        <div>
+                            <span><?php echo Html::escape((string) $group['name']); ?></span>
+                            <p><?php echo Html::escape($memberLabel($memberCount)); ?></p>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </section>
 <?php endif; ?>

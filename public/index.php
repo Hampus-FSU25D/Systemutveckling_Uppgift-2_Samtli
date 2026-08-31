@@ -134,6 +134,7 @@ $response = match (true) {
         'authenticatedUserId' => $authenticatedUserId,
         'homeGroups' => $authenticatedUserId === null ? [] : $groups->forUser($authenticatedUserId),
         'homeDiscussions' => $authenticatedUserId === null ? [] : $discussions->latestForUserGroups($authenticatedUserId, 5),
+        'homeFeaturedGroups' => $authenticatedUserId === null ? $groups->topByMemberCount(3) : [],
     ])),
     $method === 'GET' && $path === '/register' => $registerController->show(),
     $method === 'POST' && $path === '/register' => $registerController->store($_POST),

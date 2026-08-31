@@ -11,19 +11,31 @@ $templates = new TemplateRenderer(dirname(__DIR__, 2) . '/templates');
 $guestHome = $templates->render('home', [
     'title' => 'Samtli',
     'authenticatedUserId' => null,
+    'homeFeaturedGroups' => [
+        ['id' => 1, 'name' => 'Real Photo Group', 'description' => 'Actual stored group.', 'member_count' => 2],
+        ['id' => 2, 'name' => 'Book Club', 'description' => 'Actual stored group.', 'member_count' => 1],
+    ],
 ]);
 assertContains($guestHome, 'home-hero', 'guest home uses hero layout');
 assertContains($guestHome, 'Find your community.', 'guest home uses Stitch welcome headline');
-assertContains($guestHome, 'Photography', 'guest home includes visual group collage content');
+assertContains($guestHome, 'Real Photo Group', 'guest home renders supplied featured community data');
+assertContains($guestHome, 'Book Club', 'guest home renders multiple supplied featured communities');
+assertContains($guestHome, '3 members already connecting', 'guest home renders real featured member total');
 assertContains($guestHome, 'Create account', 'guest home includes account CTA');
 assertContains($guestHome, 'class="brand-logo"', 'header renders the supplied logo image');
 assertContains($guestHome, '/assets/images/brand/samtli-wordmark.png', 'header uses the project-owned Samtli wordmark');
+assertContains($guestHome, 'width="100" height="34"', 'header logo has fixed intrinsic dimensions');
+assertContains($guestHome, 'height:34px;max-width:178px', 'header logo has inline defensive sizing');
+assertContains($guestHome, '/assets/css/base.css?v=', 'stylesheet URL is cache-busted for deployment');
 assertContains($guestHome, 'href="/favicon-32x32.png"', 'head links the 32px favicon');
 assertContains($guestHome, 'href="/site.webmanifest"', 'head links the web app manifest');
 assertNotContains($guestHome, 'brand-mark', 'header does not render an icon logo mark');
 assertNotContains($guestHome, '>About</a>', 'guest header does not render a dead-end about navigation item');
 assertNotContains($guestHome, '<a href="/">Privacy</a>', 'footer does not render placeholder privacy links');
 assertNotContains($guestHome, '<a href="/">Terms</a>', 'footer does not render placeholder terms links');
+assertNotContains($guestHome, '4.2k members', 'guest home does not render fake member counts');
+assertNotContains($guestHome, '>Web Dev<', 'guest home does not render fake featured communities');
+assertNotContains($guestHome, '>Golf<', 'guest home does not render fake featured communities');
 assertNotContains($guestHome, 'PHP environment is running', 'guest home does not render bootstrap placeholder copy');
 assertNotContains($guestHome, 'bootstrap-panel', 'guest home does not use placeholder panel');
 
@@ -38,6 +50,10 @@ assertContains($authenticatedHome, 'Latest Threads', 'authenticated home include
 assertContains($authenticatedHome, 'href="/"', 'authenticated header exposes explicit home navigation');
 assertContains($authenticatedHome, 'href="/groups"', 'authenticated header exposes explicit explore navigation');
 assertContains($authenticatedHome, 'href="/account"', 'authenticated shell exposes account navigation');
+assertContains($authenticatedHome, 'class="account-menu__trigger"', 'authenticated account menu uses an avatar trigger');
+assertContains($authenticatedHome, 'aria-label="Open account menu"', 'authenticated account menu trigger is accessible');
+assertContains($authenticatedHome, '<a href="/groups">Explore groups</a>', 'account menu exposes real explore route');
+assertNotContains($authenticatedHome, 'account-menu__name', 'authenticated header does not expose profile text beside the avatar');
 assertNotContains($authenticatedHome, '>About</a>', 'authenticated header does not render public about navigation');
 assertNotContains($authenticatedHome, '>Profile</a>', 'mobile navigation does not render a missing profile route');
 assertContains($authenticatedHome, '<a href="/account"', 'mobile navigation links to real account route');
