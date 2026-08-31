@@ -141,6 +141,8 @@ assertSame(419, $invalidCsrf->statusCode(), 'invalid invitation CSRF is rejected
 $managePage = $adminController->invitations($groupId);
 assertTrue($managePage instanceof Response, 'admin invitation page renders');
 assertTrue(str_contains($managePage->body(), 'Invitations'), 'admin invitation page has heading');
+assertTrue(str_contains($managePage->body(), 'group-admin-nav'), 'admin invitation page renders shared admin navigation');
+assertTrue(str_contains($managePage->body(), '/admin/invitations" aria-current="page"'), 'admin invitation page marks invitations tab active');
 assertTrue(str_contains($managePage->body(), 'Create invitation link'), 'admin invitation page has create action');
 
 $createdResponse = $adminController->createInvitation($groupId, ['_csrf' => $csrf->token('admin.invitations')]);

@@ -117,7 +117,7 @@ export const screens = [
     auth: 'member',
     state: 'discover-groups',
     variant: 'discover-variant',
-    notes: 'Intentional production deviation: mobile bottom navigation uses Home, Explore, and Create because these are implemented routes.',
+    notes: 'Intentional production deviation: mobile bottom navigation uses Home, Explore, and Account because these are implemented product routes.',
     tags: ['full-page', 'authenticated', 'member-state'],
   },
   {
@@ -297,12 +297,11 @@ export const screens = [
   {
     name: 'account_samtli',
     reference: 'docs/design-reference/stitch-export/account_samtli/screen.png',
-    route: '/',
+    route: '/account',
     auth: 'member',
-    state: 'account-reference',
-    variant: 'post-vg-reference-only',
-    notes: 'Account settings are post-VG and no production route exists yet; compared against authenticated shell for shared component drift.',
-    tags: ['shared-component-reference'],
+    state: 'account-settings',
+    variant: 'canonical-account-settings',
+    tags: ['full-page', 'authenticated', 'form'],
   },
   {
     name: 'application_states_empty_error_samtli',

@@ -21,9 +21,13 @@ ob_start();
                 <h1 id="invitations-title">Invitations</h1>
                 <p>Create 24-hour links that let one person join without approval.</p>
             </div>
-            <a class="button button--secondary button--inline" href="/groups/<?php echo Html::escape((string) $groupId); ?>">Back to group</a>
         </div>
     </div>
+
+    <?php
+    $activeAdminNav = 'invitations';
+    require dirname(__DIR__) . '/components/group-admin-nav.php';
+    ?>
 
     <?php if ($successMessage !== null): ?>
         <div class="form-alert form-alert--success" role="status">

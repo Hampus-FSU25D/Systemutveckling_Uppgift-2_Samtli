@@ -105,6 +105,7 @@ assertTrue(str_contains($discoverPage->body(), 'data-group-search'), 'discover p
 assertTrue(str_contains($discoverPage->body(), 'data-group-card'), 'discover page renders searchable group cards');
 assertTrue(str_contains($discoverPage->body(), 'data-group-filter-empty'), 'discover page renders no-match search state');
 assertTrue(str_contains($discoverPage->body(), '1 member'), 'discover page renders real member count');
+assertSame(1, substr_count($discoverPage->body(), 'href="/groups/create"'), 'discover page exposes one create group action');
 
 $authenticator->login($creatorId);
 $validCsrf = $csrf->token('groups.join_request');

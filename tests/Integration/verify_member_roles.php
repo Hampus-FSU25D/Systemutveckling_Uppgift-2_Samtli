@@ -113,6 +113,8 @@ assertSame('member', membershipRole($pdo, $groupId, $secondMemberId), 'invalid r
 $listPage = $controller->members($groupId, 'Saved.');
 assertTrue($listPage instanceof Response, 'admin member list renders');
 assertTrue(str_contains($listPage->body(), 'Members'), 'admin member list has heading');
+assertTrue(str_contains($listPage->body(), 'group-admin-nav'), 'admin member list renders shared admin navigation');
+assertTrue(str_contains($listPage->body(), '/admin/members" aria-current="page"'), 'admin member list marks members tab active');
 assertTrue(str_contains($listPage->body(), 'role-second@example.test'), 'admin member list includes member email');
 assertTrue(!str_contains($listPage->body(), '<script>alert("xss")</script>'), 'admin member list does not render raw member HTML');
 assertTrue(str_contains($listPage->body(), '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;'), 'admin member list escapes member names');

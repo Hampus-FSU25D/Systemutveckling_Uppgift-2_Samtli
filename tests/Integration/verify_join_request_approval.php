@@ -103,6 +103,8 @@ assertSame(null, membershipRole($pdo, $groupId, $secondApplicantId), 'invalid ad
 $listPage = $controller->joinRequests($groupId, 'Saved.');
 assertTrue($listPage instanceof Response, 'admin request list renders');
 assertTrue(str_contains($listPage->body(), 'Pending requests'), 'admin request list has pending heading');
+assertTrue(str_contains($listPage->body(), 'group-admin-nav'), 'admin request list renders shared admin navigation');
+assertTrue(str_contains($listPage->body(), '/admin/join-requests" aria-current="page"'), 'admin request list marks join request tab active');
 assertTrue(str_contains($listPage->body(), 'approval-second@example.test'), 'admin request list includes applicant email');
 assertTrue(!str_contains($listPage->body(), '<script>alert("xss")</script>'), 'admin request list does not render raw applicant HTML');
 assertTrue(str_contains($listPage->body(), '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;'), 'admin request list escapes applicant names');

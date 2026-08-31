@@ -9,6 +9,7 @@ use Samtli\Discussions\DiscussionCreationService;
 use Samtli\Discussions\ReplyCreationService;
 use Samtli\Groups\GroupCreationService;
 use Samtli\Http\DiscussionController;
+use Samtli\Http\AccountController;
 use Samtli\Http\GroupAdminController;
 use Samtli\Http\GroupController;
 use Samtli\Http\InvitationController;
@@ -55,6 +56,12 @@ $registerController = new RegisterController(
 );
 $loginController = new LoginController(
     new AuthenticationService($users),
+    $authenticator,
+    $csrf,
+    $templates
+);
+$accountController = new AccountController(
+    $users,
     $authenticator,
     $csrf,
     $templates
@@ -106,6 +113,20 @@ $discussionCreateGroupId = discussionCreateGroupIdFromPath($path);
 $discussionDetail = discussionDetailFromPath($path);
 $discussionReply = discussionReplyFromPath($path);
 $authenticatedUserId = $authenticator->id();
+if ($authenticatedUserId !== null) {
+    $authenticatedUser = $users->findPublicById($authenticatedUserId);
+
+    if ($authenticatedUser === null) {
+        $authenticator->logout();
+        $authenticatedUserId = null;
+    } else {
+        $authenticator->updateUserSnapshot([
+            'first_name' => (string) $authenticatedUser['first_name'],
+            'last_name' => (string) $authenticatedUser['last_name'],
+            'email' => (string) $authenticatedUser['email'],
+        ]);
+    }
+}
 
 $response = match (true) {
     $method === 'GET' && $path === '/' => new Response($templates->render('home', [
@@ -118,6 +139,9 @@ $response = match (true) {
     $method === 'POST' && $path === '/register' => $registerController->store($_POST),
     $method === 'GET' && $path === '/login' => $loginController->show(pullFlash('success')),
     $method === 'POST' && $path === '/login' => $loginController->store($_POST),
+    $method === 'GET' && $path === '/account' => $accountController->show(pullFlash('success'), pullFlash('error')),
+    $method === 'POST' && $path === '/account' => $accountController->update($_POST),
+    $method === 'POST' && $path === '/logout' => $accountController->logout($_POST),
     $method === 'GET' && $path === '/groups' => $groupController->index(pullFlash('success'), pullFlash('error')),
     $method === 'GET' && $path === '/groups/create' => $groupController->create(),
     $method === 'POST' && $path === '/groups' => $groupController->store($_POST),

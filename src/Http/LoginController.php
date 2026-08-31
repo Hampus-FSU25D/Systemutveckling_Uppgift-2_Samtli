@@ -49,7 +49,7 @@ final class LoginController
             session_regenerate_id(true);
         }
 
-        $this->authenticator->login($result->userId());
+        $this->authenticator->login($result->userId(), $result->user());
 
         return new RedirectResponse('/');
     }

@@ -23,17 +23,16 @@ ob_start();
         </div>
         <?php if (($discussions ?? []) !== []): ?>
             <div class="group-actions">
-                <a class="button button--primary button--inline" href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">Start discussion</a>
+                <a class="button button--primary button--inline button--icon button--start-discussion" href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">Start discussion</a>
             </div>
         <?php endif; ?>
     </div>
 
-    <?php if (($isAdministrator ?? true) === true): ?>
-        <div class="group-admin-nav" aria-label="Group administration">
-            <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/join-requests">Review join requests</a>
-            <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/members">Manage members</a>
-            <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/admin/invitations">Invitations</a>
-        </div>
+    <?php if (($isAdministrator ?? false) === true): ?>
+        <?php
+        $activeAdminNav = 'overview';
+        require dirname(__DIR__) . '/components/group-admin-nav.php';
+        ?>
     <?php endif; ?>
 
     <?php if (($discussions ?? []) === []): ?>
@@ -41,12 +40,11 @@ ob_start();
             <div class="empty-state__icon" aria-hidden="true">#</div>
             <h2>No discussions yet</h2>
             <p>Start the first conversation in this group.</p>
-            <a class="button button--primary button--inline" href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">Start discussion</a>
+            <a class="button button--primary button--inline button--icon button--start-discussion" href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">Start discussion</a>
         </div>
     <?php else: ?>
         <div class="section-heading section-heading--compact">
             <h2>Recent discussions</h2>
-            <a href="/groups/<?php echo Html::escape((string) $groupId); ?>/discussions/create">New discussion</a>
         </div>
         <div class="discussion-list" role="list">
             <?php foreach (($discussions ?? []) as $discussion): ?>

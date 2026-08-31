@@ -123,6 +123,7 @@ assertTrue(str_contains($emptyMemberGroupPage->body(), 'group-hero'), 'group pag
 assertTrue(str_contains($emptyMemberGroupPage->body(), 'empty-state--centered'), 'empty group state is compact and centered');
 assertSame(1, substr_count($emptyMemberGroupPage->body(), 'Start discussion'), 'empty group page renders one primary start discussion action');
 assertTrue(!str_contains($emptyMemberGroupPage->body(), 'admin-link-row'), 'group page does not render raw admin text links');
+assertTrue(!str_contains($emptyMemberGroupPage->body(), 'group-admin-nav'), 'non-admin group page does not render admin navigation');
 
 $invalidCsrf = $discussionController->store($groupId, [
     '_csrf' => 'invalid-token',
@@ -184,6 +185,19 @@ assertTrue(str_contains($groupPage->body(), 'Recent discussions'), 'group page l
 assertTrue(str_contains($groupPage->body(), 'discussion-row__avatar'), 'group page renders author initials in discussion rows');
 assertTrue(str_contains($groupPage->body(), 'Controller Discussion'), 'group page lists created discussion');
 assertTrue(str_contains($groupPage->body(), 'Start discussion'), 'group page links to discussion creation');
+assertTrue(!str_contains($groupPage->body(), 'New discussion'), 'group page does not duplicate start discussion in section heading');
+
+$authenticator->login($adminId);
+$adminGroupPage = $groupController->show($groupId);
+assertTrue($adminGroupPage instanceof Response, 'admin group page renders');
+assertTrue(str_contains($adminGroupPage->body(), 'aria-label="Group administration"'), 'admin group page renders grouped admin navigation');
+assertTrue(str_contains($adminGroupPage->body(), 'Overview'), 'admin group navigation includes overview link');
+assertTrue(str_contains($adminGroupPage->body(), 'Join requests'), 'admin group navigation includes join request link');
+assertTrue(str_contains($adminGroupPage->body(), 'Members'), 'admin group navigation includes members link');
+assertTrue(str_contains($adminGroupPage->body(), 'Invitations'), 'admin group navigation includes invitations link');
+assertTrue(str_contains($adminGroupPage->body(), 'aria-current="page"'), 'admin group navigation marks current tab');
+assertTrue(!str_contains($adminGroupPage->body(), 'Review join requests'), 'admin group navigation does not use verbose placeholder labels');
+assertTrue(!str_contains($adminGroupPage->body(), 'Manage members'), 'admin group navigation does not use verbose placeholder labels');
 
 cleanup($pdo);
 
