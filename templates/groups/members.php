@@ -21,9 +21,13 @@ ob_start();
                 <h1 id="members-title">Members</h1>
                 <p>Review group members and update their per-group role.</p>
             </div>
-            <a class="button button--secondary button--inline" href="/groups/<?php echo Html::escape((string) $groupId); ?>">Back to group</a>
         </div>
     </div>
+
+    <?php
+    $activeAdminNav = 'members';
+    require dirname(__DIR__) . '/components/group-admin-nav.php';
+    ?>
 
     <?php if ($successMessage !== null): ?>
         <div class="form-alert form-alert--success" role="status">

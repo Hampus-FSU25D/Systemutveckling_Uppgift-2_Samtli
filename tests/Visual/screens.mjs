@@ -117,7 +117,7 @@ export const screens = [
     auth: 'member',
     state: 'discover-groups',
     variant: 'discover-variant',
-    notes: 'Intentional production deviation: mobile bottom navigation uses Home, Explore, and Create because these are implemented routes.',
+    notes: 'Intentional production deviation: mobile bottom navigation uses Home, Explore, and Account because these are implemented product routes.',
     tags: ['full-page', 'authenticated', 'member-state'],
   },
   {

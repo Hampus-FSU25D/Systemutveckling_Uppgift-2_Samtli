@@ -18,6 +18,8 @@ assertContains($guestHome, 'Photography', 'guest home includes visual group coll
 assertContains($guestHome, 'Create account', 'guest home includes account CTA');
 assertContains($guestHome, 'class="brand-logo"', 'header renders the supplied logo image');
 assertContains($guestHome, '/assets/images/brand/samtli-wordmark.png', 'header uses the project-owned Samtli wordmark');
+assertContains($guestHome, 'href="/favicon-32x32.png"', 'head links the 32px favicon');
+assertContains($guestHome, 'href="/site.webmanifest"', 'head links the web app manifest');
 assertNotContains($guestHome, 'brand-mark', 'header does not render an icon logo mark');
 assertNotContains($guestHome, '>About</a>', 'guest header does not render a dead-end about navigation item');
 assertNotContains($guestHome, '<a href="/">Privacy</a>', 'footer does not render placeholder privacy links');
