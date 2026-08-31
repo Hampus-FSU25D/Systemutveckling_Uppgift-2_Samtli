@@ -2,6 +2,7 @@
     --color-background: #faf9f7;
     --color-surface: #ffffff;
     --color-surface-low: #f4f3f1;
+    --color-surface-muted: #eeeae4;
     --color-text: #1a1c1b;
     --color-muted: #444748;
     --color-border: #e5e1dc;
@@ -15,7 +16,9 @@
     --color-success-text: #1f5c2f;
     --space-1: 4px;
     --space-2: 8px;
+    --space-3: 12px;
     --space-4: 16px;
+    --space-5: 20px;
     --space-6: 24px;
     --space-8: 32px;
     --space-10: 40px;
@@ -1295,7 +1298,7 @@ a:hover {
 
 .group-admin-nav {
     display: flex;
-    gap: 0;
+    gap: var(--space-6);
     margin: calc(var(--space-4) * -1) 0 var(--space-8);
     overflow-x: auto;
     border-bottom: 1px solid var(--color-border);
@@ -1306,8 +1309,7 @@ a:hover {
     min-height: 44px;
     place-items: center;
     flex: 0 0 auto;
-    padding: 0 var(--space-1);
-    margin-right: var(--space-7);
+    padding: 0 var(--space-2);
     border-bottom: 2px solid transparent;
     color: var(--color-muted);
     font-size: 0.875rem;
@@ -2046,6 +2048,7 @@ p {
     }
 
     .group-admin-nav {
+        gap: var(--space-4);
         margin-top: var(--space-2);
         padding-bottom: 0;
     }
