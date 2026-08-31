@@ -14,9 +14,13 @@ $initials = $initials !== '' ? $initials : 'A';
 
 ?>
 <details class="account-menu">
-    <summary aria-label="Open account menu">
-        <span class="account-avatar" aria-hidden="true"><?php echo Html::escape($initials); ?></span>
-        <span class="account-menu__name"><?php echo Html::escape($fullName !== '' ? $fullName : 'Account'); ?></span>
+    <summary class="account-menu__trigger" aria-label="Open account menu">
+        <span class="account-avatar account-avatar--icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M12 12.25a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+                <path d="M4.75 20.25a7.25 7.25 0 0 1 14.5 0"></path>
+            </svg>
+        </span>
     </summary>
     <div class="account-menu__panel">
         <div class="account-menu__identity">
@@ -28,6 +32,8 @@ $initials = $initials !== '' ? $initials : 'A';
                 <?php endif; ?>
             </div>
         </div>
+        <a href="/">Home</a>
+        <a href="/groups">Explore groups</a>
         <a href="/account">Account settings</a>
         <form action="/logout" method="post">
             <input type="hidden" name="_csrf" value="<?php echo Html::escape($logoutToken); ?>">

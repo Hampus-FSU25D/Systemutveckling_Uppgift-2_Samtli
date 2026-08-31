@@ -86,6 +86,28 @@ final class GroupRepository
     }
 
     /**
+     * @return list<array{id: int|string, name: string, description: string|null, member_count: int|string}>
+     */
+    public function topByMemberCount(int $limit = 3): array
+    {
+        $limit = max(1, min(6, $limit));
+        $statement = $this->pdo->query(
+            "SELECT
+                g.id,
+                g.name,
+                g.description,
+                COUNT(gm.user_id) AS member_count
+            FROM groups g
+            LEFT JOIN group_memberships gm ON gm.group_id = g.id
+            GROUP BY g.id, g.name, g.description, g.created_at
+            ORDER BY member_count DESC, g.created_at DESC, g.id DESC
+            LIMIT {$limit}"
+        );
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @return list<array{id: int|string, name: string, description: string|null, created_at: string, join_request_status: string|null, member_count: int|string}>
      */
     public function discoverableForUser(int $userId): array
