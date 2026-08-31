@@ -50,7 +50,6 @@ ob_start();
         <div class="group-grid" role="list">
             <?php foreach ($groups as $index => $group): ?>
                 <?php $status = $group['join_request_status'] ?? null; ?>
-                <?php $imageClass = 'group-card__media--' . (($index % 3) + 1); ?>
                 <?php $memberCount = (int) ($group['member_count'] ?? 0); ?>
                 <article
                     class="group-card group-card--discover"
@@ -58,14 +57,7 @@ ob_start();
                     data-group-card
                     data-search-text="<?php echo Html::escape(strtolower((string) $group['name'] . ' ' . (string) ($group['description'] ?? ''))); ?>"
                 >
-                    <div class="group-card__media <?php echo Html::escape($imageClass); ?>">
-                        <span><?php echo Html::escape(match ($index % 3) {
-                            0 => 'Local',
-                            1 => 'Hobby',
-                            default => 'Literature',
-                        }); ?></span>
-                    </div>
-                    <div class="group-card__icon" aria-hidden="true">#</div>
+                    <div class="group-card__icon" aria-hidden="true"><?php echo Html::escape(strtoupper(substr((string) $group['name'], 0, 1)) ?: 'S'); ?></div>
                     <div class="group-card__body">
                         <div class="group-card__title-row">
                             <h2><?php echo Html::escape((string) $group['name']); ?></h2>
@@ -74,7 +66,7 @@ ob_start();
                             <?php endif; ?>
                         </div>
                         <p class="group-card__meta"><?php echo Html::escape((string) $memberCount . ' ' . ($memberCount === 1 ? 'member' : 'members')); ?></p>
-                        <p><?php echo Html::escape((string) ($group['description'] ?? '')); ?></p>
+                        <p><?php echo Html::escape((string) (($group['description'] ?? '') !== '' ? $group['description'] : 'No description yet.')); ?></p>
                     </div>
                     <div class="group-card__actions">
                         <?php if ($status === 'pending'): ?>
