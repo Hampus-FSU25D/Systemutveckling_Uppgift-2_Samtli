@@ -105,6 +105,9 @@ $successfulLoginResponse = $controller->store([
 assertTrue($successfulLoginResponse instanceof RedirectResponse, 'successful login redirects');
 assertSame('/', $successfulLoginResponse->location(), 'successful login redirects to home');
 assertSame($userId, $requestSession['auth_user_id'] ?? null, 'successful login stores authenticated user id in session');
+assertSame('Login', $requestSession['auth_user']['first_name'] ?? null, 'successful login stores safe first name snapshot');
+assertSame('Tester', $requestSession['auth_user']['last_name'] ?? null, 'successful login stores safe last name snapshot');
+assertSame('login-test@example.test', $requestSession['auth_user']['email'] ?? null, 'successful login stores safe email snapshot');
 assertTrue(!isset($requestSession['auth_password']), 'successful login does not store plaintext password');
 
 $homeHtml = (new TemplateRenderer(dirname(__DIR__, 2) . '/templates'))->render('home', [

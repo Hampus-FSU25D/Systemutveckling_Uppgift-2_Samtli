@@ -9,13 +9,18 @@ final class AuthenticationResult
     private function __construct(
         private readonly bool $success,
         private readonly ?int $userId = null,
-        private readonly ?string $formError = null
+        private readonly ?string $formError = null,
+        /** @var array{first_name: string, last_name: string, email: string}|null */
+        private readonly ?array $user = null
     ) {
     }
 
-    public static function success(int $userId): self
+    /**
+     * @param array{first_name: string, last_name: string, email: string} $user
+     */
+    public static function success(int $userId, array $user): self
     {
-        return new self(true, $userId);
+        return new self(true, $userId, null, $user);
     }
 
     public static function failed(): self
@@ -36,5 +41,13 @@ final class AuthenticationResult
     public function formError(): ?string
     {
         return $this->formError;
+    }
+
+    /**
+     * @return array{first_name: string, last_name: string, email: string}|null
+     */
+    public function user(): ?array
+    {
+        return $this->user;
     }
 }

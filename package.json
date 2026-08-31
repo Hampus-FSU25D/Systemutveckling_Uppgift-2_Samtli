@@ -10,7 +10,8 @@
     "visual:validate": "node tests/Visual/visual.mjs validate",
     "visual:baseline": "node tests/Visual/visual.mjs baseline",
     "visual:test": "node tests/Visual/visual.mjs test",
-    "visual:report": "node tests/Visual/visual.mjs report"
+    "visual:report": "node tests/Visual/visual.mjs report",
+    "ux:test": "node tests/Visual/ux.mjs"
   },
   "repository": {
     "type": "git",

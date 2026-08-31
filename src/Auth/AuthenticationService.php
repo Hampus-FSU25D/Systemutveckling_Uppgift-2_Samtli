@@ -30,6 +30,10 @@ final class AuthenticationService
             return AuthenticationResult::failed();
         }
 
-        return AuthenticationResult::success((int) $user['id']);
+        return AuthenticationResult::success((int) $user['id'], [
+            'first_name' => (string) $user['first_name'],
+            'last_name' => (string) $user['last_name'],
+            'email' => (string) $user['email'],
+        ]);
     }
 }

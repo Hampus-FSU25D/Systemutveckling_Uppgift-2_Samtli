@@ -184,6 +184,7 @@ assertTrue(str_contains($groupPage->body(), 'Recent discussions'), 'group page l
 assertTrue(str_contains($groupPage->body(), 'discussion-row__avatar'), 'group page renders author initials in discussion rows');
 assertTrue(str_contains($groupPage->body(), 'Controller Discussion'), 'group page lists created discussion');
 assertTrue(str_contains($groupPage->body(), 'Start discussion'), 'group page links to discussion creation');
+assertTrue(!str_contains($groupPage->body(), 'New discussion'), 'group page does not duplicate start discussion in section heading');
 
 cleanup($pdo);
 

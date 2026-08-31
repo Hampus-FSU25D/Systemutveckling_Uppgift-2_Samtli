@@ -297,12 +297,11 @@ export const screens = [
   {
     name: 'account_samtli',
     reference: 'docs/design-reference/stitch-export/account_samtli/screen.png',
-    route: '/',
+    route: '/account',
     auth: 'member',
-    state: 'account-reference',
-    variant: 'post-vg-reference-only',
-    notes: 'Account settings are post-VG and no production route exists yet; compared against authenticated shell for shared component drift.',
-    tags: ['shared-component-reference'],
+    state: 'account-settings',
+    variant: 'canonical-account-settings',
+    tags: ['full-page', 'authenticated', 'form'],
   },
   {
     name: 'application_states_empty_error_samtli',

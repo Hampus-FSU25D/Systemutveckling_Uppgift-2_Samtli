@@ -21,16 +21,53 @@ final class UserRepository
         return $statement->fetchColumn() !== false;
     }
 
+    public function emailExistsForAnotherUser(string $email, int $userId): bool
+    {
+        $statement = $this->pdo->prepare('SELECT 1 FROM users WHERE email = ? AND id <> ? LIMIT 1');
+        $statement->execute([$email, $userId]);
+
+        return $statement->fetchColumn() !== false;
+    }
+
     /**
-     * @return array{id: int|string, email: string, password_hash: string}|null
+     * @return array{id: int|string, first_name: string, last_name: string, email: string, password_hash: string}|null
      */
     public function findForAuthentication(string $email): ?array
     {
-        $statement = $this->pdo->prepare('SELECT id, email, password_hash FROM users WHERE email = ? LIMIT 1');
+        $statement = $this->pdo->prepare('SELECT id, first_name, last_name, email, password_hash FROM users WHERE email = ? LIMIT 1');
         $statement->execute([$email]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $row === false ? null : $row;
+    }
+
+    /**
+     * @return array{id: int|string, first_name: string, last_name: string, email: string, created_at: string}|null
+     */
+    public function findPublicById(int $userId): ?array
+    {
+        $statement = $this->pdo->prepare('SELECT id, first_name, last_name, email, created_at FROM users WHERE id = ? LIMIT 1');
+        $statement->execute([$userId]);
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $row === false ? null : $row;
+    }
+
+    public function updateProfile(int $userId, string $firstName, string $lastName, string $email): void
+    {
+        $statement = $this->pdo->prepare(
+            'UPDATE users SET first_name = ?, last_name = ?, email = ? WHERE id = ?'
+        );
+
+        try {
+            $statement->execute([$firstName, $lastName, $email, $userId]);
+        } catch (PDOException $exception) {
+            if ($this->isDuplicateEmailViolation($exception)) {
+                throw new DuplicateEmailException('Email address already exists.', 0, $exception);
+            }
+
+            throw $exception;
+        }
     }
 
     public function create(string $firstName, string $lastName, string $email, string $passwordHash): int

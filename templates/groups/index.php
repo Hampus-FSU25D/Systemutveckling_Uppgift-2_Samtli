@@ -45,7 +45,6 @@ ob_start();
         <div class="empty-state">
             <h2>No groups to discover yet</h2>
             <p>Groups you already belong to are hidden from this list.</p>
-            <a class="button button--primary button--inline" href="/groups/create">Create group</a>
         </div>
     <?php else: ?>
         <div class="group-grid" role="list">

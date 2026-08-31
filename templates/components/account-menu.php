@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+use Samtli\View\Html;
+
+/** @var array{id: int|string, first_name: string, last_name: string, email: string, created_at?: string}|null $layoutUser */
+/** @var string $logoutToken */
+
+$fullName = trim((string) ($layoutUser['first_name'] ?? '') . ' ' . (string) ($layoutUser['last_name'] ?? ''));
+$email = (string) ($layoutUser['email'] ?? '');
+$initials = strtoupper(substr((string) ($layoutUser['first_name'] ?? 'A'), 0, 1) . substr((string) ($layoutUser['last_name'] ?? ''), 0, 1));
+$initials = $initials !== '' ? $initials : 'A';
+
+?>
+<details class="account-menu">
+    <summary aria-label="Open account menu">
+        <span class="account-avatar" aria-hidden="true"><?php echo Html::escape($initials); ?></span>
+        <span class="account-menu__name"><?php echo Html::escape($fullName !== '' ? $fullName : 'Account'); ?></span>
+    </summary>
+    <div class="account-menu__panel">
+        <div class="account-menu__identity">
+            <span class="account-avatar" aria-hidden="true"><?php echo Html::escape($initials); ?></span>
+            <div>
+                <strong><?php echo Html::escape($fullName !== '' ? $fullName : 'Account'); ?></strong>
+                <?php if ($email !== ''): ?>
+                    <span><?php echo Html::escape($email); ?></span>
+                <?php endif; ?>
+            </div>
+        </div>
+        <a href="/account">Account settings</a>
+        <form action="/logout" method="post">
+            <input type="hidden" name="_csrf" value="<?php echo Html::escape($logoutToken); ?>">
+            <button type="submit">Log out</button>
+        </form>
+    </div>
+</details>
