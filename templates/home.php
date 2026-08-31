@@ -56,13 +56,19 @@ ob_start();
                 <div class="home-group-strip" role="list">
                     <?php foreach (array_slice($homeGroups, 0, 3) as $group): ?>
                         <a class="home-group-tile" role="listitem" href="/groups/<?php echo Html::escape((string) $group['id']); ?>">
-                            <span class="home-group-tile__image home-group-tile__image--initial" aria-hidden="true"><?php echo Html::escape($homeInitial((string) $group['name'])); ?></span>
-                            <span><?php echo Html::escape((string) $group['name']); ?></span>
+                            <span class="home-group-tile__initial" aria-hidden="true"><?php echo Html::escape($homeInitial((string) $group['name'])); ?></span>
+                            <span class="home-group-tile__content">
+                                <strong><?php echo Html::escape((string) $group['name']); ?></strong>
+                                <span><?php echo Html::escape(($group['role'] ?? '') === 'administrator' ? 'Administrator' : 'Member'); ?></span>
+                            </span>
                         </a>
                     <?php endforeach; ?>
-                    <a class="home-group-tile" role="listitem" href="/groups">
-                        <span class="home-group-tile__image home-group-tile__image--add" aria-hidden="true">+</span>
-                        <span>Discover</span>
+                    <a class="home-group-tile home-group-tile--discover" role="listitem" href="/groups">
+                        <span class="home-group-tile__initial" aria-hidden="true">+</span>
+                        <span class="home-group-tile__content">
+                            <strong>Discover</strong>
+                            <span>Find more groups</span>
+                        </span>
                     </a>
                 </div>
             <?php endif; ?>
@@ -128,27 +134,35 @@ ob_start();
             </div>
         </div>
 
-        <div class="home-hero__visual" aria-label="Featured communities">
+        <div class="home-featured-panel" aria-label="Featured communities">
+            <div class="home-featured-panel__heading">
+                <span>Top communities</span>
+                <a href="/groups">Explore all</a>
+            </div>
             <?php if ($homeFeaturedGroups === []): ?>
-                <div class="home-collage-empty">
+                <div class="home-featured-empty">
                     <span aria-hidden="true">S</span>
                     <p>No communities yet</p>
                     <a href="/register">Create the first account</a>
                 </div>
             <?php else: ?>
-                <?php foreach (array_slice($homeFeaturedGroups, 0, 3) as $index => $group): ?>
+                <div class="home-featured-list" role="list">
+                <?php foreach (array_slice($homeFeaturedGroups, 0, 3) as $group): ?>
                     <?php $memberCount = (int) ($group['member_count'] ?? 0); ?>
                     <a
-                        class="home-collage-card <?php echo $index === 0 ? 'home-collage-card--tall' : ''; ?>"
+                        class="home-featured-group"
                         href="/groups"
+                        role="listitem"
                     >
-                        <span class="home-collage-card__initial" aria-hidden="true"><?php echo Html::escape($homeInitial((string) $group['name'])); ?></span>
+                        <span class="home-featured-group__initial" aria-hidden="true"><?php echo Html::escape($homeInitial((string) $group['name'])); ?></span>
                         <div>
-                            <span><?php echo Html::escape((string) $group['name']); ?></span>
-                            <p><?php echo Html::escape($memberLabel($memberCount)); ?></p>
+                            <strong><?php echo Html::escape((string) $group['name']); ?></strong>
+                            <p><?php echo Html::escape((string) (($group['description'] ?? '') !== '' ? $group['description'] : 'No description yet.')); ?></p>
                         </div>
+                        <span class="home-featured-group__meta"><?php echo Html::escape($memberLabel($memberCount)); ?></span>
                     </a>
                 <?php endforeach; ?>
+                </div>
             <?php endif; ?>
         </div>
     </section>

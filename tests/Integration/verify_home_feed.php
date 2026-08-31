@@ -127,9 +127,11 @@ assertContains($guestHome, 'Top Public One', 'guest home renders top real commun
 assertContains($guestHome, 'Top Public Two', 'guest home renders second real community');
 assertContains($guestHome, 'Top Public Three', 'guest home renders third real community');
 assertContains($guestHome, '21 members already connecting', 'guest home renders real member total from featured groups');
+assertContains($guestHome, 'home-featured-panel', 'guest home renders content-driven featured group panel');
 assertNotContains($guestHome, '4.2k members', 'guest home does not render fake landing member count');
 assertNotContains($guestHome, '>Web Dev<', 'guest home does not render fake landing community');
 assertNotContains($guestHome, '>Golf<', 'guest home does not render fake landing community');
+assertNotContains($guestHome, 'home-collage-card', 'guest home does not use image-collage group cards without group image data');
 
 cleanup($pdo);
 

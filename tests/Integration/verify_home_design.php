@@ -21,6 +21,7 @@ assertContains($guestHome, 'Find your community.', 'guest home uses Stitch welco
 assertContains($guestHome, 'Real Photo Group', 'guest home renders supplied featured community data');
 assertContains($guestHome, 'Book Club', 'guest home renders multiple supplied featured communities');
 assertContains($guestHome, '3 members already connecting', 'guest home renders real featured member total');
+assertContains($guestHome, 'home-featured-panel', 'guest home uses a content-driven featured groups panel');
 assertContains($guestHome, 'Create account', 'guest home includes account CTA');
 assertContains($guestHome, 'class="brand-logo"', 'header renders the supplied logo image');
 assertContains($guestHome, '/assets/images/brand/samtli-wordmark.png', 'header uses the project-owned Samtli wordmark');
@@ -36,6 +37,8 @@ assertNotContains($guestHome, '<a href="/">Terms</a>', 'footer does not render p
 assertNotContains($guestHome, '4.2k members', 'guest home does not render fake member counts');
 assertNotContains($guestHome, '>Web Dev<', 'guest home does not render fake featured communities');
 assertNotContains($guestHome, '>Golf<', 'guest home does not render fake featured communities');
+assertNotContains($guestHome, 'home-collage-card', 'guest home does not use image-collage group cards without group image data');
+assertNotContains($guestHome, 'images.unsplash.com', 'guest home does not render placeholder remote group imagery');
 assertNotContains($guestHome, 'PHP environment is running', 'guest home does not render bootstrap placeholder copy');
 assertNotContains($guestHome, 'bootstrap-panel', 'guest home does not use placeholder panel');
 
