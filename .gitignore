@@ -24,3 +24,4 @@ artifacts/
 *.sqlite
 *.sqlite3
 database/data/
+.worktrees/
