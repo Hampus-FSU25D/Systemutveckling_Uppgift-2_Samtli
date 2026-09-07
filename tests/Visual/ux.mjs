@@ -28,6 +28,14 @@ if (accountTriggerRect === null || accountTriggerRect.width !== 44 || accountTri
 await expect(page.locator('.account-menu__name')).toHaveCount(0);
 await page.locator('.account-menu summary').click();
 await expect(page.locator('.account-menu__identity')).toContainText('Mira Stone');
+const accountAvatarStyle = await page.locator('.account-menu__identity > .account-avatar').evaluate((avatar) => {
+  const style = getComputedStyle(avatar);
+
+  return { display: style.display, justifyItems: style.justifyItems };
+});
+if (accountAvatarStyle.display !== 'grid' || accountAvatarStyle.justifyItems !== 'center') {
+  throw new Error(`Account avatar initials are not centered: ${JSON.stringify(accountAvatarStyle)}`);
+}
 const accountPanel = page.locator('.account-menu__panel');
 await expect(accountPanel.getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/');
 await expect(accountPanel.getByRole('link', { name: 'Explore groups' })).toHaveAttribute('href', '/groups');

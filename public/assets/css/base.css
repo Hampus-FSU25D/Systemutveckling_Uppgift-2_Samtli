@@ -220,19 +220,19 @@ a:hover {
     min-width: 0;
 }
 
-.account-menu__identity strong,
-.account-menu__identity span {
+.account-menu__identity div strong,
+.account-menu__identity div span {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.account-menu__identity strong {
+.account-menu__identity div strong {
     font-size: 0.875rem;
 }
 
-.account-menu__identity span {
+.account-menu__identity div span {
     color: var(--color-muted);
     font-size: 0.8125rem;
 }

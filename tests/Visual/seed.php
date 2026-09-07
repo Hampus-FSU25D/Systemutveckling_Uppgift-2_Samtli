@@ -103,7 +103,7 @@ try {
 
 function cleanupVisualData(PDO $pdo): void
 {
-    $userIds = $pdo->query("SELECT id FROM users WHERE email LIKE 'visual.%@samtli.test'")->fetchAll(PDO::FETCH_COLUMN);
+    $userIds = $pdo->query("SELECT id FROM users WHERE email LIKE 'visual.%@samtli.test' OR email = 'nora.visual@samtli.test'")->fetchAll(PDO::FETCH_COLUMN);
     $groupIds = $pdo->query("SELECT id FROM groups WHERE name IN ('Photography', 'Urban Gardeners Co-op', 'Sourdough Starters', 'Slow Fiction Collective')")->fetchAll(PDO::FETCH_COLUMN);
 
     if ($userIds !== []) {
