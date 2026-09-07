@@ -16,6 +16,7 @@ temp/
 coverage/
 output/
 artifacts/
+.playwright-cli/
 
 *.sql
 !database/migrations/*.sql
