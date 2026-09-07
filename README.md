@@ -58,7 +58,7 @@ De tre obligatoriska skärmbilderna finns i [docs/submission/screenshots](docs/s
 2. [Gruppdiskussion](docs/submission/screenshots/02-group-discussion.png)
 3. [Svara på diskussion](docs/submission/screenshots/03-discussion-replies.png)
 
-Återstående manuella bilaga är genomgångsvideon med voice-over. Videon bör visa: skapa konto, ansöka om medlemskap i en grupp och starta en diskussion efter godkännande.
+Genomgångsvideon med voice-over finns som [samtli-demo.mp4](docs/submission/samtli-demo.mp4) och visar: skapa konto, ansöka om medlemskap i en grupp och starta en diskussion efter godkännande.
 
 ## Lokal start
 
