@@ -1,117 +1,75 @@
-# Samtli
+# Samtli – inlämning för Systemutveckling uppgift 2
 
-Samtli is a server-rendered PHP community platform for interest-based groups, discussions and role-based membership management.
+Samtli är ett server-renderat PHP-community där användare skapar grupper, ansöker om medlemskap och för privata diskussioner. Projektet är byggt för uppgiften **Systemutveckling uppgift 2** och omfattar samtliga G- och VG-krav.
 
-## About
+Den driftsatta versionen finns på [samtli.hampusandersson.dev](https://samtli.hampusandersson.dev).
 
-The project is built as a course assignment and portfolio project. The goal is a clear PHP application where users can create groups, request membership, discuss topics and manage group roles securely.
+## Teknik och struktur
 
-## Current Status
+- PHP 8.4 med server-renderade PHP-sidor
+- MariaDB/MySQL och PDO med förberedda SQL-satser
+- HTML, projektägd CSS och enbart mindre mängder vanlig JavaScript
+- Docker Compose för lokal körning och Coolify för produktion
 
-The repository foundation, database schema, user registration, login flow, group creation, group discovery, membership request flow, administrator approval, discussion creation/detail pages, discussion replies, member role management and single-use invitation links are implemented. The first milestone remains a full VG implementation of the assignment scope.
+Kodbasen är uppdelad efter ansvar: controllers hanterar HTTP-flöden, services affärsregler, repositories datalagring, `src/Security/` autentisering och CSRF, och `templates/` presentation. Databasmigreringar finns i `database/migrations/`.
 
-## Core Assignment Scope
+## Kravspårning
 
-Samtli will include accounts, groups, memberships, discussions, replies, join requests, per-group member and administrator roles, administrator approvals, role management and 24-hour single-use invitation links.
+| Uppgiftskrav | Samtli |
+| --- | --- |
+| SQL-databas och PHP-sidor | MariaDB-migreringar, PDO och server-renderade templates |
+| Konto med namn, e-post och lösenordshash | Registrering och inloggning; lösenord hanteras med `password_hash()` och `password_verify()` |
+| Skapa och hitta grupper | Inloggade användare kan skapa grupper och se grupper de ännu inte tillhör |
+| Diskussioner och svar | Medlemmar kan starta ämnen med första inlägg och svara i gruppens diskussioner |
+| Medlemsansökan och godkännande | Användare ansöker från gruppöversikten; administratörer granskar och godkänner |
+| Roller per grupp (VG) | `member` och `administrator`; administratörer kan ändra andra medlemmars roll |
+| Administratörsbehörighet (VG) | Servern returnerar 403 för en medlem som försöker öppna adminfunktioner |
+| Hot-link-inbjudningar (VG) | Administratören skapar en kryptografiskt slumpad länk, token lagras hashad, gäller 24 timmar och kan användas exakt en gång |
 
-## Tech Stack
+All åtkomstkontroll sker på serversidan. Alla skrivande formulär har CSRF-skydd och gruppinnehåll kontrolleras mot den inloggade användarens medlemskap. Se [docs/ASSIGNMENT.md](docs/ASSIGNMENT.md) för den fullständiga kravlistan och [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) för arkitekturen.
 
-- PHP 8.4
-- MariaDB
-- PDO
-- Composer
-- HTML/CSS
-- Vanilla JavaScript where useful
-- Docker
-- Coolify deployment target
-- Postman for assignment verification
+## Verifiering inför inlämning
 
-## Architecture
+En fullständig körning genomfördes mot produktionsmiljön den 7 september 2026 med Postman CLI:
 
-The codebase is organized around Controllers, Services, Repositories, Security helpers, server-rendered Templates and SQL database migrations.
-
-See `docs/ARCHITECTURE.md`.
-
-The database schema is documented in `docs/database/SCHEMA.md`.
-
-Entity relationship diagram:
-
-![Samtli entity relationship diagram](docs/database/samtli-erd.png)
-
-## Design
-
-Google Stitch mockups are stored in `docs/design-reference/` and are the visual source of truth for implementation. Common components must remain visually consistent across the application.
-
-Reference files:
-
-- `docs/design-reference/DESIGN.md`
-- `docs/design-reference/SCREEN_INVENTORY.md`
-- `docs/design-reference/COMPONENT_INVENTORY.md`
-
-## Local Development
-
-Create a local environment file:
-
-```bash
-cp .env.example .env
+```powershell
+postman collection run postman/Samtli.postman_collection.json `
+  --env-var "base_url=https://samtli.hampusandersson.dev" `
+  --ignore-redirects -r json `
+  --reporter-json-export docs/submission/postman/live-run.json
 ```
 
-Start the stack:
+Resultat: **30 requestar, 41 av 41 assertions godkända, 0 request- och scriptfel**. Collectionen testar registrering, inloggning, gruppskapande, diskussionsstart, svar, medlemsansökan, administratörsgodkännande samt skapa, acceptera och återanvända en engångsinbjudan. Rapporten sparas i [docs/submission/postman/live-run.json](docs/submission/postman/live-run.json).
 
-```bash
+Manuell browserverifiering mot samma miljö bekräftade också att en administratör kan ändra en medlems roll och att en vanlig medlem nekas administrativa sidor med HTTP 403.
+
+Lokal kodverifiering kan köras i Docker:
+
+```powershell
 docker compose up --build
+docker compose exec app composer test
 ```
 
-Apply database migrations:
+## Bilagor för inlämning
 
-```bash
+De tre obligatoriska skärmbilderna finns i [docs/submission/screenshots](docs/submission/screenshots):
+
+1. [Startsida](docs/submission/screenshots/01-home.png)
+2. [Gruppdiskussion](docs/submission/screenshots/02-group-discussion.png)
+3. [Svara på diskussion](docs/submission/screenshots/03-discussion-replies.png)
+
+Återstående manuella bilaga är genomgångsvideon med voice-over. Videon bör visa: skapa konto, ansöka om medlemskap i en grupp och starta en diskussion efter godkännande.
+
+## Lokal start
+
+```powershell
+Copy-Item .env.example .env
+docker compose up --build
 docker compose exec app php bin/migrate.php
 ```
 
-The equivalent Composer command inside the application container is:
+Öppna sedan `http://localhost:38515`. Konfiguration och hemligheter hämtas från miljövariabler; riktiga `.env`-värden eller databasdumpningar ska inte committas.
 
-```bash
-composer migrate
-```
+## Git-historik
 
-Open:
-
-```text
-http://localhost:38515
-```
-
-Stop the stack:
-
-```bash
-docker compose down
-```
-
-## Environment Configuration
-
-Configuration is read from environment variables. Required variables are documented in `.env.example`, including `APP_ENV`, `APP_DEBUG`, `APP_URL`, `APP_PORT`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME` and `DB_PASSWORD`.
-
-Do not commit a real `.env` file or production secrets.
-
-## Deployment
-
-The intended deployment target is Coolify using Docker on the homelab.
-
-- Host-facing application port: `38515`
-- Application container port: `80`
-- Planned public URL: `https://samtli.hampusandersson.dev`
-
-The public URL is a deployment target. It is not claimed as live by this repository bootstrap.
-
-Coolify should inject production environment variables and connect the application container to a persistent MariaDB resource.
-
-The Docker image runs `php bin/migrate.php` before Apache starts, so a fresh Coolify database is initialized automatically. Set `MIGRATE_ON_START=false` only if migrations are being handled by a separate deployment step.
-
-## Assignment
-
-See `docs/ASSIGNMENT.md`.
-
-Postman verification is documented in `docs/POSTMAN.md`, with the collection stored at `postman/Samtli.postman_collection.json`.
-
-## Roadmap
-
-See `docs/ROADMAP.md`.
+Git-historiken dokumenterar den stegvisa utvecklingen med separata commits för funktionalitet, säkerhet, testning och visuella förbättringar. Den ska lämnas med tillsammans med projektet som underlag för uppgiftens krav på eget utvecklingsarbete.

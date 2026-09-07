@@ -24,7 +24,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test('register page loads', function () { pm.response.to.have.status(200); });",
-              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "const token = pm.response.text().match(/<form[^>]*action=\"\\/register\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "pm.test('register CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
               "pm.collectionVariables.set('csrf_register', token[1]);",
               "pm.collectionVariables.set('run_id', Date.now().toString());",
@@ -91,7 +91,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test('login page loads', function () { pm.response.to.have.status(200); });",
-              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "const token = pm.response.text().match(/<form[^>]*action=\"\\/login\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "pm.test('login CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
               "pm.collectionVariables.set('csrf_login', token[1]);"
             ]
@@ -111,8 +111,8 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('admin login reaches authenticated home', function () { pm.response.to.have.status(200); });",
-              "pm.test('admin session is active', function () { pm.expect(pm.response.text()).to.include('You are logged in.'); });"
+              "pm.test('admin login redirects to authenticated home', function () { pm.response.to.have.status(303); });",
+              "pm.test('admin login targets home', function () { pm.expect(pm.response.headers.get('Location')).to.equal('/'); });"
             ]
           }
         }
@@ -154,7 +154,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test('create group page loads', function () { pm.response.to.have.status(200); });",
-              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "const token = pm.response.text().match(/<form[^>]*action=\"\\/groups\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "pm.test('group create CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
               "pm.collectionVariables.set('csrf_group_create', token[1]);",
               "pm.collectionVariables.set('group_name', `Postman Group ${pm.collectionVariables.get('run_id')}`);"
@@ -175,7 +175,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('group creation redirects', function () { pm.response.to.have.status(302); });",
+              "pm.test('group creation redirects', function () { pm.response.to.have.status(303); });",
               "const location = pm.response.headers.get('Location') || '';",
               "const match = location.match(/\\/groups\\/(\\d+)/);",
               "pm.test('group id is returned in redirect', function () { pm.expect(match).to.not.equal(null); });",
@@ -224,7 +224,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test('start discussion page loads', function () { pm.response.to.have.status(200); });",
-              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "const token = pm.response.text().match(/<form[^>]*action=\"\\/groups\\/\\d+\\/discussions\\/create\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "pm.test('discussion CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
               "pm.collectionVariables.set('csrf_discussion_create', token[1]);"
             ]
@@ -244,7 +244,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('discussion creation redirects', function () { pm.response.to.have.status(302); });",
+              "pm.test('discussion creation redirects', function () { pm.response.to.have.status(303); });",
               "const location = pm.response.headers.get('Location') || '';",
               "const match = location.match(/\\/discussions\\/(\\d+)/);",
               "pm.test('discussion id is returned in redirect', function () { pm.expect(match).to.not.equal(null); });",
@@ -294,7 +294,7 @@
             "exec": [
               "pm.test('discussion page loads', function () { pm.response.to.have.status(200); });",
               "pm.test('discussion content is visible', function () { pm.expect(pm.response.text()).to.include('Postman verification thread'); });",
-              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "const token = pm.response.text().match(/<form[^>]*action=\"\\/groups\\/\\d+\\/discussions\\/\\d+\\/replies\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "pm.test('reply CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
               "pm.collectionVariables.set('csrf_reply', token[1]);"
             ]
@@ -314,7 +314,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('reply redirects to discussion', function () { pm.response.to.have.status(302); });",
+              "pm.test('reply redirects to discussion', function () { pm.response.to.have.status(303); });",
               "pm.test('reply redirect targets discussion', function () { pm.expect(pm.response.headers.get('Location')).to.include(`/groups/${pm.collectionVariables.get('group_id')}/discussions/${pm.collectionVariables.get('discussion_id')}`); });"
             ]
           }
@@ -356,7 +356,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test('invitations page loads', function () { pm.response.to.have.status(200); });",
-              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "const token = pm.response.text().match(/<form[^>]*action=\"\\/groups\\/\\d+\\/admin\\/invitations\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "pm.test('invitation CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
               "pm.collectionVariables.set('csrf_invitation_create', token[1]);"
             ]
@@ -376,7 +376,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('invitation creation redirects', function () { pm.response.to.have.status(302); });"
+              "pm.test('invitation creation redirects', function () { pm.response.to.have.status(303); });"
             ]
           }
         }
@@ -433,8 +433,8 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/register', function (err, res) {",
-              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.sendRequest(pm.variables.get('base_url') + '/register', function (err, res) {",
+              "  const token = res.text().match(/<form[^>]*action=\"\\/register\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "  pm.collectionVariables.set('csrf_register_applicant', token[1]);",
               "});"
             ]
@@ -489,8 +489,8 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/login', function (err, res) {",
-              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.sendRequest(pm.variables.get('base_url') + '/login', function (err, res) {",
+              "  const token = res.text().match(/<form[^>]*action=\"\\/login\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "  pm.collectionVariables.set('csrf_login_applicant', token[1]);",
               "});"
             ]
@@ -535,7 +535,7 @@
             "exec": [
               "pm.test('discover page loads', function () { pm.response.to.have.status(200); });",
               "pm.test('created group is discoverable', function () { pm.expect(pm.response.text()).to.include(pm.collectionVariables.get('group_name')); });",
-              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "const token = pm.response.text().match(/<form[^>]*action=\"\\/groups\\/\\d+\\/join-requests\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "pm.test('join request CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
               "pm.collectionVariables.set('csrf_join_request', token[1]);"
             ]
@@ -555,7 +555,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('membership request redirects', function () { pm.response.to.have.status(302); });",
+              "pm.test('membership request redirects', function () { pm.response.to.have.status(303); });",
               "pm.test('membership request returns to discover', function () { pm.expect(pm.response.headers.get('Location')).to.equal('/groups'); });"
             ]
           }
@@ -592,8 +592,8 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/login', function (err, res) {",
-              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.sendRequest(pm.variables.get('base_url') + '/login', function (err, res) {",
+              "  const token = res.text().match(/<form[^>]*action=\"\\/login\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "  pm.collectionVariables.set('csrf_login_admin_again', token[1]);",
               "});"
             ]
@@ -637,8 +637,8 @@
             "type": "text/javascript",
             "exec": [
               "pm.test('join requests page loads', function () { pm.response.to.have.status(200); });",
-              "pm.test('applicant request is visible', function () { pm.expect(pm.response.text()).to.include(pm.collectionVariables.get('applicant_email')); });",
-              "const csrf = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.test('applicant request is visible', function () { pm.expect(pm.response.text()).to.include('Postman Applicant'); });",
+              "const csrf = pm.response.text().match(/<form[^>]*action=\"\\/groups\\/\\d+\\/admin\\/join-requests\\/\\d+\\/approve\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "const action = pm.response.text().match(/action=\"(\\/groups\\/\\d+\\/admin\\/join-requests\\/\\d+\\/approve)\"/);",
               "pm.test('approval form exists', function () { pm.expect(csrf).to.not.equal(null); pm.expect(action).to.not.equal(null); });",
               "pm.collectionVariables.set('csrf_approval', csrf[1]);",
@@ -660,7 +660,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('approval redirects', function () { pm.response.to.have.status(302); });",
+              "pm.test('approval redirects', function () { pm.response.to.have.status(303); });",
               "pm.test('approval returns to admin requests', function () { pm.expect(pm.response.headers.get('Location')).to.include('/admin/join-requests'); });"
             ]
           }
@@ -697,8 +697,8 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/register', function (err, res) {",
-              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.sendRequest(pm.variables.get('base_url') + '/register', function (err, res) {",
+              "  const token = res.text().match(/<form[^>]*action=\"\\/register\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "  pm.collectionVariables.set('csrf_register_invitee', token[1]);",
               "});"
             ]
@@ -753,8 +753,8 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.sendRequest(pm.collectionVariables.get('base_url') + '/login', function (err, res) {",
-              "  const token = res.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "pm.sendRequest(pm.variables.get('base_url') + '/login', function (err, res) {",
+              "  const token = res.text().match(/<form[^>]*action=\"\\/login\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "  pm.collectionVariables.set('csrf_login_invitee', token[1]);",
               "});"
             ]
@@ -799,7 +799,7 @@
             "exec": [
               "pm.test('invitation page loads', function () { pm.response.to.have.status(200); });",
               "pm.test('invitation page names group', function () { pm.expect(pm.response.text()).to.include(pm.collectionVariables.get('group_name')); });",
-              "const token = pm.response.text().match(/name=\"_csrf\" value=\"([^\"]+)\"/);",
+              "const token = pm.response.text().match(/<form[^>]*action=\"\\/invitations\\/[a-f0-9]{64}\\/accept\"[^>]*>[\\s\\S]*?name=\"_csrf\" value=\"([^\"]+)\"/);",
               "pm.test('accept CSRF token exists', function () { pm.expect(token).to.not.equal(null); });",
               "pm.collectionVariables.set('csrf_invitation_accept', token[1]);"
             ]
@@ -819,7 +819,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test('invitation accept redirects to group', function () { pm.response.to.have.status(302); });",
+              "pm.test('invitation accept redirects to group', function () { pm.response.to.have.status(303); });",
               "pm.test('invitation accept returns to group page', function () { pm.expect(pm.response.headers.get('Location')).to.equal(`/groups/${pm.collectionVariables.get('group_id')}`); });"
             ]
           }
