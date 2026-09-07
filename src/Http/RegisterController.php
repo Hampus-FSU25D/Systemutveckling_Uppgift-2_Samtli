@@ -6,12 +6,14 @@ namespace Samtli\Http;
 
 use Samtli\Auth\RegistrationService;
 use Samtli\Security\CsrfTokenManager;
+use Samtli\Security\SessionAuthenticator;
 use Samtli\View\TemplateRenderer;
 
 final class RegisterController
 {
     public function __construct(
         private readonly RegistrationService $registration,
+        private readonly SessionAuthenticator $authenticator,
         private readonly CsrfTokenManager $csrf,
         private readonly TemplateRenderer $templates
     ) {
@@ -40,9 +42,13 @@ final class RegisterController
             return new Response($this->renderForm($result->fieldErrors(), $this->oldInput($post)), 422);
         }
 
-        $_SESSION['_flash']['success'] = 'Account created. You can now log in.';
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_regenerate_id(true);
+        }
 
-        return new RedirectResponse('/login');
+        $this->authenticator->login($result->userId());
+
+        return new RedirectResponse('/');
     }
 
     /**

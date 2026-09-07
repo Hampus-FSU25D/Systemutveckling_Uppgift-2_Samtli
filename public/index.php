@@ -51,6 +51,7 @@ $authenticator = new SessionAuthenticator($_SESSION);
 
 $registerController = new RegisterController(
     new RegistrationService($users),
+    $authenticator,
     $csrf,
     $templates
 );

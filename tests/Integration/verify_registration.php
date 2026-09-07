@@ -5,9 +5,11 @@ declare(strict_types=1);
 use Samtli\Auth\RegistrationService;
 use Samtli\Database\Connection;
 use Samtli\Http\RegisterController;
+use Samtli\Http\RedirectResponse;
 use Samtli\Http\Response;
 use Samtli\Repositories\UserRepository;
 use Samtli\Security\CsrfTokenManager;
+use Samtli\Security\SessionAuthenticator;
 use Samtli\View\Html;
 use Samtli\View\TemplateRenderer;
 
@@ -24,6 +26,7 @@ $testEmails = [
     'short-password-test@example.test',
     'mismatch-password-test@example.test',
     'xss-registration@example.test',
+    'auto-login-registration@example.test',
 ];
 
 cleanupUsers($pdo, $testEmails);
@@ -102,6 +105,7 @@ $requestSession = [];
 $requestCsrf = new CsrfTokenManager($requestSession);
 $controller = new RegisterController(
     $service,
+    new SessionAuthenticator($requestSession),
     $requestCsrf,
     new TemplateRenderer(dirname(__DIR__, 2) . '/templates')
 );
@@ -131,6 +135,21 @@ assertTrue($xssResponse instanceof Response, 'invalid form submission re-renders
 assertTrue(!str_contains($xssResponse->body(), '<script>alert("xss")</script>'), 'script-like submitted value is not rendered as raw HTML');
 assertTrue(str_contains($xssResponse->body(), '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;'), 'script-like submitted value is escaped in the registration page');
 
+$successfulRegistrationCsrfToken = $requestCsrf->token('register');
+$successfulRegistrationResponse = $controller->store([
+    '_csrf' => $successfulRegistrationCsrfToken,
+    'first_name' => 'Auto',
+    'last_name' => 'Login',
+    'email' => 'auto-login-registration@example.test',
+    'password' => 'correct horse battery staple',
+    'password_confirmation' => 'correct horse battery staple',
+]);
+assertTrue($successfulRegistrationResponse instanceof RedirectResponse, 'successful registration redirects');
+assertSame('/', $successfulRegistrationResponse->location(), 'successful registration redirects to home');
+$autoLoginUser = fetchUser($pdo, 'auto-login-registration@example.test');
+assertTrue($autoLoginUser !== null, 'successful registration creates the auto-login user');
+assertSame((int) $autoLoginUser['id'], $requestSession['auth_user_id'] ?? null, 'successful registration authenticates the new user');
+
 $escaped = Html::escape('<script>alert("xss")</script>');
 assertSame('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;', $escaped, 'HTML helper escapes script-like form values');
 
@@ -157,7 +176,7 @@ function cleanupUsers(PDO $pdo, array $emails): void
  */
 function fetchUser(PDO $pdo, string $email): ?array
 {
-    $statement = $pdo->prepare('SELECT first_name, last_name, email, password_hash, created_at, updated_at FROM users WHERE email = ?');
+    $statement = $pdo->prepare('SELECT id, first_name, last_name, email, password_hash, created_at, updated_at FROM users WHERE email = ?');
     $statement->execute([$email]);
     $row = $statement->fetch(PDO::FETCH_ASSOC);
 
